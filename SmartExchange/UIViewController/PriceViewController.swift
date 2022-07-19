@@ -13,6 +13,7 @@ import DateTimePicker
 import SwiftyJSON
 //import SwiftSpinner
 import JGProgressHUD
+import BiometricAuthentication
 
 extension UIView {
     func rotate360DegreesAgain(duration: CFTimeInterval = 3) {
@@ -27,7 +28,7 @@ extension UIView {
 }
 
 class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
-
+    
     let hud = JGProgressHUD()
     
     @IBOutlet weak var tradeInOnlineView: UIView!
@@ -46,83 +47,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var offeredPriceInfo: UILabel!
     @IBOutlet weak var loaderImage: UIImageView!
     
-//    @IBAction func scheduleVisitBtnClicked(_ sender: Any) {
-//        let min = Date().addingTimeInterval(0)
-//        let max = Date().addingTimeInterval(60 * 60 * 24 * 4)
-//        let picker = DateTimePicker.create(minimumDate: min, maximumDate: max)
-//        picker.completionHandler = { date in
-//            let formatter = DateFormatter()
-//            formatter.dateFormat = "YYYY/MM/dd hh:mm:ss"
-//
-//            let dt = formatter.string(from: date)
-//            print("date: \(dt)")
-//            DispatchQueue.main.async{
-//                self.endPoint = UserDefaults.standard.string(forKey: "endpoint")!
-//                var request = URLRequest(url: URL(string: "\(self.endPoint)/scheduleVisit")!)
-//                request.httpMethod = "POST"
-//                let postString = "storeToken=&orderId=\(self.orderId)&type=set&scheduleDateTime=\(dt)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
-//
-//                request.httpBody = postString.data(using: .utf8)
-//                let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//                    guard let dataThis = data, error == nil else {
-//                        SwiftSpinner.hide()
-//                        // check for fundamental networking error
-//                        print("error=\(error.debugDescription)")
-//                        self.view.makeToast("Please Check Internet conection.", duration: 2.0, position: .bottom)
-//                        return
-//                    }
-//
-//                    if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           //
-//                        SwiftSpinner.hide()
-//                        //                check for http errors
-//                        print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                        print("response = \(response.debugDescription)")
-//                    } else{
-//                        DispatchQueue.main.async{
-//                            self.view.makeToast("Visit Scheduled successfully!", duration: 1.0, position: .bottom)
-//                        }
-//
-//                        print("response = \(response)")
-//
-//                    }
-//
-//                }
-//
-//
-//                task.resume()
-//
-//                picker.removeFromSuperview()
-//            }
-//        }
-//        picker.dismissHandler = {
-//            DispatchQueue.main.async{
-//                self.view.makeToast("Schedule Visit Cancelled", duration: 1.0, position: .bottom)
-//                picker.removeFromSuperview()
-//            }
-//
-//        }
-//
-//        let screenSize: CGRect = UIScreen.main.bounds
-//
-//        let screenWidth = screenSize.width
-//        let screenHeight = screenSize.height
-//
-//        picker.frame = CGRect(x: 0, y: (screenHeight-picker.frame.size.height), width: picker.frame.size.width, height: picker.frame.size.height)
-//        self.view.addSubview(picker)
-//    }
-//
-    
-    
-    
-    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
-        let scale = newWidth / image.size.width
-        let newHeight = image.size.height * scale
-        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
-        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage ?? UIImage()
-    }
+    var arrFailedAndSkipedTest = [ModelCompleteDiagnosticFlow]()
+    var arrFunctionalTest = [ModelCompleteDiagnosticFlow]()
+    var section = [""]
+    var resultJSON = JSON()
     
     var appPhysicalQuestionCodeStr = ""
     var appCodeStr = ""
@@ -224,18 +152,6 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        //self.myTableView.dataSource = self
-        //self.myTableView.delegate = self
-        
-        //self.view.addSubview(self.myTableView)
-        //DispatchQueue.main.asyncAfter(deadline: .now()) {
-        //self.myTableViewHeightConstraint.constant = self.myTableView.contentSize.height
-        //}
-    }
-    
     func addInfoToTextView()  {
         let strMessage = "Your sell back request has been registered with us and we will be calling you shortly to confirm an appointment for pickup.\nor you may call us on \(self.XtraCoverSupportNumber) for more details."
 
@@ -277,6 +193,16 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         return true
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? UIImage()
     }
 
     func callAPI(){
@@ -995,45 +921,562 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBOutlet weak var myTableView: UITableView!
-    
+    @IBOutlet weak var myTableViewHeightConstraint: NSLayoutConstraint!
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Num: \(indexPath.row)")
-        print("Value: \(self.myArray[indexPath.row])")
+        //print("Num: \(indexPath.row)")
+        //print("Value: \(self.myArray[indexPath.row])")
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.section.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.myArray.count
+        //return self.myArray.count
+        
+        if section == 0 {
+            if self.arrFailedAndSkipedTest.count > 0 {
+                return  self.arrFailedAndSkipedTest.count + 1
+            }
+            else {
+                return self.arrFunctionalTest.count + 1
+            }
+        }
+        else {
+            return self.arrFunctionalTest.count + 1
+        }
+        
     }
     
+    /*
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath as IndexPath)
-        //cell.textLabel!.text = "\(self.myArray[indexPath.row])"
-        //cell.textLabel?.sizeToFit()
-        //cell.textLabel?.layoutIfNeeded()
-        //return cell
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath)
         let lblTitle : UILabel = cell.viewWithTag(10) as! UILabel
         let lblSubTitle : UILabel = cell.viewWithTag(20) as! UILabel
         
+        /*
         let str = self.myArray[indexPath.row]
         let arrStr = str.components(separatedBy: ":")
-        
-        //lblTitle.text = self.myArray[indexPath.row]
-        
         lblTitle.text = arrStr[0]
         lblSubTitle.text = arrStr[1]
-        
-        print("arrStr[0]",arrStr[0])
-        print("arrStr[1]",arrStr[1])
+        */
         
         return cell
+    }*/
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if self.arrFailedAndSkipedTest.count > 0 {
+            if indexPath.section == 0 {
+                
+                if indexPath.row == 0 {
+                    
+                    let cellfailed = tableView.dequeueReusableCell(withIdentifier: "TestResultTitleCell", for: indexPath) as! TestResultTitleCell
+                    cellfailed.lblTitle.text = "Failed and Skipped Tests".localized
+                    cellfailed.lblTitle.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
+                    cellfailed.lblSeperator.isHidden = true
+                    
+                    return cellfailed
+                    
+                }else {
+                    
+                    let cellfailed = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
+                    cellfailed.imgReTry.image = UIImage(named: "unverified")
+                    cellfailed.lblName.text = self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType.localized
+                    cellfailed.imgReTry.isHidden = true
+                    cellfailed.lblReTry.isHidden = false
+                    //cellfailed.lblReTry.text = "ReTry".localized
+                    cellfailed.lblReTry.text = ""
+                 
+                    DispatchQueue.main.async {
+                        cellfailed.lblSeperator.isHidden = false
+                        
+                        if indexPath.row == 1 {
+                            //cellfailed.roundCorners([.topLeft,.topRight], radius: 10.0)
+                        }
+                        
+                        if indexPath.row == self.arrFailedAndSkipedTest.count {
+                            //cellfailed.roundCorners([.bottomLeft,.bottomRight], radius: 10.0)
+                            cellfailed.lblSeperator.isHidden = true
+                        }
+                    }
+                                        
+                    return cellfailed
+                    
+                }
+                
+            }
+            else{
+                
+                if indexPath.row == 0 {
+                    
+                    let cellfailed = tableView.dequeueReusableCell(withIdentifier: "TestResultTitleCell", for: indexPath) as! TestResultTitleCell
+                    cellfailed.lblTitle.text = "Functional Checks".localized
+                    cellfailed.lblTitle.textColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
+                    cellfailed.lblSeperator.isHidden = true
+                    
+                    return cellfailed
+                }else {
+                    
+                    let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
+                    cellFunction.imgReTry.image = UIImage(named: "rightGreen")
+                    cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
+                    cellFunction.imgReTry.isHidden = false
+                    cellFunction.lblReTry.isHidden = true
+                    
+                    
+                    DispatchQueue.main.async {
+                        cellFunction.lblSeperator.isHidden = false
+                        
+                        if indexPath.row == 1 {
+                            //cellFunction.roundCorners([.topLeft,.topRight], radius: 10.0)
+                        }
+                        
+                        if indexPath.row == self.arrFunctionalTest.count {
+                            //cellFunction.roundCorners([.bottomLeft,.bottomRight], radius: 10.0)
+                            cellFunction.lblSeperator.isHidden = true
+                        }
+                    }
+                    
+                    return cellFunction
+                    
+                }
+                
+                
+            }
+        }
+        else{
+            
+            if indexPath.row == 0 {
+                
+                let cellfailed = tableView.dequeueReusableCell(withIdentifier: "TestResultTitleCell", for: indexPath) as! TestResultTitleCell
+                cellfailed.lblTitle.text = "Functional Checks".localized
+                cellfailed.lblSeperator.isHidden = true
+                cellfailed.lblTitle.textColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
+                
+                return cellfailed
+            }else {
+                
+                let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
+                cellFunction.imgReTry.image = UIImage(named: "rightGreen")
+                cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
+                cellFunction.imgReTry.isHidden = false
+                cellFunction.lblReTry.isHidden = true
+                
+            
+                DispatchQueue.main.async {
+                    cellFunction.lblSeperator.isHidden = false
+                    
+                    if indexPath.row == 1 {
+                        //cellFunction.roundCorners([.topLeft,.topRight], radius: 10.0)
+                    }
+                    
+                    if indexPath.row == self.arrFunctionalTest.count {
+                        //cellFunction.roundCorners([.bottomLeft,.bottomRight], radius: 10.0)
+                        cellFunction.lblSeperator.isHidden = true
+                    }
+                }
+                                
+                return cellFunction
+                
+            }
+            
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.myTableView.register(UINib(nibName: "TestResultCell", bundle: nil), forCellReuseIdentifier: "testResultCell")
+        self.myTableView.register(UINib(nibName: "TestResultTitleCell", bundle: nil), forCellReuseIdentifier: "TestResultTitleCell")
+        
+        self.myTableView.addObserver(self, forKeyPath: "contentSize", options: .new, context: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        self.myTableView.removeObserver(self, forKeyPath: "contentSize")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        
+        if(keyPath == "contentSize") {
+            if let newvalue = change?[.newKey]
+            {
+                let newsize  = newvalue as! CGSize
+                self.myTableViewHeightConstraint.constant = newsize.height + 10.0
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.view.layoutIfNeeded()
+                }
+                
+            }
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        self.arrFailedAndSkipedTest.removeAll()
+        self.arrFunctionalTest.removeAll()
+        
+        print("self.resultJSON" , self.resultJSON)
+        
+        if(!UserDefaults.standard.bool(forKey: "deadPixel")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 1
+            model.strTestType = "Dead Pixels"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Dead Pixels"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "screen")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 1
+            model.strTestType = "Screen"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Screen"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "rotation")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 2
+            model.strTestType = "Rotation"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Rotation"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "proximity")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 3
+            model.strTestType = "Proximity"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Proximity"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "volume")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 4
+            model.strTestType = "Hardware Buttons"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Hardware Buttons"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "earphone")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 5
+            model.strTestType = "Earphone"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Earphone"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "charger")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 6
+            model.strTestType = "Charger"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Charger"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Camera"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Camera"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        /*
+        var biometricTest = ""
+        switch UIDevice.current.moName {
+            
+        case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max":
+            
+            print("hello faceid available")
+            // device supports face id recognition.
+            
+            biometricTest = "Face-Id Scanner"
+            
+        default:
+            biometricTest = "Fingerprint Scanner"
+            
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "fingerprint")) {
+            //if self.resultJSON["Fingerprint Scanner"].int != 0  {
+                //if self.resultJSON["Fingerprint Scanner"].int != -2 {
+                    let model = ModelCompleteDiagnosticFlow()
+                    model.priority = 8
+                    //model.strTestType = "Fingerprint Scanner"
+                    model.strTestType = biometricTest
+                    self.arrFailedAndSkipedTest.append(model)
+                //}
+            //}
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            //model.strTestType = "Fingerprint Scanner"
+            model.strTestType = biometricTest
+            self.arrFunctionalTest.append(model)
+        }
+        */
+        
+        var biometricTest = ""
+        if BioMetricAuthenticator.canAuthenticate() {
+            
+            if BioMetricAuthenticator.shared.faceIDAvailable() {
+                biometricTest = "Face-Id Scanner"
+            }else {
+                biometricTest = "Fingerprint Scanner"
+            }
+            
+            if(!UserDefaults.standard.bool(forKey: "fingerprint")) {
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 8
+                //model.strTestType = "Fingerprint Scanner"
+                model.strTestType = biometricTest
+                self.arrFailedAndSkipedTest.append(model)
+            }
+            else{
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 0
+                //model.strTestType = "Fingerprint Scanner"
+                model.strTestType = biometricTest
+                self.arrFunctionalTest.append(model)
+            }
+            
+        }else {
+            print("Device Biometric not support")
+            print("Device does not have Biometric Authentication Method")
+            
+            biometricTest = "Biometric Authentication"
+            
+            let model = ModelCompleteDiagnosticFlow()
+            model.strTestType = biometricTest
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        
+        
+        if(!UserDefaults.standard.bool(forKey: "WIFI")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 9
+            model.strTestType = "WIFI"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "WIFI"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "GPS")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 10
+            model.strTestType = "GPS"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "GPS"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "Bluetooth")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 11
+            model.strTestType = "Bluetooth"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Bluetooth"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "GSM")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 12
+            model.strTestType = "GSM"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "GSM"
+            self.arrFunctionalTest.append(model)
+        }
+                    
+        if (!UserDefaults.standard.bool(forKey: "mic")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 15
+            model.strTestType = "Microphone"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Microphone"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Speakers")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 16
+            model.strTestType = "Speaker"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Speaker"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Vibrator")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 17
+            model.strTestType = "Vibrator"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Vibrator"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "Torch")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 18
+            model.strTestType = "FlashLight"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "FlashLight"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        /*
+        if(!UserDefaults.standard.bool(forKey: "Autofocus")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 19
+            model.strTestType = "Autofocus"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Autofocus"
+            self.arrFunctionalTest.append(model)
+        }
+        */
+        
+        if(!UserDefaults.standard.bool(forKey: "GSM")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 20
+            model.strTestType = "SMS Verification"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "SMS Verification"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "Storage")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 21
+            model.strTestType = "Storage"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Storage"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "Battery")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 21
+            model.strTestType = "Battery"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Battery"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if arrFailedAndSkipedTest.count > 0 {
+            self.section = ["Failed and Skipped Tests".localized, "Functional Checks".localized]
+        }
+        else{
+            self.section = ["Functional Checks".localized]
+        }
+               
+        self.myTableView.dataSource = self
+        self.myTableView.delegate = self
+        
+        self.myTableView.reloadData()
+                
+    }
+    
     
     func createTableUsingMyArray() {
         
@@ -1085,7 +1528,6 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if(appCodeS.contains("CPBP04")){
             b = "Dented".localized
         }
-        
         
         
         let back = "\(db): \(b)"

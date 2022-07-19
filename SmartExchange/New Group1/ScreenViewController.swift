@@ -13,6 +13,9 @@ import SwiftyJSON
 import AVKit
 
 class ScreenViewController: UIViewController {
+    
+    var screenRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var screenTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     @IBOutlet weak var startScreenBtn: UIButton!
     @IBOutlet weak var screenImageView: UIImageView!
@@ -72,7 +75,7 @@ class ScreenViewController: UIViewController {
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
         DispatchQueue.main.async {
-            self.checkMicrophone()
+            //self.checkMicrophone()
         }
         
     }
@@ -200,15 +203,38 @@ class ScreenViewController: UIViewController {
             UserDefaults.standard.set(true, forKey: "screen")
             resultJSON["Screen"].int = 1
             
+            /*
             if self.isComingFromTestResult {
+                
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
+                vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: nil)
+                
             }else {
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+               
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
                 vc.resultJSON = self.resultJSON
+                vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            
         }else{
             
             let title = "screen_failed_info".localized
@@ -221,9 +247,24 @@ class ScreenViewController: UIViewController {
             // Create buttons
             let buttonOne = DefaultButton(title: "Yes".localized) {
                 popup.dismiss(animated: true, completion: nil)
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
-                vc.resultJSON = self.resultJSON
-                self.present(vc, animated: true, completion: nil)
+                
+                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
+                //vc.resultJSON = self.resultJSON
+                //self.present(vc, animated: true, completion: nil)
+                
+                DispatchQueue.main.async {
+                    for v in self.obstacleViews{
+                        v.removeFromSuperview()
+                    }
+                    self.obstacleViews = []
+                    self.flags = []
+                    self.totalTime = 40
+                    self.startTest = false
+                    //self.resultJSON = JSON()
+                    //self.startScreenBtn.isHidden = false
+                    self.screenImageView.isHidden = false
+                }
+                
             }
             
             let buttonTwo = CancelButton(title: "No".localized) {
@@ -231,15 +272,38 @@ class ScreenViewController: UIViewController {
                 UserDefaults.standard.set(false, forKey: "screen")
                 self.resultJSON["Screen"].int = 0
                 
+                /*
                 if self.isComingFromTestResult {
+                    
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                    
                 }else {
+                    
                     print("This screen not dismissed")
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+                    //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+                    
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
                 
             }

@@ -15,6 +15,9 @@ import SwiftGifOrigin
 
 class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate {
     
+    var micRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var micTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var lblCheckingMicrophone: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
     
@@ -29,7 +32,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     var isComingFromTestResult = false
     var isComingFromProductquote = false
     
-    var recordingSession: AVAudioSession!
+    var recordingSession: AVAudioSession?
     var audioRecorder: AVAudioRecorder!
     
     var recording: Recording!
@@ -51,13 +54,13 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         
         // Recording audio requires a user's permission to stop malicious apps doing malicious things, so we need to request recording permission from the user.
         
-        recordingSession = AVAudioSession.sharedInstance()
+        self.recordingSession = AVAudioSession.sharedInstance()
 
         do {
-            try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try recordingSession.setActive(true)
+            try self.recordingSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try self.recordingSession?.setActive(true)
             
-            recordingSession.requestRecordPermission() { [unowned self] allowed in
+            self.recordingSession?.requestRecordPermission() { [unowned self] allowed in
                 DispatchQueue.main.async {
                     if allowed {
                         //self.loadRecordingUI()
@@ -91,8 +94,8 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
 
     func changeLanguageOfUI() {
   
-        self.lblCheckingMicrophone.text = "Checking Microphone".localized
-        self.lblPleaseEnsure.text = "Click to start button. after that microphone will listen your voice for 4 seconds to check your microphone is working or not".localized
+        self.lblCheckingMicrophone.text = "Checking Microphone"
+        self.lblPleaseEnsure.text = "Click to start button. after that microphone will listen your voice for 4 seconds to check your microphone is working or not"
         
         self.btnStart.setTitle("Start".localized, for: UIControlState.normal)
         self.btnSkip.setTitle("Skip".localized, for: UIControlState.normal)
@@ -273,10 +276,40 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     }
     
     func goNext() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-        vc.resultJSON = self.resultJSON
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
+                
+        /*
+        if self.isComingFromTestResult {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }else {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "SpeakerVC") as! SpeakerVC
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }*/
+        
+        if self.isComingFromTestResult {
+            
+            guard let didFinishRetryDiagnosis = self.micRetryDiagnosis else { return }
+            didFinishRetryDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        else{
+            
+            guard let didFinishTestDiagnosis = self.micTestDiagnosis else { return }
+            didFinishTestDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        
+        
     }
     
     func skipTest() {
@@ -292,8 +325,13 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         
         // Create buttons
         let buttonOne = CancelButton(title: "Yes".localized) {
-
+            
+            self.resultJSON["MIC"].int = -1
+            UserDefaults.standard.set(false, forKey: "mic")
+                
+            /*
             if self.isComingFromTestResult {
+                
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 
                 self.resultJSON["MIC"].int = -1
@@ -302,6 +340,33 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
                 vc.resultJSON = self.resultJSON
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: nil)
+                
+            }else {
+                
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "SpeakerVC") as! SpeakerVC
+                
+                self.resultJSON["MIC"].int = -1
+                UserDefaults.standard.set(false, forKey: "mic")
+                
+                vc.resultJSON = self.resultJSON
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+                
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.micRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.micTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
           
         }

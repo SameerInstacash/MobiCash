@@ -18,6 +18,9 @@ import JGProgressHUD
 
 class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
     
+    var backgroundRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var backgroundTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var internalImageView: UIImageView!
     
     var location = CLLocation()
@@ -302,7 +305,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
             
         }
         
-        if count > 2 {
+        if count == 2 {
             DispatchQueue.main.async {
                 //SwiftSpinner.show(progress: 1.0, title: "Tests_Complete".localized)
                 //SwiftSpinner.setTitleFont(UIFont(name: "Futura", size: 22.0))
@@ -313,7 +316,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
             }
         }
         
-        if count > 3 {
+        if count == 3 {
             DispatchQueue.main.async {
                 locationManager.cancelLocationRequest(INTULocationRequestID.init())
                 
@@ -443,12 +446,30 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
             self.present(vc, animated: true, completion: nil)
             */
             
+            /*
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
             print("Result JSON: \(self.resultJSON)")
             vc.resultJSON = self.resultJSON
             //vc.appCodeStr = String(appCodestr)
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
+            */
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.backgroundRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.backgroundTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            
             
         }
         

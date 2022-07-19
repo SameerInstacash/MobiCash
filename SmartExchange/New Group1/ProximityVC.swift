@@ -12,6 +12,9 @@ import SwiftyJSON
 
 class ProximityVC: UIViewController {
     
+    var proximityRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var proximityTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     var resultJSON = JSON()
     var isComingFromTestResult = false
 
@@ -35,6 +38,7 @@ class ProximityVC: UIViewController {
             
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: nil)
             
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -43,6 +47,21 @@ class ProximityVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "VRVC") as! VolumeRockerVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.proximityRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.proximityTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
             
         }
@@ -124,6 +143,7 @@ class ProximityVC: UIViewController {
             
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: nil)
             
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -132,8 +152,22 @@ class ProximityVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "VRVC") as! VolumeRockerVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
-            }
+            }*/
             
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.proximityRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.proximityTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
 
         }
     }

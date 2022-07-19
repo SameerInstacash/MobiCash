@@ -14,6 +14,9 @@ import AudioToolbox
 
 class SpeakerVC: UIViewController, UITextFieldDelegate {
     
+    var speakerRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var speakerTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var lblCheckingSpeaker: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
     
@@ -35,7 +38,8 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     var isComingFromTestResult = false
     var isComingFromProductquote = false
     
-    let audioSession = AVAudioSession.sharedInstance()
+    //let audioSession = AVAudioSession.sharedInstance()
+    var audioSession: AVAudioSession?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,7 +47,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         self.hideKeyboardWhenTappedAround()
         
-        self.txtFieldNum.layer.cornerRadius = 20.0
+        self.txtFieldNum.layer.cornerRadius = 10.0
         self.txtFieldNum.layer.borderWidth = 1.0
         self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
                 
@@ -71,13 +75,16 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     }
     
     func configureAudioSessionCategory() {
+        
+        self.audioSession = AVAudioSession.sharedInstance()
+        
         print("Configuring audio session")
         do {
             //try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try audioSession.setActive(true)
-            try audioSession.overrideOutputAudioPort(AVAudioSessionPortOverride.speaker)
-            print("AVAudio Session out options: ", audioSession.currentRoute)
+            try self.audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try self.audioSession?.setActive(true)
+            try self.audioSession?.overrideOutputAudioPort(AVAudioSessionPortOverride.speaker)
+            print("AVAudio Session out options: ", self.audioSession?.currentRoute ?? "")
             print("Successfully configured audio session.")
         } catch (let error) {
             print("Error while configuring audio session: \(error)")
@@ -151,9 +158,9 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         // 8/10/21
         // This is to audio output from bottom (main) speaker
         do {
-            try audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
-            try audioSession.setActive(true)
-            print("Successfully configured audio session (SPEAKER-Bottom).", "\nCurrent audio route: ",audioSession.currentRoute.outputs)
+            try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+            try self.audioSession?.setActive(true)
+            print("Successfully configured audio session (SPEAKER-Bottom).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
         } catch let error as NSError {
             print("#configureAudioSessionToSpeaker Error \(error.localizedDescription)")
         }
@@ -205,9 +212,9 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             
             // This is to audio output from bottom (main) speaker
             do {
-                try self.audioSession.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
-                try self.audioSession.setActive(true)
-                print("Successfully configured audio session (SPEAKER-Upper).", "\nCurrent audio route: ",self.audioSession.currentRoute.outputs)
+                try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+                try self.audioSession?.setActive(true)
+                print("Successfully configured audio session (SPEAKER-Upper).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
             } catch let error as NSError {
                 print("#configureAudioSessionToEarpieceSpeaker Error \(error.localizedDescription)")
             }
@@ -267,10 +274,40 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     }
     
     func goNext() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-        vc.resultJSON = self.resultJSON
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
+          
+        /*
+        if self.isComingFromTestResult {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }else {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "VibratorVC") as! VibratorVC
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }*/
+        
+        if self.isComingFromTestResult {
+            
+            guard let didFinishRetryDiagnosis = self.speakerRetryDiagnosis else { return }
+            didFinishRetryDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        else{
+            
+            guard let didFinishTestDiagnosis = self.speakerTestDiagnosis else { return }
+            didFinishTestDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        
+        
     }
     
     //MARK: TextField Delegate
@@ -364,19 +401,48 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         
         // Create buttons
         let buttonOne = CancelButton(title: "Yes".localized) {
-
+            
+            self.resultJSON["Speakers"].int = -1
+            UserDefaults.standard.set(false, forKey: "Speakers")
+            
+            /*
             if self.isComingFromTestResult {
                 
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 
                 self.resultJSON["Speakers"].int = -1
-                //self.resultJSON["Microphone"].int = 0
-                //UserDefaults.standard.set(false, forKey: "Microphone")
                 UserDefaults.standard.set(false, forKey: "Speakers")
                 
                 vc.resultJSON = self.resultJSON
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: nil)
+                
+            }else {
+                
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "VibratorVC") as! VibratorVC
+                
+                self.resultJSON["Speakers"].int = -1
+                UserDefaults.standard.set(false, forKey: "Speakers")
+                
+                vc.resultJSON = self.resultJSON
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+                
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.speakerRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.speakerTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
           
         }

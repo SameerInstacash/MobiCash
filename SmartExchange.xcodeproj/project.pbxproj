@@ -43,6 +43,7 @@
 		5966EF612614812C00E91F21 /* seven.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF562614812800E91F21 /* seven.wav */; };
 		5966EF622614812C00E91F21 /* zero.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF572614812A00E91F21 /* zero.wav */; };
 		5966EF632614812C00E91F21 /* five.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF582614812C00E91F21 /* five.wav */; };
+		596F3430288526AD008E9B4D /* TorchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596F342F288526AD008E9B4D /* TorchVC.swift */; };
 		59BDBE38283F396B00A7890F /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE32283F396800A7890F /* TPKeyboardAvoidingTableView.m */; };
 		59BDBE39283F396B00A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE33283F396800A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		59BDBE3A283F396B00A7890F /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */; };
@@ -165,6 +166,7 @@
 		5966EF562614812800E91F21 /* seven.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = seven.wav; sourceTree = "<group>"; };
 		5966EF572614812A00E91F21 /* zero.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = zero.wav; sourceTree = "<group>"; };
 		5966EF582614812C00E91F21 /* five.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = five.wav; sourceTree = "<group>"; };
+		596F342F288526AD008E9B4D /* TorchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TorchVC.swift; sourceTree = "<group>"; };
 		59BDBE2F283F396600A7890F /* SmartExchange-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartExchange-Bridging-Header.h"; sourceTree = "<group>"; };
 		59BDBE30283F396700A7890F /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
 		59BDBE31283F396800A7890F /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
@@ -343,18 +345,6 @@
 				C39948221E54270600F01384 /* ViewController.swift */,
 				C37A34E32074075C004A4986 /* IMEIViewController.swift */,
 				C39F31DB1E7A969C00959100 /* SmartExMainVC.swift */,
-				C3E76E6B1E7D5C6D00228428 /* DeadPixelVC.swift */,
-				C31CFDEC207DE80C003870BE /* ScreenViewController.swift */,
-				C3E1C2EC1E7FA8760043DB5C /* AutoRotationVC.swift */,
-				C3798EDC1E7EF8B100D95BA1 /* ProximityVC.swift */,
-				C3F2C42E1E7EC73E0034E035 /* VolumeRockerVC.swift */,
-				C343A76E1E7FBFA500C355DD /* EarphoneJackVC.swift */,
-				C343A7701E7FC2BF00C355DD /* DeviceChargerVC.swift */,
-				C3F4AC901E81062D00D18FFA /* CameraViewController.swift */,
-				C37A34E12073EFAD004A4986 /* FingerprintViewController.swift */,
-				59420D28262EBFA30048B712 /* WiFiTestVC.swift */,
-				C3E76E691E7D5C5900228428 /* InternalTests.swift */,
-				C393FA88207625C600D43AEB /* ResultsViewController.swift */,
 				C31CFDF020871398003870BE /* Question.swift */,
 				C3DED6BE207C83B800324995 /* Answer.swift */,
 				C3DED6C2207C8B8100324995 /* APIClient.swift */,
@@ -379,15 +369,27 @@
 			path = TableViewCell;
 			sourceTree = "<group>";
 		};
-		5966EF3C261480AB00E91F21 /* RetryTestVC */ = {
+		5966EF3C261480AB00E91F21 /* AllTestVC */ = {
 			isa = PBXGroup;
 			children = (
+				C3E76E6B1E7D5C6D00228428 /* DeadPixelVC.swift */,
+				C31CFDEC207DE80C003870BE /* ScreenViewController.swift */,
 				5966EF472614810100E91F21 /* MicrophoneVC.swift */,
-				5966EF482614810300E91F21 /* Recording.swift */,
 				5966EF492614810500E91F21 /* SpeakerVC.swift */,
 				5966EF46261480FF00E91F21 /* VibratorVC.swift */,
+				596F342F288526AD008E9B4D /* TorchVC.swift */,
+				C3E1C2EC1E7FA8760043DB5C /* AutoRotationVC.swift */,
+				C3798EDC1E7EF8B100D95BA1 /* ProximityVC.swift */,
+				C3F2C42E1E7EC73E0034E035 /* VolumeRockerVC.swift */,
+				C343A76E1E7FBFA500C355DD /* EarphoneJackVC.swift */,
+				C343A7701E7FC2BF00C355DD /* DeviceChargerVC.swift */,
+				C3F4AC901E81062D00D18FFA /* CameraViewController.swift */,
+				C37A34E12073EFAD004A4986 /* FingerprintViewController.swift */,
+				59420D28262EBFA30048B712 /* WiFiTestVC.swift */,
+				C3E76E691E7D5C5900228428 /* InternalTests.swift */,
+				C393FA88207625C600D43AEB /* ResultsViewController.swift */,
 			);
-			name = RetryTestVC;
+			name = AllTestVC;
 			path = "New Group1";
 			sourceTree = "<group>";
 		};
@@ -459,6 +461,7 @@
 		59E086D22674A6CF003FDA1C /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5966EF482614810300E91F21 /* Recording.swift */,
 				59E086D42674A709003FDA1C /* Reachability.swift */,
 				59E086D32674A709003FDA1C /* StoreUrlData.swift */,
 			);
@@ -527,7 +530,7 @@
 				59418635282E278800DB2723 /* Poppins Font */,
 				59E086D22674A6CF003FDA1C /* Models */,
 				5966EF3D261480B000E91F21 /* Mp3 Files */,
-				5966EF3C261480AB00E91F21 /* RetryTestVC */,
+				5966EF3C261480AB00E91F21 /* AllTestVC */,
 				5966EF3B261480A100E91F21 /* TableViewCell */,
 				C363AE3A208F061200D2AC54 /* hardwareQuestions */,
 				5963FDFD25F740C500EADBB1 /* Blynk Exchange.entitlements */,
@@ -953,6 +956,7 @@
 				59DA342E283B8ED3005AC9CA /* Msg.swift in Sources */,
 				C393FA89207625C600D43AEB /* ResultsViewController.swift in Sources */,
 				C3798EDD1E7EF8B100D95BA1 /* ProximityVC.swift in Sources */,
+				596F3430288526AD008E9B4D /* TorchVC.swift in Sources */,
 				C3DED6C3207C8B8100324995 /* APIClient.swift in Sources */,
 				C3B255732117002A0027B5C4 /* Q4optViewController.swift in Sources */,
 				5966EF4D2614810500E91F21 /* SpeakerVC.swift in Sources */,

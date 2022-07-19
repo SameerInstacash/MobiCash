@@ -15,6 +15,9 @@ import CoreMotion
 
 class VibratorVC: UIViewController {
     
+    var vibratorRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var vibratorTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var lblCheckingVibrator: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
     
@@ -38,7 +41,7 @@ class VibratorVC: UIViewController {
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         self.hideKeyboardWhenTappedAround()
         
-        self.txtFieldNum.layer.cornerRadius = 20.0
+        self.txtFieldNum.layer.cornerRadius = 10.0
         self.txtFieldNum.layer.borderWidth = 1.0
         self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
                 
@@ -143,10 +146,38 @@ class VibratorVC: UIViewController {
     }
     
     func goNext() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-        vc.resultJSON = self.resultJSON
-        vc.modalPresentationStyle = .fullScreen
-        self.present(vc, animated: true, completion: nil)
+        
+        /*
+        if self.isComingFromTestResult {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }else {
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "TorchVC") as! TorchVC
+            vc.resultJSON = self.resultJSON
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true, completion: nil)
+        }*/
+        
+        if self.isComingFromTestResult {
+            
+            guard let didFinishRetryDiagnosis = self.vibratorRetryDiagnosis else { return }
+            didFinishRetryDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        else{
+            
+            guard let didFinishTestDiagnosis = self.vibratorTestDiagnosis else { return }
+            didFinishTestDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        
     }
     
     func skipTest() {
@@ -162,8 +193,13 @@ class VibratorVC: UIViewController {
         
         // Create buttons
         let buttonOne = CancelButton(title: "Yes".localized) {
+            
+            self.resultJSON["Vibrator"].int = -1
+            UserDefaults.standard.set(false, forKey: "Vibrator")
 
+            /*
             if self.isComingFromTestResult {
+                
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 
                 self.resultJSON["Vibrator"].int = -1
@@ -172,6 +208,33 @@ class VibratorVC: UIViewController {
                 vc.resultJSON = self.resultJSON
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: nil)
+                
+            }else {
+                
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "TorchVC") as! TorchVC
+                
+                self.resultJSON["Vibrator"].int = -1
+                UserDefaults.standard.set(false, forKey: "Vibrator")
+                
+                vc.resultJSON = self.resultJSON
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true, completion: nil)
+                
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.vibratorRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.vibratorTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
           
         }

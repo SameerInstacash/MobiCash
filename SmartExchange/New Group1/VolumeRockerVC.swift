@@ -12,6 +12,9 @@ import PopupDialog
 import SwiftyJSON
 
 class VolumeRockerVC: UIViewController {
+    
+    var volumeRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var volumeTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     @IBOutlet weak var btnInfo: UITextView!
     @IBOutlet weak var volumeUpImg: UIImageView!
@@ -29,7 +32,7 @@ class VolumeRockerVC: UIViewController {
                 
         self.btnInfo.text = "hard_btn_info".localized
       
-        //*
+        /*
         self.volumeButtonHandler = JPSVolumeButtonHandler(up: {
             
                 print("Volume up pressed")
@@ -44,6 +47,7 @@ class VolumeRockerVC: UIViewController {
                     UserDefaults.standard.set(true, forKey: "volume")
                     self.resultJSON["Hardware Buttons"].int = 1
                     
+                    /*
                     if self.isComingFromTestResult {
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                         vc.resultJSON = self.resultJSON
@@ -52,7 +56,23 @@ class VolumeRockerVC: UIViewController {
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
                         vc.resultJSON = self.resultJSON
                         self.present(vc, animated: true, completion: nil)
+                    }*/
+                    
+                    if self.isComingFromTestResult {
+                        
+                        guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
                     }
+                    else{
+                        
+                        guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
+                    
                     
                 }
                 self.action()
@@ -72,7 +92,8 @@ class VolumeRockerVC: UIViewController {
                     
                     //UserDefaults.standard.set(true, forKey: "charger")
                     //UserDefaults.standard.set(true, forKey: "earphone")
-                                                                
+                               
+                    /*
                     if self.isComingFromTestResult {
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                         vc.resultJSON = self.resultJSON
@@ -81,6 +102,21 @@ class VolumeRockerVC: UIViewController {
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
                         vc.resultJSON = self.resultJSON
                         self.present(vc, animated: true, completion: nil)
+                    }*/
+                    
+                    if self.isComingFromTestResult {
+                        
+                        guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
+                    else{
+                        
+                        guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
                     }
                     
                 }
@@ -89,7 +125,7 @@ class VolumeRockerVC: UIViewController {
      
         let handler = volumeButtonHandler
         handler!.start(true)
-        //*/
+        */
         
     }
 
@@ -102,14 +138,14 @@ class VolumeRockerVC: UIViewController {
         super.viewWillAppear(true)
         
         // SAM comment on 18/4/22
-        //self.listenVolumeButton()
+        self.listenVolumeButton()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // SAM comment on 18/4/22
-        //self.audioSession.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
     }
     
     var volDown = false
@@ -137,7 +173,7 @@ class VolumeRockerVC: UIViewController {
 
     func listenVolumeButton() {
         
-        //let audioSession = AVAudioSession.sharedInstance()
+        self.audioSession = AVAudioSession.sharedInstance()
         
         do {
             try self.audioSession?.setActive(true, with: [])
@@ -172,6 +208,7 @@ class VolumeRockerVC: UIViewController {
                         UserDefaults.standard.set(true, forKey: "volume")
                         self.resultJSON["Hardware Buttons"].int = 1
                         
+                        /*
                         if self.isComingFromTestResult {
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                             vc.resultJSON = self.resultJSON
@@ -180,6 +217,21 @@ class VolumeRockerVC: UIViewController {
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
                             vc.resultJSON = self.resultJSON
                             self.present(vc, animated: true, completion: nil)
+                        }*/
+                        
+                        if self.isComingFromTestResult {
+                            
+                            guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                            didFinishRetryDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                            
+                        }
+                        else{
+                            
+                            guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                            didFinishTestDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                            
                         }
                         
                     }
@@ -201,6 +253,7 @@ class VolumeRockerVC: UIViewController {
                         UserDefaults.standard.set(true, forKey: "volume")
                         self.resultJSON["Hardware Buttons"].int = 1
                         
+                        /*
                         if self.isComingFromTestResult {
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                             vc.resultJSON = self.resultJSON
@@ -209,6 +262,21 @@ class VolumeRockerVC: UIViewController {
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
                             vc.resultJSON = self.resultJSON
                             self.present(vc, animated: true, completion: nil)
+                        }*/
+                        
+                        if self.isComingFromTestResult {
+                            
+                            guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                            didFinishRetryDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                            
+                        }
+                        else{
+                            
+                            guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                            didFinishTestDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                            
                         }
                         
                     }
@@ -238,10 +306,9 @@ class VolumeRockerVC: UIViewController {
             
             self.tearDown()
             UserDefaults.standard.set(false, forKey: "volume")
-               
-            
             self.resultJSON["Hardware Buttons"].int = 0
           
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -250,10 +317,23 @@ class VolumeRockerVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
             
-//            }else{
-//            }
         }
         
         let buttonTwo = DefaultButton(title: "No".localized) {
@@ -302,8 +382,6 @@ class VolumeRockerVC: UIViewController {
         self.present(popup, animated: true, completion: nil)
         
     }
-    
-
     
     
 

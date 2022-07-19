@@ -14,6 +14,9 @@ import SwiftyJSON
 
 class EarphoneJackVC: UIViewController {
     
+    var earphoneRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var earphoneTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     var resultJSON = JSON()
     @IBOutlet weak var earphoneInfoImage: UIImageView!
     var isComingFromTestResult = false
@@ -32,6 +35,7 @@ class EarphoneJackVC: UIViewController {
             UserDefaults.standard.set(false, forKey: "earphone")
             self.resultJSON["Earphone"].int = 0
             
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -40,6 +44,21 @@ class EarphoneJackVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChargerVC") as! DeviceChargerVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.earphoneRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.earphoneTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
             
         }
@@ -137,6 +156,7 @@ class EarphoneJackVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "earphone")
                 self.resultJSON["Earphone"].int = 1
                 
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -145,13 +165,31 @@ class EarphoneJackVC: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChargerVC") as! DeviceChargerVC
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.earphoneRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.earphoneTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+
+                
                 break
             case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue:
                 print("headphone pulled out")
                 UserDefaults.standard.set(true, forKey: "earphone")
                 self.resultJSON["Earphone"].int = 1
                 
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -160,7 +198,24 @@ class EarphoneJackVC: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChargerVC") as! DeviceChargerVC
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
+                }*/
+                
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.earphoneRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.earphoneTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+
                 
                 break
             default:

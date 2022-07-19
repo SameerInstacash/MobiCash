@@ -12,6 +12,9 @@ import PopupDialog
 
 class AutoRotationVC: UIViewController {
     
+    var rotationRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var rotationTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var beginBtn: UIButton!
     @IBOutlet weak var AutoRotationText: UITextView!
     @IBOutlet weak var AutoRotationImage: UIImageView!
@@ -38,6 +41,7 @@ class AutoRotationVC: UIViewController {
                 
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
                 
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -46,6 +50,21 @@ class AutoRotationVC: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProximityView") as! ProximityVC
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.rotationRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.rotationTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
                 
             }
@@ -137,6 +156,7 @@ class AutoRotationVC: UIViewController {
             
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
             
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -145,10 +165,25 @@ class AutoRotationVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProximityView") as! ProximityVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.rotationRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.rotationTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
             
-            // let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
-            //self.present(vc, animated: true, completion: nil)
+            
         }
         
     }

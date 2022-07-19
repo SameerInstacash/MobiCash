@@ -12,8 +12,10 @@ import DKCamera
 import PopupDialog
 import SwiftyJSON
 
-
 class CameraViewController: UIViewController {
+    
+    var cameraRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var cameraTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     var resultJSON = JSON()
     var isFrontClick = false
@@ -72,10 +74,32 @@ class CameraViewController: UIViewController {
             
             if self.isFrontClick == true && self.isBackClick == true {
                 
-                self.dismiss(animated: true, completion: nil)
+                //self.dismiss(animated: true, completion: nil)
+                
                 UserDefaults.standard.set(true, forKey: "camera")
                 self.resultJSON["Camera"].int = 1
                 
+                if self.isComingFromTestResult {
+                    
+                    camera.dismiss(animated: false) {
+                        guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                    
+                }
+                else{
+                    
+                    camera.dismiss(animated: false) {
+                        guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                    
+                }
+                
+                
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -84,7 +108,7 @@ class CameraViewController: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
-                }
+                }*/
                 
             }
         }
@@ -107,6 +131,7 @@ class CameraViewController: UIViewController {
                 UserDefaults.standard.set(false, forKey: "camera")
                 self.resultJSON["Camera"].int = 0
                 
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -115,8 +140,22 @@ class CameraViewController: UIViewController {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
-                }
+                }*/
                 
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
                 
             }
         }

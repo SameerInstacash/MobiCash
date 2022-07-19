@@ -15,6 +15,9 @@ import JGProgressHUD
 
 class WiFiTestVC: UIViewController {
     
+    var wifiRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var wifiTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    
     @IBOutlet weak var btnStart: UIButton!
     //@IBOutlet weak var btnSkip: UIButton!
     
@@ -101,6 +104,7 @@ class WiFiTestVC: UIViewController {
     
     func navigateToBackgroundTestScreen() {
         
+        /*
         if self.isComingFromTestResult {
 
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
@@ -115,6 +119,21 @@ class WiFiTestVC: UIViewController {
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true, completion: nil)
            
+        }*/
+        
+        if self.isComingFromTestResult {
+            
+            guard let didFinishRetryDiagnosis = self.wifiRetryDiagnosis else { return }
+            didFinishRetryDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
+        }
+        else{
+            
+            guard let didFinishTestDiagnosis = self.wifiTestDiagnosis else { return }
+            didFinishTestDiagnosis(self.resultJSON)
+            self.dismiss(animated: false, completion: nil)
+            
         }
         
     }

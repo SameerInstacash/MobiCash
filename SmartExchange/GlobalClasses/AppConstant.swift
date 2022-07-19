@@ -12,11 +12,12 @@ import SwiftyJSON
 var AppUserName = "planetm"
 var AppApiKey = "fd9a42ed13c8b8a27b5ead10d054caaf"
 
-var AppBaseUrl = "https://xcover-uat.getinstacash.in/xtracoverexchange/api/v1/public/" // Staging
-//var AppBaseUrl = "https://sellncash.xtracover.com/xtracoverexchange/api/v1/public/" // Live
 
-var AppBaseTnc = "https://xcover-uat.getinstacash.in/xtracoverexchange/tnc.php"  // Staging
-//var AppBaseTnc = "https://sellncash.xtracover.com/xtracoverexchange/tnc.php"  // Live
+var AppBaseUrl = "https://mgarage-uat.getinstacash.in/mgexchange/api/v1/public/" // Staging
+//var AppBaseUrl = "" // Live
+
+var AppBaseTnc = "https://mgarage-uat.getinstacash.in/mgexchange/tnc.php"  // Staging
+//var AppBaseTnc = ""  // Live
 
 
 // Api Name

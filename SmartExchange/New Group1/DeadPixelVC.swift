@@ -17,6 +17,9 @@ import CoreMotion
 import AVFoundation
 
 class DeadPixelVC: UIViewController {
+    
+    var deadPixelRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var deadPixelTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     @IBOutlet weak var startTestBtn: UIButton!
     @IBOutlet weak var deadPixelInfoImage: UIImageView!
@@ -43,14 +46,13 @@ class DeadPixelVC: UIViewController {
         //self.playSound()
         
         DispatchQueue.main.async {
-            self.configureAudioSessionCategory()
-            self.playSound()
+            //self.configureAudioSessionCategory()
+            //self.playSound()
         }
            
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.checkVibrator()
+            //self.checkVibrator()
         }
-        
         
         
     }
@@ -91,14 +93,36 @@ class DeadPixelVC: UIViewController {
                 UserDefaults.standard.set(false, forKey: "deadPixel")
                 print("Dead Pixel Failed!")
                 
+                /*
                 if self.isComingFromTestResult {
+                    
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                    
                 }else {
+                    
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                    
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
                 
             }
@@ -108,25 +132,49 @@ class DeadPixelVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "deadPixel")
                 print("Dead Pixel Passed!")
                 
+                /*
                 if self.isComingFromTestResult {
+                    
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                    
                 }else {
+                    
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
                     vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
                     self.present(vc, animated: true, completion: nil)
+                    
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
                 
             }
             
             let buttonThree = DefaultButton(title: "retry".localized) {
+                
                 self.timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
                 self.view.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 self.startTestBtn.isHidden = true
                 self.deadPixelInfo.isHidden = true
                 self.deadPixelInfoImage.isHidden = true
                 self.timerIndex = 0
+                
             }
             
                         
@@ -157,7 +205,6 @@ class DeadPixelVC: UIViewController {
             // Customize default button appearance
             let db = DefaultButton.appearance()
             db.titleFont      = UIFont(name: GlobalUtility().AppFontMedium, size: 16)!
-            
             
             
             // Customize cancel button appearance

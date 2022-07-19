@@ -37,6 +37,7 @@ extension UIViewController {
 public extension UIDevice {
     
     var moName: String {
+        
         var systemInfo = utsname()
         uname(&systemInfo)
         let machineMirror = Mirror(reflecting: systemInfo.machine)
@@ -50,6 +51,10 @@ public extension UIDevice {
         case "iPod5,1":                                 return "iPod touch (5th generation)"
         case "iPod7,1":                                 return "iPod touch (6th generation)"
         case "iPod9,1":                                 return "iPod touch (7th generation)"
+            
+        case "iPhone1,1":                               return "iPhone"
+        case "iPhone1,2":                               return "iPhone 3G"
+        case "iPhone2,1":                               return "iPhone 3GS"
             
         case "iPhone3,1", "iPhone3,2", "iPhone3,3":     return "iPhone 4"
         case "iPhone4,1":                               return "iPhone 4s"
@@ -69,10 +74,12 @@ public extension UIDevice {
         case "iPhone11,2":                              return "iPhone XS"
         case "iPhone11,4", "iPhone11,6":                return "iPhone XS Max"
         case "iPhone11,8":                              return "iPhone XR"
+            
         case "iPhone12,1":                              return "iPhone 11"
         case "iPhone12,3":                              return "iPhone 11 Pro"
         case "iPhone12,5":                              return "iPhone 11 Pro Max"
         case "iPhone12,8":                              return "iPhone SE (2nd generation)"
+            
         case "iPhone13,1":                              return "iPhone 12 mini"
         case "iPhone13,2":                              return "iPhone 12"
         case "iPhone13,3":                              return "iPhone 12 Pro"
@@ -82,8 +89,9 @@ public extension UIDevice {
         case "iPhone14,5":                              return "iPhone 13"
         case "iPhone14,2":                              return "iPhone 13 Pro"
         case "iPhone14,3":                              return "iPhone 13 Pro Max"
-            
-            
+        case "iPhone14,6":                              return "iPhone SE 3rd Gen"
+             
+                        
         //iPad
         case "iPad1,1", "iPad1,2":                      return "iPad (1st generation)"
         case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return "iPad (2nd generation)"
@@ -123,7 +131,7 @@ public extension UIDevice {
         case "AppleTV6,2":                              return "Apple TV 4K"
         case "AudioAccessory1,1":                       return "HomePod"
         case "AudioAccessory5,1":                       return "HomePod mini"
-        case "i386", "x86_64":                          return "iPhone 13 Pro"
+        case "i386", "x86_64":                          return identifier
         default:                                        return identifier
         
         }
@@ -302,7 +310,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         
     }
     
-    @IBAction func submitStoreToken(_ sender: Any) {
+    @IBAction func submitStoreTokenBtnPressed(_ sender: Any) {
         
         if self.storeTokenEdit.text?.isEmpty ?? false {
             
@@ -317,171 +325,28 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             }
             
         }else {
-            self.fireWebServiceForQuoteId(quoteID: self.storeTokenEdit.text ?? "")
+            
+            let strTxtFld = (self.storeTokenEdit.text ?? "").uppercased()
+            print("strTxtFld", strTxtFld)
+            
+            if strTxtFld.contains("C") {
+                
+                let token = strTxtFld.replacingOccurrences(of: "C", with: "")
+                print("token is :",token)
+                
+                self.fireWebServiceForQuoteId(quoteID: token)
+                
+            }else {
+                
+                print("storeToken is :",self.storeTokenEdit.text ?? "")
+                self.storeToken = self.storeTokenEdit.text ?? ""
+                self.verifyUserSmartCode()
+                
+            }
+            
         }
         
         return
-        
-        /*
-        self.storeToken = String(storeTokenEdit.text ?? "0")
-        switch(self.storeToken.prefix(4)) {
-        case "9100"  :
-            self.endPoint = "https://exchange.getinstacash.com/store/api/v1/public/"
-            break;
-        case "6000"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6300"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9000"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6001"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6002"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6301"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6302"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6003"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6004"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6303"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6304"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6005"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9001"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6305"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6305"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6006"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6007"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9002"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9003"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6306"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6307"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6008"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6009"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/asurionre/api/v1/public/"
-            break;
-        case "6010"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6011"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9004"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9005"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9006"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6308"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6309"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6310"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6311"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6312"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6313"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6314"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9007"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9008"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9009"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9010"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "8515"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6016"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6017"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6018"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6019"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6020"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6315"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "8516"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "6501"  :
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        case "9102"  :
-            self.endPoint = "https://exchange.getinstacash.com/blynk/api/v1/public/"
-            break;
-            /* you can have any number of case statements */
-        default : /* Optional */
-            self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-            break;
-        }
-        self.verifyUserSmartCode()
-        */
         
         
         self.storeToken = String(storeTokenEdit.text ?? "0")
@@ -513,7 +378,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     
                     self.verifyUserSmartCode()
                     
-                    UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+                    //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                     
                     //break
                     return
@@ -538,7 +403,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             
             self.verifyUserSmartCode()
             
-            UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+            //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
             
         }else {
             DispatchQueue.main.async() {
@@ -597,7 +462,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
     }
     
     
-    @IBAction func scanQRPressed(_ sender: Any) {
+    @IBAction func scanQRBtnPressed(_ sender: Any) {
         
         DispatchQueue.main.async {
             
@@ -607,15 +472,34 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             self.readerVC.delegate               = self
             
             self.readerVC.completionBlock = { (result: QRCodeReaderResult?) in
+                
                 if let result = result {
+                    
                     let completeResult = String(result.value)
                     print("completeResult is:-",completeResult)
                     
-                    if self.hasScanned {
-                        print("self.hasScanned = !self.hasScanned", self.hasScanned)
-                        self.hasScanned = !self.hasScanned
-                        self.fireWebServiceForQuoteId(quoteID: completeResult)
+                    let strTxtFld = completeResult.uppercased()
+                    print("strTxtFld on Scan QRCode", strTxtFld)
+                 
+                    if strTxtFld.contains("C") {
+                        
+                        let token = strTxtFld.replacingOccurrences(of: "C", with: "")
+                        print("token is :",token)
+                        self.fireWebServiceForQuoteId(quoteID: token)
+                        
+                    }else {
+                        
+                        print("storeToken is :", completeResult)
+                        self.storeToken = completeResult
+                        self.verifyUserSmartCode()
+                        
                     }
+                    
+                    //if self.hasScanned {
+                        //print("self.hasScanned = !self.hasScanned", self.hasScanned)
+                        //self.hasScanned = !self.hasScanned
+                        //self.fireWebServiceForQuoteId(quoteID: completeResult)
+                    //}
                     
                     return
                     
@@ -632,166 +516,6 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         self.appCodes = ""
                     }
                     
-                    /*
-                    switch(self.storeToken.prefix(4)) {
-                    case "9100"  :
-                        self.endPoint = "https://exchange.getinstacash.com/store/api/v1/public/"
-                        break;
-                    case "6000"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6300"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9000"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6001"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6002"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6301"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6302"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6003"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6004"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6303"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6304"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6005"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9001"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6305"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6305"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6006"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6007"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9002"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9003"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6306"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6307"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6008"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6009"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6010"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6011"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9004"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9005"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9006"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6308"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6309"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6310"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6311"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6312"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6313"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6314"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9007"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9008"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9009"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9010"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "8515"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6016"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6017"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6018"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6019"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6020"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6315"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "8516"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "6501"  :
-                        self.endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
-                        break;
-                    case "9102"  :
-                        self.endPoint = "https://exchange.buyblynk.com/api/v1/public/"
-                        break;
-                        
-                        /* you can have any number of case statements */
-                    default : /* Optional */
-                        self.endPoint = "https://exchange.buyblynk.com/api/v1/public/"
-                        break;
-                    }
-                    self.verifyUserSmartCode()
-                    */
                     
                     if self.storeToken.count >= 4 {
                         print("self.storeToken", self.storeToken)
@@ -812,7 +536,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 
                                 self.verifyUserSmartCode()
                                 
-                                UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+                                //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                                 
                                 //break
                                 return
@@ -838,7 +562,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         
                         self.verifyUserSmartCode()
                         
-                        UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+                        //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                         
                     }else {
                         DispatchQueue.main.async() {
@@ -886,7 +610,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         
         self.QuoteIdPost(strURL: strUrl, parameters: parameters as NSDictionary, completionHandler: {responseObject , error in
             
-            self.hasScanned = !self.hasScanned
+            //self.hasScanned = !self.hasScanned
             print(responseObject ?? [:])
             
             DispatchQueue.main.async {
@@ -909,10 +633,14 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         self.storeToken = String(values[0])
                         self.productId = values[1]
                         self.appCodes = values[2]
+                        
+                        UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                     }else{
                         self.storeToken = String(values[0])
                         self.productId = ""
                         self.appCodes = ""
+                        
+                        UserDefaults.standard.setValue(true, forKey: "Trade_In_Online")
                     }
                     
                     
@@ -934,7 +662,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 
                                 self.verifyUserSmartCode()
                                 
-                                UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+                                //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                                 
                                 //break
                                 return
@@ -954,14 +682,12 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         
                         preferences.setValue(AppBaseTnc, forKey: "tncendpoint") 
                         
-                         
-                        
                         preferences.setValue(0, forKey: "storeType")
                         preferences.setValue(0, forKey: "tradeOnline")
                         
                         self.verifyUserSmartCode()
                         
-                        UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+                        //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                         
                     }else {
                         DispatchQueue.main.async() {
@@ -998,29 +724,22 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
     
     func verifyUserSmartCode() {
         let device = UIDevice.current.moName
-//        retryBtn.isHidden = true
-        
-        //smartExLoadingImage.isHidden = false
-        //smartExLoadingImage.rotate360Degrees()
         
         self.hud.textLabel.text = ""
         self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
         self.hud.show(in: self.view)
         
-        
         var request = URLRequest(url: URL(string: "\(self.endPoint)/startSession")!)
         let preferences = UserDefaults.standard
         preferences.set(self.endPoint, forKey: "endpoint")
         request.httpMethod = "POST"
-        //        let mName = UIDevice.current.modelName
+        //let mName = UIDevice.current.modelName
         let modelCapacity = getTotalSize()
-        //        let model =  "\(mName)"
+        //let model =  "\(mName)"
         let IMEI = imeiLabel.text
         let ram =  ProcessInfo.processInfo.physicalMemory
         //let ram = 3221223823
         let postString = "IMEINumber=\(IMEI!)&device=\(device)&memory=\(modelCapacity)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&ram=\(ram)&storeToken=\(self.storeToken)"
-//        let postString = "IMEINumber=\(IMEI!)&device=iPhone XR&memory=64&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&ram=2919613952&storeToken=6017"
-//                let postString = "IMEINumber=\(IMEI!)&device=a0001&memory=64&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&ram=1919613952&storeToken=6016"
         
         print("url is :",request,"\nParam is :",postString)
         
@@ -1050,6 +769,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     let preferences = UserDefaults.standard
                     var productIdenti = "0"
                     let productData = json["productData"]
+                    
                     if productData["id"].string ?? "" != "" {
                     
                         productIdenti = productData["id"].string ?? ""
@@ -1081,9 +801,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                             print("uptoPrice", uptoPrice)
                             
                             DispatchQueue.main.async() {
-                                let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
-                                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "UserDetailsVC") as! UserDetailsVC
-                                self.present(vc, animated: true, completion: nil)
+                                
+                                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
+                                //self.present(vc, animated: true, completion: nil)
+                                
+                                self.DeadPixelTest()
                             }
                             
                         }else {
@@ -1111,8 +833,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 print("uptoPrice", uptoPrice)
                                 
                                 DispatchQueue.main.async() {
-                                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
-                                    self.present(vc, animated: true, completion: nil)
+                                    
+                                    //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
+                                    //self.present(vc, animated: true, completion: nil)
+                                    
+                                    self.DeadPixelTest()
                                 }
                             }else{
                                 DispatchQueue.main.async {
@@ -1449,4 +1174,286 @@ class WebServies: NSObject {
     
  
     
+}
+
+
+extension ViewController {
+    
+    func DeadPixelTest() {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .flipHorizontal
+        
+        vc.deadPixelTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.touchScreenTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func touchScreenTest(_ testResultJSON : JSON) {
+
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.screenTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.MicrophoneTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func MicrophoneTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.micTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.SpeakerTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func SpeakerTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "SpeakerVC") as! SpeakerVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.speakerTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.VibratorTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func VibratorTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "VibratorVC") as! VibratorVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.vibratorTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.FlashlightTest(rsltJson)
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func FlashlightTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TorchVC") as! TorchVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.flashLightTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.AutoRotationTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func AutoRotationTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.rotationTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.ProximityTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func ProximityTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProximityView") as! ProximityVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.proximityTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.VolumeButtonTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func VolumeButtonTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "VRVC") as! VolumeRockerVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.volumeTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.EarphoneTest(rsltJson)
+                
+            }
+            
+            /*
+            DispatchQueue.main.async() {
+                
+                switch UIDevice.current.currentModelName {
+                case "iPhone 4","iPhone 4s","iPhone 5","iPhone 5c","iPhone 5s","iPhone 6","iPhone 6 Plus","iPhone 6s","iPhone 6s Plus":
+                                
+                    //self.EarphoneTest()
+                    self.CameraTest()
+                    break
+                default:
+                    
+                    //self.ChargerTest()
+                    self.CameraTest()
+                    break
+                }
+                
+            }*/
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func EarphoneTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.earphoneTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.ChargerTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func ChargerTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChargerVC") as! DeviceChargerVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.chargerTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.CameraTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func CameraTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.cameraTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.BiometricTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func BiometricTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.biometricTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.WiFiTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func WiFiTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "WiFiTestVC") as! WiFiTestVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.wifiTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.BackgroundTest(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func BackgroundTest(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.backgroundTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                self.TestResultScreen(rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    func TestResultScreen(_ testResultJSON : JSON) {
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+        vc.modalPresentationStyle = .overFullScreen
+        vc.resultJSON = testResultJSON
+        
+        vc.testResultTestDiagnosis = { rsltJson in
+            DispatchQueue.main.async() {
+                
+                print("rsltJson",rsltJson)
+                
+            }
+        }
+        self.present(vc, animated: true, completion: nil)
+                
+    }
+    
+    
+
+
 }

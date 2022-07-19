@@ -13,6 +13,9 @@ import SwiftGifOrigin
 import SwiftyJSON
 
 class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    var chargerRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
+    var chargerTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     var resultJSON = JSON()
     @IBOutlet weak var chargerInfoImage: UIImageView!
@@ -33,6 +36,7 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
                 UserDefaults.standard.set(false, forKey: "charger")
                 self.resultJSON["USB"].int = 0
                 
+                /*
                 if self.isComingFromTestResult {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                     vc.resultJSON = self.resultJSON
@@ -41,6 +45,21 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
                     vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
+                }*/
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.chargerRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.chargerTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
                 
             }
@@ -118,6 +137,7 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
             UserDefaults.standard.set(true, forKey: "charger")
             self.resultJSON["USB"].int = 1
             
+            /*
             if self.isComingFromTestResult {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
                 vc.resultJSON = self.resultJSON
@@ -126,7 +146,23 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
+            }*/
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.chargerRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
             }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.chargerTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            
         }
         
         

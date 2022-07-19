@@ -8,18 +8,18 @@ New Relic: map file upload attempt #3 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
 executing upload_dsym_to_new_relic
 new relic: successfully uploaded dsym files
- '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-behrzjzdegwrcpbrcqturzktsgbo/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
+/Library/Developer/Xcode/DerivedData/SmartExchange-gwhpipnpogaprlanduiojnyzpsfp/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
 New Relic: map file upload attempt #2 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
 Traceback (most recent call last):
-  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/July-22/29:6:22/SmartExchange-iOS-SellNCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/July-22/19:7:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
     os.mkdir(workDir)
-OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-behrzjzdegwrcpbrcqturzktsgbo/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
+OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-gwhpipnpogaprlanduiojnyzpsfp/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
 New Relic: map file upload attempt #3 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
 Traceback (most recent call last):
-  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/July-22/29:6:22/SmartExchange-iOS-SellNCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/July-22/19:7:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
     os.mkdir(workDir)
-OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-behrzjzdegwrcpbrcqturzktsgbo/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
+OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-gwhpipnpogaprlanduiojnyzpsfp/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
 executing upload_dsym_to_new_relic
 new relic: successfully uploaded dsym files
