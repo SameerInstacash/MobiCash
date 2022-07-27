@@ -77,7 +77,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.combineAllAppCodeForServerSend()
         
-        let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as! Bool
+        let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as? Bool ?? false
         print("isTradeInOnline value is :", isTradeInOnline)
         
         if isTradeInOnline {
@@ -280,10 +280,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         if let dataFromString = jsonString?.data(using: .utf8, allowLossyConversion: false) {
                             print("currency JSON")
                             let currencyJson = try JSON(data: dataFromString)
-                            multiplier = Float(currencyJson["Conversion Rate"].string!)!
+                            multiplier = Float(currencyJson["Conversion Rate"].string ?? "0") ?? 0.0
                             print("multiplier: \(multiplier)")
-                            symbol = currencyJson["Symbol"].string!
-                            curCode = currencyJson["Code"].string!
+                            symbol = currencyJson["Symbol"].string ?? ""
+                            curCode = currencyJson["Code"].string ?? ""
                         }else{
                             print("No values")
                         }
@@ -588,7 +588,9 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
         let product_id = UserDefaults.standard.string(forKey: "product_id") ?? ""
         print("Result JSON 5: \(self.resultJOSN)")
+        
         let postString = "customerId=\(customerId)&resultCode=\(resultCode)&resultJson=\(self.resultJOSN)&price=\(price)&deviceName=\(self.deviceName)&conditionString=\(self.appCodeStr)&metaDetails=\(metaDetails)&IMEINumber=\(imei)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&productId=\(product_id)"
+        
         print("\(postString)")
         
         print("url is :",request,"\nParam is :",postString)
@@ -602,6 +604,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
             guard let dataThis = data, error == nil else {
+                
                 /*
                 DispatchQueue.main.async {
                     //SwiftSpinner.hide()
@@ -642,7 +645,8 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.orderId = msg["orderId"].string ?? ""
                     self.isSynced = true
                     
-                    DispatchQueue.main.async{
+                    DispatchQueue.main.async {
+                        
                         self.loaderImage.isHidden = true
                         self.uploadIdBtn.isHidden = false
                         self.refValueLabel.isHidden = false
@@ -762,7 +766,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if sender.titleLabel?.text == "Scan Identity Card (IC) to proceed" {
             
-            if (isSynced){
+            if (self.isSynced){
                 let camera = DKCamera()
                 camera.didCancel = {
                     self.dismiss(animated: true, completion: nil)
@@ -1482,26 +1486,26 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         print("createTableUsingMyArray called")
         
-        let appCodeS = UserDefaults.standard.string(forKey: "appCodes")!
+        let appCodeS = UserDefaults.standard.string(forKey: "appCodes") ?? ""
         
         var functional = "Functional Issue: "
         var start = 0;
         
         
         var l = UserDefaults.standard.string(forKey: "lcd") ?? ""
-        if(appCodeS.contains("SPTS01")) {
+        if (appCodeS.contains("SPTS01")) {
             l = "flawless".localized
         }
-        if(appCodeS.contains("SPTS02")) {
+        if (appCodeS.contains("SPTS02")) {
             l = "Minor_Scratches".localized
         }
-        if(appCodeS.contains("SPTS03")) {
+        if (appCodeS.contains("SPTS03")) {
             l = "Heavily_Scratched".localized
         }
-        if(appCodeS.contains("SPTS04")) {
+        if (appCodeS.contains("SPTS04")) {
             l = "cracked".localized
         }
-        if(appCodeS.contains("SBRK01")) {
+        if (appCodeS.contains("SBRK01")) {
             l = "Not_Working".localized
         }
         
@@ -1513,19 +1517,19 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var b = UserDefaults.standard.string(forKey: "back") ?? ""
         print("devie body: \(b)")
         
-        if(appCodeS.contains("CPBP01")){
+        if (appCodeS.contains("CPBP01")){
             b = "flawless".localized
         }
-        if(appCodeS.contains("CPBP02")){
+        if (appCodeS.contains("CPBP02")){
             b = "Minor_Scratches".localized
         }
-        if(appCodeS.contains("CPBP03")){
+        if (appCodeS.contains("CPBP03")){
             b = "Heavily_Scratched".localized
         }
-        if(appCodeS.contains("CPBP05")){
+        if (appCodeS.contains("CPBP05")){
             b = "cracked".localized
         }
-        if(appCodeS.contains("CPBP04")){
+        if (appCodeS.contains("CPBP04")){
             b = "Dented".localized
         }
         
@@ -1534,85 +1538,85 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         var myarray: Array = [lcd, back]
         
-        if(!UserDefaults.standard.bool(forKey: "rotation")){
+        if (!UserDefaults.standard.bool(forKey: "rotation")){
             functional = "rotation_info".localized
             myarray.append(functional)
         }
         
-        if((!UserDefaults.standard.bool(forKey: "proximity"))){
+        if ((!UserDefaults.standard.bool(forKey: "proximity"))){
             functional = "Proximity_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "volume")){
+        if (!UserDefaults.standard.bool(forKey: "volume")){
             functional = "hardware_info".localized
             myarray.append(functional)
         }
         
         /*
-        if(!UserDefaults.standard.bool(forKey: "connection")){
+        if (!UserDefaults.standard.bool(forKey: "connection")){
             functional = "Wifi_info".localized
             myarray.append(functional)
         }
         */
  
-        if(!UserDefaults.standard.bool(forKey: "earphone")){
+        if (!UserDefaults.standard.bool(forKey: "earphone")){
             functional = "earphone_info".localized
             myarray.append(functional)
         }
 
-        if(!UserDefaults.standard.bool(forKey: "charger")){
+        if (!UserDefaults.standard.bool(forKey: "charger")){
             functional = "charger_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "camera")){
+        if (!UserDefaults.standard.bool(forKey: "camera")){
             functional = "camera_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "fingerprint")){
+        if (!UserDefaults.standard.bool(forKey: "fingerprint")){
             functional = "fingerprint_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "WIFI")){
+        if (!UserDefaults.standard.bool(forKey: "WIFI")){
             functional = "wifi_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "GSM")) {
+        if (!UserDefaults.standard.bool(forKey: "GSM")) {
             functional = "gsm_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Bluetooth")) {
+        if (!UserDefaults.standard.bool(forKey: "Bluetooth")) {
             functional = "bluetooth_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "GPS")) {
+        if (!UserDefaults.standard.bool(forKey: "GPS")) {
             functional = "gps_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "mic")){
+        if (!UserDefaults.standard.bool(forKey: "mic")){
             functional = "mic_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Speakers")) {
+        if (!UserDefaults.standard.bool(forKey: "Speakers")) {
             functional = "speakers_info".localized
             myarray.append(functional)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Vibrator")) {
+        if (!UserDefaults.standard.bool(forKey: "Vibrator")) {
             functional = "vibrator_info".localized
             myarray.append(functional)
         }
         
         /*
-        if(!UserDefaults.standard.bool(forKey: "NFC")) {
+        if (!UserDefaults.standard.bool(forKey: "NFC")) {
             functional = "nfc_info".localized
             myarray.append(functional)
         }
@@ -1661,29 +1665,29 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appCodestring = "\(appCodestring);CISS15"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "volume")){
+        if (!UserDefaults.standard.bool(forKey: "volume")){
             appCodestring = "\(appCodestring);CISS02;CISS03"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "earphone")){
+        if (!UserDefaults.standard.bool(forKey: "earphone")){
             appCodestring = "\(appCodestring);CISS11"
             print("Earphone kharaab hai")
         }else {
             print("Earphone sahi hai")
         }
         
-        if(!UserDefaults.standard.bool(forKey: "charger")){
+        if (!UserDefaults.standard.bool(forKey: "charger")){
             appCodestring = "\(appCodestring);CISS05"
             print("Charger kharaab hai")
         }else {
             print("Charger sahi hai")
         }
         
-        if(!UserDefaults.standard.bool(forKey: "camera")){
+        if (!UserDefaults.standard.bool(forKey: "camera")){
             appCodestring = "\(appCodestring);CISS01"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "fingerprint")){
+        if (!UserDefaults.standard.bool(forKey: "fingerprint")){
             appCodestring = "\(appCodestring);CISS12"
         }
         
@@ -1691,19 +1695,19 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appCodestring = "\(appCodestring);CISS04"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "GSM")) {
+        if (!UserDefaults.standard.bool(forKey: "GSM")) {
             appCodestring = "\(appCodestring);CISS10"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "mic")){
+        if (!UserDefaults.standard.bool(forKey: "mic")){
             appCodestring = "\(appCodestring);CISS08"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Speakers")){
+        if (!UserDefaults.standard.bool(forKey: "Speakers")){
             appCodestring = "\(appCodestring);CISS07"
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Vibrator")){
+        if (!UserDefaults.standard.bool(forKey: "Vibrator")){
             appCodestring = "\(appCodestring);CISS13"
         }
         

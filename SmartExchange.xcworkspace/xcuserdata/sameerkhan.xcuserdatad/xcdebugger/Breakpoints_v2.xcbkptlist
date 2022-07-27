@@ -7,16 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E3D23036-BD9D-4BBA-8818-21F575A1F79E"
+            uuid = "354D5297-17E6-484F-A60D-5D5530E239CC"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SmartExchange/UIViewController/ViewController.swift"
+            filePath = "SmartExchange/New Group1/InternalTests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "744"
-            endingLineNumber = "744"
-            landmarkName = "verifyUserSmartCode()"
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "centralManager(_:didDiscover:advertisementData:rssi:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

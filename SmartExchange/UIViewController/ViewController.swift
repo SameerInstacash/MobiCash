@@ -89,6 +89,7 @@ public extension UIDevice {
         case "iPhone14,5":                              return "iPhone 13"
         case "iPhone14,2":                              return "iPhone 13 Pro"
         case "iPhone14,3":                              return "iPhone 13 Pro Max"
+            
         case "iPhone14,6":                              return "iPhone SE 3rd Gen"
              
                         
@@ -195,7 +196,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
     var appCodes: String = ""
     
     
-    var endPoint = "https://exchange.getinstacash.in/stores-asia/api/v1/public/"
+    //var endPoint = "https://exchange.getinstacash.in/stores-asia/api/v1/public/"
     var storeToken: String = ""
     
     var hasScanned = true
@@ -223,7 +224,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         
         
         let imei = UserDefaults.standard.string(forKey: "imei_number")
-        print(imei)
+        print(imei ?? "imei")
         self.scanQRBtn.layer.cornerRadius = 6
         self.previousBtn.layer.cornerRadius = 6
         self.submitStoreBtn.layer.cornerRadius = 6
@@ -296,7 +297,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             DispatchQueue.main.async {
                 self.storeToken = (tempDict?.value(forKey: "token") as? String) ?? ""
             
-                self.endPoint = AppBaseUrl
+                //self.endPoint = AppBaseUrl
 
                 let preferences = UserDefaults.standard
                 preferences.setValue(AppBaseTnc, forKey: "tncendpoint")
@@ -341,7 +342,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                 print("storeToken is :",self.storeTokenEdit.text ?? "")
                 self.storeToken = self.storeTokenEdit.text ?? ""
                 self.verifyUserSmartCode()
-                
+                                
             }
             
         }
@@ -368,8 +369,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             for tokens in self.arrStoreUrlData {
                 if tokens.strPrefixKey == enteredToken {
                     
-                    self.endPoint = tokens.strUrl
-                    print("self.endPoint submit", self.endPoint)
+                    //self.endPoint = tokens.strUrl
+                    //print("self.endPoint submit", self.endPoint)
                     
                     let preferences = UserDefaults.standard
                     preferences.setValue(tokens.strTnc, forKey: "tncendpoint")
@@ -377,9 +378,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                     
                     self.verifyUserSmartCode()
-                    
-                    //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-                    
+                                        
                     //break
                     return
                 }
@@ -389,9 +388,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             //self.endPoint = "https://exchange.buyblynk.com/api/v1/public" // Blynk
            
             
-            self.endPoint = AppBaseUrl
-            
-            print("self.endPoint", self.endPoint)
+            //self.endPoint = AppBaseUrl
+            //print("self.endPoint", self.endPoint)
             
             let preferences = UserDefaults.standard
             //preferences.setValue("https://exchange.buyblynk.com/tnc.php", forKey: "tncendpoint") // Blynk
@@ -402,9 +400,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             preferences.setValue(0, forKey: "tradeOnline")
             
             self.verifyUserSmartCode()
-            
-            //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-            
+                        
         }else {
             DispatchQueue.main.async() {
                 self.view.makeToast("Please Enter Valid Store Token".localized, duration: 2.0, position: .bottom)
@@ -526,8 +522,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                             
                             if tokens.strPrefixKey == enteredToken {
                                 
-                                self.endPoint = tokens.strUrl
-                                print("self.endPoint", self.endPoint)
+                                //self.endPoint = tokens.strUrl
+                                //print("self.endPoint", self.endPoint)
                                 
                                 let preferences = UserDefaults.standard
                                 preferences.setValue(tokens.strTnc, forKey: "tncendpoint")
@@ -535,9 +531,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                                 
                                 self.verifyUserSmartCode()
-                                
-                                //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-                                
+                                                                
                                 //break
                                 return
                             }
@@ -547,9 +541,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         //self.endPoint = "https://exchange.buyblynk.com/api/v1/public" // Blynk
                         
                         
-                        self.endPoint = AppBaseUrl
-                                                
-                        print("self.endPoint", self.endPoint)
+                        //self.endPoint = AppBaseUrl
+                        //print("self.endPoint", self.endPoint)
                         
                         let preferences = UserDefaults.standard
                         //preferences.setValue("https://exchange.buyblynk.com/tnc.php", forKey: "tncendpoint") // Blynk
@@ -561,9 +554,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         preferences.setValue(0, forKey: "tradeOnline")
                         
                         self.verifyUserSmartCode()
-                        
-                        //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-                        
+                                                
                     }else {
                         DispatchQueue.main.async() {
                             self.view.makeToast("Store Token Not Valid".localized, duration: 2.0, position: .bottom)
@@ -633,14 +624,10 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         self.storeToken = String(values[0])
                         self.productId = values[1]
                         self.appCodes = values[2]
-                        
-                        UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
                     }else{
                         self.storeToken = String(values[0])
                         self.productId = ""
                         self.appCodes = ""
-                        
-                        UserDefaults.standard.setValue(true, forKey: "Trade_In_Online")
                     }
                     
                     
@@ -652,8 +639,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         for tokens in self.arrStoreUrlData {
                             if tokens.strPrefixKey == enteredToken {
                                 
-                                self.endPoint = tokens.strUrl
-                                print("self.endPoint", self.endPoint)
+                                //self.endPoint = tokens.strUrl
+                                //print("self.endPoint", self.endPoint)
                                 
                                 let preferences = UserDefaults.standard
                                 preferences.setValue(tokens.strTnc, forKey: "tncendpoint")
@@ -661,9 +648,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                                 
                                 self.verifyUserSmartCode()
-                                
-                                //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-                                
+                                                                
                                 //break
                                 return
                             }
@@ -672,10 +657,9 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         // If Store Token not add in firebase
                         //self.endPoint = "https://exchange.buyblynk.com/api/v1/public" // Blynk
                         
-                        self.endPoint = AppBaseUrl
-                        
-                        print("self.endPoint", self.endPoint)
-                        print("store token not matched in firebase database storeUrl Data")
+                        //self.endPoint = AppBaseUrl
+                        //print("self.endPoint", self.endPoint)
+                        //print("store token not matched in firebase database storeUrl Data")
                         
                         let preferences = UserDefaults.standard
                         //preferences.setValue("https://exchange.buyblynk.com/tnc.php", forKey: "tncendpoint") // Blynk
@@ -686,9 +670,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         preferences.setValue(0, forKey: "tradeOnline")
                         
                         self.verifyUserSmartCode()
-                        
-                        //UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
-                        
+                                                
                     }else {
                         DispatchQueue.main.async() {
                             self.view.makeToast("Store Token Not Valid".localized, duration: 2.0, position: .bottom)
@@ -716,22 +698,26 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         })
         
     }
-    
-    
-//    @IBAction func retryBtnPressed(_ sender: Any?) {
-//        verifyUserSmartCode()
-//    }
-    
+
     func verifyUserSmartCode() {
+        
+        if self.appCodes != "" {
+            UserDefaults.standard.setValue(false, forKey: "Trade_In_Online")
+        }else {
+            UserDefaults.standard.setValue(true, forKey: "Trade_In_Online")
+        }
+        
         let device = UIDevice.current.moName
         
         self.hud.textLabel.text = ""
         self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
         self.hud.show(in: self.view)
         
-        var request = URLRequest(url: URL(string: "\(self.endPoint)/startSession")!)
+        //var request = URLRequest(url: URL(string: "\(self.endPoint)/startSession")!)
+        var request = URLRequest(url: URL(string: "\(AppBaseUrl)/startSession")!)
         let preferences = UserDefaults.standard
-        preferences.set(self.endPoint, forKey: "endpoint")
+        //preferences.set(self.endPoint, forKey: "endpoint")
+        preferences.set(AppBaseUrl, forKey: "endpoint")
         request.httpMethod = "POST"
         //let mName = UIDevice.current.modelName
         let modelCapacity = getTotalSize()
@@ -774,7 +760,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     
                         productIdenti = productData["id"].string ?? ""
                         
-                        let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as! Bool
+                        let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as? Bool ?? false
                         print("isTradeInOnline value is",isTradeInOnline)
                         
                         if isTradeInOnline {
@@ -811,6 +797,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         }else {
                             
                             if productIdenti == self.productId {
+                                
                                 let productName = productData["name"]
                                 let productImage = productData["image"]
                                 preferences.set(productIdenti, forKey: "product_id")
@@ -839,18 +826,61 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                     
                                     self.DeadPixelTest()
                                 }
+                                
                             }else{
-                                DispatchQueue.main.async {
-                                    self.view.makeToast("Device Mismatch found!", duration: 2.0, position: .bottom)
+                                
+                                // 20/7/22 After handle C case
+                                if self.productId == "" {
+
+                                    print("// 20/7/22 After handle C case")
+                                    
+                                    let productName = productData["name"]
+                                    let productImage = productData["image"]
+                                    preferences.set(productIdenti, forKey: "product_id")
+                                    preferences.set("\(productName)", forKey: "productName")
+                                    preferences.set("\(self.appCodes)", forKey: "appCodes")
+                                    preferences.set("\(productImage)", forKey: "productImage")
+                                    
+                                    preferences.set(json["customerId"].string!, forKey: "customer_id")
+                                    preferences.set(self.storeToken, forKey: "store_code")
+                                    let serverData = json["serverData"]
+                                    print("\n\n\(serverData["currencyJson"])")
+                                    let jsonEncoder = JSONEncoder()
+                                    
+                                    let currencyJSON = serverData["currencyJson"]
+                                    let jsonData = try jsonEncoder.encode(currencyJSON)
+                                    let jsonString = String(data: jsonData, encoding: .utf8)
+                                    preferences.set(jsonString, forKey: "currencyJson")
+                                    let priceData = json["priceData"]
+                                    let uptoPrice = priceData["msg"].string ?? ""
+                                    print("uptoPrice", uptoPrice)
+                                    
+                                    DispatchQueue.main.async() {
+                                        
+                                        //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
+                                        //self.present(vc, animated: true, completion: nil)
+                                        
+                                        self.DeadPixelTest()
+                                    }
+                                    
+                                }else {
+                                    
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("Device Mismatch found!", duration: 2.0, position: .bottom)
+                                    }
+                                    
                                 }
+                                
                             }
                             
                         }
                         
                     }else{
+                        
                         DispatchQueue.main.async() {
                             self.view.makeToast("Device not found!", duration: 2.0, position: .bottom)
                         }
+                        
                     }
                   
                 }else{
@@ -861,9 +891,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     
                 }
             }catch {
+                
                 DispatchQueue.main.async() {
                     self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
+                
             }
             
             
@@ -902,7 +934,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         
                             productIdenti = productData["id"].string ?? ""
                             
-                            let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as! Bool
+                            let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as? Bool ?? false
                             print("isTradeInOnline value is",isTradeInOnline)
                             
                             if isTradeInOnline {
@@ -1189,6 +1221,7 @@ extension ViewController {
             DispatchQueue.main.async() {
                 
                 self.touchScreenTest(rsltJson)
+                //self.BackgroundTest(rsltJson)
                 
             }
         }

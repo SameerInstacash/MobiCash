@@ -15,8 +15,9 @@ import CoreBluetooth
 //import CoreNFC
 //import SwiftSpinner
 import JGProgressHUD
+import CoreTelephony
 
-class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
+class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDelegate {
     
     var backgroundRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
     var backgroundTestDiagnosis: ((_ testJSON: JSON) -> Void)?
@@ -35,16 +36,17 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
     
     var isComingFromTestResult = false
     let hud = JGProgressHUD()
+    var isCapableToCall: Bool = false
     
     let locationManager = CLLocationManager()
     var gpsTimer: Timer?
     var count = 0
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
-        internalImageView.loadGif(name: "internal")
+        self.internalImageView.loadGif(name: "internal")
         
         // Sameer 8/4/21
         self.isLocationAccessEnabled()
@@ -53,6 +55,10 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
     override func viewWillAppear(_ animated: Bool) {
        self.manager = CBCentralManager()
        self.manager.delegate = self
+        
+        // Start scanning for peripherals
+        //let dictionary = [CBCentralManagerScanOptionAllowDuplicatesKey : true]
+        //self.manager.scanForPeripherals(withServices: nil, options: dictionary)
     }
     
     func isLocationAccessEnabled() {
@@ -79,6 +85,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
+      
         switch central.state {
         case .poweredOn:
             print("on")
@@ -111,6 +118,64 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
         }
     }
     
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        if let power = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Double{
+            print("Distance is ", pow(10, ((power - Double(truncating: RSSI))/20)))
+        }
+    }
+    
+    /*
+    var peri: [NSString] = []
+    var signalstrength: [NSString] = []
+    var rssvalue: NSNumber!
+
+    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        
+        if let power = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Double{
+            print("Distance is ", pow(10, ((power - Double(truncating: RSSI))/20)))
+        }
+        
+        var localname: NSString = peripheral.name as? NSString ?? "" //advertisementData[CBAdvertisementDataLocalNameKey]! as NSString
+        
+        print("Discovered: \(peripheral.name ?? "")")
+        
+        var per : NSString = "\(peripheral.name ?? "")" as NSString
+        
+        peri.append(per)
+        
+        //signalstrength.append(RSSI.stringValue)
+        
+        rssvalue = peripheral.rssi
+        
+        print("RSSI!:\(rssvalue ?? 0)")
+        print("RSI:\(peripheral.rssi)")
+        
+    }
+    
+    func peripheralDidUpdateName(_ peripheral: CBPeripheral) {
+        
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+        
+    }
+    
+    func peripheralDidUpdateRSSI(_ peripheral: CBPeripheral, error: Error?) {
+        
+    }
+    
+    func centralManagerDidUpdateState(central: CBCentralManager!)
+    {
+        print("checking state")
+        
+        if central.state != .poweredOn
+        {
+            return
+        }
+        central.scanForPeripherals(withServices: nil,options:nil)
+    }
+    */
+    
     @IBAction func beginInternalBtnClicked(_ sender: Any) {
         
         // ***** STARTING ALL TESTS ***** //
@@ -126,6 +191,13 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
         
         self.resultJSON["Battery"].int = 1
         UserDefaults.standard.set(true, forKey: "Battery")
+        
+        
+        let batteryLevel = Luminous.System.Battery.level
+        let batteryState = Luminous.System.Battery.state
+        print("batteryLevel", batteryLevel ?? "batteryLevel not found")
+        print("batteryState", batteryState)
+        
             
         /*
         // Check if NFC supported
@@ -149,7 +221,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
         
         
             
-            
+            /*
             // 1. GSM Test
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
                 //SwiftSpinner.show(progress: 0.2, title: "Checking_Network".localized)
@@ -191,7 +263,120 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
                     UserDefaults.standard.set(true, forKey: "GSM")
                 }
                 
+            }*/
+        
+        
+        // 1. GSM Test
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.0) {
+            
+            self.hud.textLabel.text = "Checking_Network".localized
+            self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
+            self.hud.indicatorView = JGProgressHUDRingIndicatorView()
+            self.hud.progress = 0.2
+            self.hud.show(in: self.view)
+            
+            if self.checkGSM() {
+                
+                if Luminous.System.Carrier.mobileCountryCode != nil {
+                    self.mcc = Luminous.System.Carrier.mobileCountryCode!
+                    //self.connection = true
+                    self.resultJSON["GSM"].int = 1
+                    UserDefaults.standard.set(true, forKey: "GSM")
+                }
+                
+                if Luminous.System.Carrier.mobileNetworkCode != nil {
+                    self.mnc = Luminous.System.Carrier.mobileNetworkCode!
+                    //self.connection = true
+                    self.resultJSON["GSM"].int = 1
+                    UserDefaults.standard.set(true, forKey: "GSM")
+                }
+                
+                if Luminous.System.Carrier.ISOCountryCode != nil {
+                    self.networkName = Luminous.System.Carrier.name!
+                    //self.connection = true
+                    self.resultJSON["GSM"].int = 1
+                    UserDefaults.standard.set(true, forKey: "GSM")
+                }
+                
+                
+                // ***** 24/10/21
+                // ***** TO CHECK GSM TEST WHEN E-SIM AVAILABLE ***** //
+                
+                // First, check if the currentRadioAccessTechnology is nil
+                // It means that no physical Sim card is inserted
+                let telephonyInfo = CTTelephonyNetworkInfo()
+                
+                if #available(iOS 12.0, *) {
+                    if telephonyInfo.serviceCurrentRadioAccessTechnology == nil {
+                        print(telephonyInfo.serviceCurrentRadioAccessTechnology ?? [:])
+                        
+                        // Next, on iOS 12 only, you can check the number of services connected
+                        // With the new serviceCurrentRadioAccessTechnology property
+                        
+                        if let radioTechnologies =
+                            telephonyInfo.serviceCurrentRadioAccessTechnology, !radioTechnologies.isEmpty {
+                            // One or more radio services has been detected,
+                            // the user has one (ore more) eSim package connected to a network
+                                                        
+                            self.resultJSON["GSM"].int = 1
+                            UserDefaults.standard.set(true, forKey: "GSM")
+                            
+                        }
+                        
+                    }
+                } else {
+                    // Fallback on earlier versions
+                    print("No sim available")
+                }
+                
+                if #available(iOS 12.0, *) {
+                    if let countryCode = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders?.values.first(where: { $0.isoCountryCode != nil }) {
+                        print("Country Code : \(countryCode)")
+                                              
+                        self.resultJSON["GSM"].int = 1
+                        UserDefaults.standard.set(true, forKey: "GSM")
+                        
+                    }
+                }
+                
+                // ***** TO CHECK GSM TEST WHEN E-SIM AVAILABLE ***** //
+                
+                
+                
+                // To Check Both Sim Cards working or not as per mobiCash's requirment
+                if #available(iOS 12.0, *) {
+                    
+                    let serviceProviders = CTTelephonyNetworkInfo().serviceSubscriberCellularProviders
+                    //print("serviceProviders are:", serviceProviders ?? [:])
+                    
+                    //let totalKey = serviceProviders?.keys
+                   
+                    for (_,carrier) in (serviceProviders ?? [:]).enumerated() {
+                        print("carrier",carrier)
+                        
+                        if carrier.value.isoCountryCode == nil {
+                            print(carrier.value.isoCountryCode ?? "isoCountryCode")
+                            
+                            self.resultJSON["GSM"].int = 0
+                            UserDefaults.standard.set(false, forKey: "GSM")
+                        }
+                        
+                    }
+                    
+                }
+                
+            }else {
+                
+                AppResultJSON["GSM"].int = -2
+                AppUserDefaults.setValue(true, forKey: "GSM")
+                
             }
+            
+        }
+
+        
+        
+        
             
             // 2. Bluetooth Test
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -576,4 +761,52 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate {
     }
     */
 
+}
+
+
+extension InternalTestsVC {
+
+    func checkGSM() -> Bool {
+        
+        if UIDevice.current.model.hasPrefix("iPad") {
+            
+            // iPad Case
+            let networkInfo = CTTelephonyNetworkInfo()
+            let carrier: CTCarrier? = networkInfo.subscriberCellularProvider
+            let code: String? = carrier?.isoCountryCode
+            
+            if (code != nil) {
+                self.isCapableToCall = true
+            }
+            else {
+                self.isCapableToCall = false
+            }
+            return self.isCapableToCall
+            
+        }else {
+            
+            // iPhone Case
+            if UIApplication.shared.canOpenURL(NSURL(string: "tel://")! as URL) {
+                // Check if iOS Device supports phone calls
+                // User will get an alert error when they will try to make a phone call in airplane mode
+                
+                if let mnc = CTTelephonyNetworkInfo().subscriberCellularProvider?.mobileNetworkCode, !mnc.isEmpty {
+                    // iOS Device is capable for making calls
+                    self.isCapableToCall = true
+                } else {
+                    // Device cannot place a call at this time. SIM might be removed
+                    //self.isCapableToCall = false
+                    self.isCapableToCall = true
+                }
+            } else {
+                // iOS Device is not capable for making calls
+                self.isCapableToCall = false
+            }
+            return self.isCapableToCall
+            
+        }
+            
+        
+    }
+    
 }
