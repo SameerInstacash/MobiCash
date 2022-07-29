@@ -57,9 +57,25 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
        self.manager.delegate = self
         
         // Start scanning for peripherals
-        //let dictionary = [CBCentralManagerScanOptionAllowDuplicatesKey : true]
-        //self.manager.scanForPeripherals(withServices: nil, options: dictionary)
+        //let dictionary = [CBCentralManagerScanOptionAllowDuplicatesKey : false]
+        //self.manager.scanForPeripherals(withServices: [], options: dictionary)
+        
+        switch ProcessInfo.processInfo.thermalState {
+        case .nominal:
+            print("The thermal state is within normal limits.")
+        case .fair:
+            print("The thermal state is slightly elevated.")
+        case .serious:
+            print("The thermal state is high.")
+        default:
+            print("The thermal state is significantly impacting the performance of the system and the device needs to cool down.")
+        }
+        
+        
     }
+    
+
+
     
     func isLocationAccessEnabled() {
         if CLLocationManager.locationServicesEnabled() {
@@ -85,6 +101,10 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        
+        // Start scanning for peripherals
+        //let dictionary = [CBCentralManagerScanOptionAllowDuplicatesKey : false]
+        //self.manager.scanForPeripherals(withServices: [], options: dictionary)
       
         switch central.state {
         case .poweredOn:
@@ -118,63 +138,39 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
         }
     }
     
-    func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if let power = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Double{
-            print("Distance is ", pow(10, ((power - Double(truncating: RSSI))/20)))
-        }
-    }
-    
-    /*
+    //*
     var peri: [NSString] = []
     var signalstrength: [NSString] = []
     var rssvalue: NSNumber!
 
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         
-        if let power = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Double{
+        if let power = advertisementData[CBAdvertisementDataTxPowerLevelKey] as? Double {
             print("Distance is ", pow(10, ((power - Double(truncating: RSSI))/20)))
         }
         
-        var localname: NSString = peripheral.name as? NSString ?? "" //advertisementData[CBAdvertisementDataLocalNameKey]! as NSString
+        var localname: NSString = peripheral.name as? NSString ?? ""
+        print(localname)
+        //advertisementData[CBAdvertisementDataLocalNameKey]! as NSString
         
         print("Discovered: \(peripheral.name ?? "")")
         
-        var per : NSString = "\(peripheral.name ?? "")" as NSString
-        
+        let per : NSString = "\(peripheral.name ?? "")" as NSString
         peri.append(per)
         
         //signalstrength.append(RSSI.stringValue)
+        
+        print("RSSI.stringValue i.e. bluetooth signal strenght is :- ",RSSI.stringValue)
         
         rssvalue = peripheral.rssi
         
         print("RSSI!:\(rssvalue ?? 0)")
         print("RSI:\(peripheral.rssi)")
+     
+        self.manager.stopScan()
         
     }
-    
-    func peripheralDidUpdateName(_ peripheral: CBPeripheral) {
-        
-    }
-    
-    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
-        
-    }
-    
-    func peripheralDidUpdateRSSI(_ peripheral: CBPeripheral, error: Error?) {
-        
-    }
-    
-    func centralManagerDidUpdateState(central: CBCentralManager!)
-    {
-        print("checking state")
-        
-        if central.state != .poweredOn
-        {
-            return
-        }
-        central.scanForPeripherals(withServices: nil,options:nil)
-    }
-    */
+    //*/
     
     @IBAction func beginInternalBtnClicked(_ sender: Any) {
         
@@ -192,7 +188,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
         self.resultJSON["Battery"].int = 1
         UserDefaults.standard.set(true, forKey: "Battery")
         
-        
+        // MARK: Battery Level & State
         let batteryLevel = Luminous.System.Battery.level
         let batteryState = Luminous.System.Battery.state
         print("batteryLevel", batteryLevel ?? "batteryLevel not found")
@@ -810,3 +806,5 @@ extension InternalTestsVC {
     }
     
 }
+
+ 

@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import PopupDialog
+import CoreMotion
 
 class AutoRotationVC: UIViewController {
     
@@ -23,6 +24,9 @@ class AutoRotationVC: UIViewController {
     var hasStarted = false
     var resultJSON = JSON()
     var isComingFromTestResult = false
+    
+    let motion = CMMotionManager()
+    var timer : Timer?
     
     @IBAction func beginBtnClicked(_ sender: Any) {
         
@@ -141,6 +145,8 @@ class AutoRotationVC: UIViewController {
     
     @objc func rotated()
     {
+        //self.startGyros()
+        
         if (UIDeviceOrientationIsLandscape(UIDevice.current.orientation))
         {
             print("LandScape")
@@ -148,13 +154,14 @@ class AutoRotationVC: UIViewController {
             self.AutoRotationImageView.image = UIImage(named: "portrait_image")!
         }
         
-        if(UIDeviceOrientationIsPortrait(UIDevice.current.orientation))
+        if (UIDeviceOrientationIsPortrait(UIDevice.current.orientation))
         {
             print("Portrait")
             UserDefaults.standard.set(true, forKey: "rotation")
             self.resultJSON["Rotation"].int = 1
             
             NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+            
             
             /*
             if self.isComingFromTestResult {
@@ -165,7 +172,8 @@ class AutoRotationVC: UIViewController {
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProximityView") as! ProximityVC
                 vc.resultJSON = self.resultJSON
                 self.present(vc, animated: true, completion: nil)
-            }*/
+            }
+            */
             
             
             if self.isComingFromTestResult {
@@ -188,5 +196,48 @@ class AutoRotationVC: UIViewController {
         
     }
     
+    
+}
+
+extension AutoRotationVC {
+    
+    func startGyros() {
+        if motion.isGyroAvailable {
+            self.motion.gyroUpdateInterval = 1.0 / 60.0
+            self.motion.startGyroUpdates()
+            
+            // Configure a timer to fetch the accelerometer data.
+            self.timer = Timer(fire: Date(), interval: (1.0/60.0), repeats: true, block: { (timer) in
+                
+                // Get the gyro data.
+                if let data = self.motion.gyroData {
+                    
+                    let x = data.rotationRate.x
+                    let y = data.rotationRate.y
+                    let z = data.rotationRate.z
+                    
+                    print("X-axis",x)
+                    print("Y-axis",y)
+                    print("Z-axis",z)
+                    
+                    // Use the gyroscope data in your app.
+                    self.stopGyros()
+                    
+                }
+            })
+            
+            // Add the timer to the current run loop.
+            RunLoop.current.add(self.timer!, forMode: .defaultRunLoopMode)
+        }
+    }
+
+    func stopGyros() {
+        if self.timer != nil {
+            self.timer?.invalidate()
+            self.timer = nil
+            
+            self.motion.stopGyroUpdates()
+        }
+    }
     
 }

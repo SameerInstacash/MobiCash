@@ -4572,8 +4572,8 @@ voice for 4 seconds to check your microphone is working or not</string>
                                     <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 </variation>
                             </textField>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flashlight.on.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="qum-Ea-qgI">
-                                <rect key="frame" x="128" y="273.5" width="119" height="120"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="torch" translatesAutoresizingMaskIntoConstraints="NO" id="qum-Ea-qgI">
+                                <rect key="frame" x="128" y="274" width="119" height="119"/>
                                 <color key="tintColor" red="0.019607843140000001" green="0.67843137249999996" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="119" id="9Cr-ii-ptl">
@@ -4790,7 +4790,6 @@ voice for 4 seconds to check your microphone is working or not</string>
         <image name="dented-2" width="41" height="58"/>
         <image name="earphone_jack.gif" width="366" height="385"/>
         <image name="fingerprint" width="256" height="256"/>
-        <image name="flashlight.on.fill" catalog="system" width="76" height="128"/>
         <image name="flawless" width="34" height="50"/>
         <image name="heavy-scratches" width="34" height="50"/>
         <image name="ic_load" width="512" height="512"/>
@@ -4805,6 +4804,7 @@ voice for 4 seconds to check your microphone is working or not</string>
         <image name="screen" width="148" height="259"/>
         <image name="smartphone" width="70" height="133"/>
         <image name="speaker" width="119" height="119"/>
+        <image name="torch" width="238" height="238"/>
         <image name="vibrations" width="119" height="119"/>
         <image name="volume_down" width="48" height="48"/>
         <image name="volume_up" width="48" height="48"/>
