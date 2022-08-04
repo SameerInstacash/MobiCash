@@ -39,8 +39,31 @@ class WiFiTestVC: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        self.changeLanguageOfUI()
+        //self.changeLanguageOfUI()
+        
+        //print("WiFi Signal strength is:", self.wifiStrength() ?? 0)
+        //statusBarManager
     }
+    
+    private func wifiStrength() -> Int? {
+        let app = UIApplication.shared
+        var rssi: Int?
+        guard let statusBar = app.value(forKey: "statusBar") as? UIView, let foregroundView = statusBar.value(forKey: "foregroundView") as? UIView else {
+            return rssi
+        }
+        for view in foregroundView.subviews {
+            if let statusBarDataNetworkItemView = NSClassFromString("UIStatusBarDataNetworkItemView"), view .isKind(of: statusBarDataNetworkItemView) {
+                if let val = view.value(forKey: "wifiStrengthRaw") as? Int {
+                    print("rssi: \(val)")
+
+                    rssi = val
+                    break
+                }
+            }
+        }
+        return rssi
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -141,8 +164,62 @@ class WiFiTestVC: UIViewController {
     // MARK: IBActions
     @IBAction func btnStartWiFiTestClicked(_ sender: UIButton) {
       
-        wifiTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+        self.wifiTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
     
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "WiFi Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("WIFI Skipped!")
+                                
+                UserDefaults.standard.setValue(false, forKey: "WIFI")
+                self.resultJSON["WIFI"].int = -1
+             
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.wifiRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.wifiTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
 
     // MARK: - Navigation

@@ -20,7 +20,7 @@ class ScreenViewController: UIViewController {
     @IBOutlet weak var startScreenBtn: UIButton!
     @IBOutlet weak var screenImageView: UIImageView!
     @IBOutlet weak var screenText: UILabel!
-    @IBOutlet weak var screenNavBar: UINavigationBar!
+    //@IBOutlet weak var screenNavBar: UINavigationBar!
     var isComingFromTestResult = false
     
     var obstacleViews : [UIView] = []
@@ -37,9 +37,10 @@ class ScreenViewController: UIViewController {
     }
     
     func drawScreenTest(){
+        
         startScreenBtn.isHidden = true
         screenImageView.isHidden = true
-        screenNavBar.isHidden = true
+        //screenNavBar.isHidden = true
         screenText.isHidden = true
         let screenSize: CGRect = UIScreen.main.bounds
         let screenWidth:Int = Int(screenSize.width)
@@ -78,6 +79,7 @@ class ScreenViewController: UIViewController {
             //self.checkMicrophone()
         }
         
+        //"Click 'Start Test', then swipe along the squares"
     }
 
     override func didReceiveMemoryWarning() {
@@ -200,6 +202,7 @@ class ScreenViewController: UIViewController {
     func endTimer(type: Int) {
         countdownTimer.invalidate()
         if type == 1 {
+            
             UserDefaults.standard.set(true, forKey: "screen")
             resultJSON["Screen"].int = 1
             
@@ -237,6 +240,9 @@ class ScreenViewController: UIViewController {
             
         }else{
             
+            self.ShowGlobalPopUp()
+            
+            /*
             let title = "screen_failed_info".localized
             let message = "retry_test".localized
             
@@ -323,7 +329,8 @@ class ScreenViewController: UIViewController {
             
             // Customize the container view appearance
             let pcv = PopupDialogContainerView.appearance()
-            pcv.cornerRadius    = 2
+            pcv.cornerRadius    = 10
+            //pcv.cornerRadius    = 2
             pcv.shadowEnabled   = true
             pcv.shadowColor     = .black
             
@@ -347,7 +354,123 @@ class ScreenViewController: UIViewController {
             
             // Present dialog
             self.present(popup, animated: true, completion: nil)
+            */
+            
         }
+        
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Screen Calibration Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Screen Skipped!")
+                
+                self.resultJSON["Screen"].int = -1
+                UserDefaults.standard.set(false, forKey: "screen")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+               break
+                                
+            default:
+                
+                break
+                                
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Screen Diagnosis Test Failed!"
+        popUpVC.strMessage = "Do you want to retry the test?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Screen Test Retry!")
+                
+                DispatchQueue.main.async {
+                    for v in self.obstacleViews{
+                        v.removeFromSuperview()
+                    }
+                    self.obstacleViews = []
+                    self.flags = []
+                    self.totalTime = 40
+                    self.startTest = false
+                    //self.resultJSON = JSON()
+                    //self.startScreenBtn.isHidden = false
+                    self.screenImageView.isHidden = false
+                }
+                                
+            case 2:
+                
+                print("Screen Test Failed!")
+                
+                UserDefaults.standard.set(false, forKey: "screen")
+                self.resultJSON["Screen"].int = 0
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
         
     }
 
@@ -394,6 +517,7 @@ extension UIColor {
         let blue  = CGFloat(b) / 255.0
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }
+    
     func toHexString() -> String {
         var r:CGFloat = 0
         var g:CGFloat = 0

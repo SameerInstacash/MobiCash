@@ -74,9 +74,6 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
         
     }
     
-
-
-    
     func isLocationAccessEnabled() {
         if CLLocationManager.locationServicesEnabled() {
             
@@ -149,7 +146,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
             print("Distance is ", pow(10, ((power - Double(truncating: RSSI))/20)))
         }
         
-        var localname: NSString = peripheral.name as? NSString ?? ""
+        let localname: NSString = peripheral.name as? NSString ?? ""
         print(localname)
         //advertisementData[CBAdvertisementDataLocalNameKey]! as NSString
         
@@ -165,14 +162,14 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
         rssvalue = peripheral.rssi
         
         print("RSSI!:\(rssvalue ?? 0)")
-        print("RSI:\(peripheral.rssi)")
+        print("RSI:\(peripheral.rssi ?? 0)")
      
         self.manager.stopScan()
         
     }
     //*/
     
-    @IBAction func beginInternalBtnClicked(_ sender: Any) {
+    @IBAction func startInternalTestBtnClicked(_ sender: Any) {
         
         // ***** STARTING ALL TESTS ***** //
         
@@ -439,7 +436,6 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
         
     }
     
-    
     @objc func runTimedCode() {
         
         self.count += 1
@@ -507,6 +503,55 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                 self.navigateToBackgroundTestScreen()
             }
         }
+        
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Background Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                self.resultJSON["Bluetooth"] = -1
+                UserDefaults.standard.set(true, forKey: "Bluetooth")
+                
+                self.resultJSON["GSM"].int = -1
+                UserDefaults.standard.set(false, forKey: "GSM")
+                
+                self.resultJSON["Storage"].int = -1
+                UserDefaults.standard.set(false, forKey: "Storage")
+                
+                self.resultJSON["GPS"].int = -1
+                UserDefaults.standard.set(false, forKey: "GPS")
+                
+                self.resultJSON["Battery"].int = -1
+                UserDefaults.standard.set(true, forKey: "Battery")
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
         
     }
     
@@ -691,7 +736,8 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -714,7 +760,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                 }
             }catch {
                 DispatchQueue.main.async() {
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
             }
             

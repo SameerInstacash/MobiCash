@@ -255,7 +255,8 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -627,7 +628,9 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -812,7 +815,9 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         guard let dataThis = data, error == nil else {
                             
                             DispatchQueue.main.async() {
-                                self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                                //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                                
+                                self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                             }
                             
                             /* SAMEER-14/6/22

@@ -117,6 +117,10 @@ class CameraViewController: UIViewController {
     }
     
     @IBAction func skipPictureBtnPressed(_ sender: Any) {
+        
+        self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         let title = "camera_test".localized
         let message = "skip_info".localized
@@ -180,7 +184,8 @@ class CameraViewController: UIViewController {
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.cornerRadius    = 2
+        pcv.cornerRadius    = 10
+        //pcv.cornerRadius    = 2
         pcv.shadowEnabled   = true
         pcv.shadowColor     = .black
         
@@ -204,8 +209,59 @@ class CameraViewController: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
+        
     }
 
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Camera Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Camera Skipped!")
+                
+                UserDefaults.standard.set(false, forKey: "camera")
+                self.resultJSON["Camera"].int = -1
+              
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

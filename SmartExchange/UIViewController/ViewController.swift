@@ -191,6 +191,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
     //@IBOutlet weak var tradeInOnlineBtn: UIButton!
     @IBOutlet weak var storeTokenEdit: UITextField!
     @IBOutlet weak var submitStoreBtn: UIButton!
+    @IBOutlet weak var lblDescription: UILabel!
     
     var productId: String = ""
     var appCodes: String = ""
@@ -223,8 +224,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         self.submitStoreBtn.setTitle("Submit".localized, for: .normal)
         
         
-        let imei = UserDefaults.standard.string(forKey: "imei_number")
-        print(imei ?? "imei")
+        let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
+        print(imei)
+        //self.imeiLabel.text = IMEINumber
+        self.imeiLabel.text = imei
+        
         self.scanQRBtn.layer.cornerRadius = 6
         self.previousBtn.layer.cornerRadius = 6
         self.submitStoreBtn.layer.cornerRadius = 6
@@ -232,8 +236,11 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         let uuid = UUID().uuidString
         print(uuid)
         //smartExLoadingImage.isHidden = true
-        imeiLabel.text = IMEINumber
+        
     
+        
+        self.lblDescription.text = " \u{2022} Please click on ‘Scan QR Code’ or enter ‘Retail code’ below to begin Diagnostics. \n \u{2022} To view previous results, click on ‘Previous Quotation’"
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -722,10 +729,10 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         //let mName = UIDevice.current.modelName
         let modelCapacity = getTotalSize()
         //let model =  "\(mName)"
-        let IMEI = imeiLabel.text
+        let IMEI = imeiLabel.text ?? ""
         let ram =  ProcessInfo.processInfo.physicalMemory
         //let ram = 3221223823
-        let postString = "IMEINumber=\(IMEI!)&device=\(device)&memory=\(modelCapacity)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&ram=\(ram)&storeToken=\(self.storeToken)"
+        let postString = "IMEINumber=\(IMEI)&device=\(device)&memory=\(modelCapacity)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&ram=\(ram)&storeToken=\(self.storeToken)"
         
         print("url is :",request,"\nParam is :",postString)
         
@@ -738,7 +745,8 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             
             guard let data = data, error == nil else {
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong", duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -791,7 +799,15 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
                                 //self.present(vc, animated: true, completion: nil)
                                 
-                                self.DeadPixelTest()
+                                //self.DeadPixelTest()
+                                
+                                let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeviceDetectVC") as! DeviceDetectVC
+                                vc.modalPresentationStyle = .overFullScreen
+                                vc.productName = productName.string ?? ""
+                                vc.productImage = productImage.string ?? ""
+                                vc.productPrice = uptoPrice
+                                self.present(vc, animated: true, completion: nil)
+                                
                             }
                             
                         }else {
@@ -824,7 +840,14 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                     //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
                                     //self.present(vc, animated: true, completion: nil)
                                     
-                                    self.DeadPixelTest()
+                                    //self.DeadPixelTest()
+                                    
+                                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeviceDetectVC") as! DeviceDetectVC
+                                    vc.productName = productName.string ?? ""
+                                    vc.productImage = productImage.string ?? ""
+                                    vc.productPrice = uptoPrice
+                                    self.present(vc, animated: true, completion: nil)
+                                    
                                 }
                                 
                             }else{
@@ -860,7 +883,14 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                         //let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
                                         //self.present(vc, animated: true, completion: nil)
                                         
-                                        self.DeadPixelTest()
+                                        //self.DeadPixelTest()
+                                        
+                                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeviceDetectVC") as! DeviceDetectVC
+                                        vc.productName = productName.string ?? ""
+                                        vc.productImage = productImage.string ?? ""
+                                        vc.productPrice = uptoPrice
+                                        self.present(vc, animated: true, completion: nil)
+                                        
                                     }
                                     
                                 }else {
@@ -893,7 +923,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             }catch {
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
                 
             }
@@ -1204,289 +1234,8 @@ class WebServies: NSObject {
         }
     }
     
- 
-    
+     
 }
 
 
-extension ViewController {
-    
-    func DeadPixelTest() {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeadPixelVC") as! DeadPixelVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .flipHorizontal
-        
-        vc.deadPixelTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.touchScreenTest(rsltJson)
-                //self.BackgroundTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func touchScreenTest(_ testResultJSON : JSON) {
 
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.screenTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.MicrophoneTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func MicrophoneTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.micTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.SpeakerTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func SpeakerTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "SpeakerVC") as! SpeakerVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.speakerTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.VibratorTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func VibratorTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "VibratorVC") as! VibratorVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.vibratorTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.FlashlightTest(rsltJson)
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func FlashlightTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "TorchVC") as! TorchVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.flashLightTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.AutoRotationTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func AutoRotationTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.rotationTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.ProximityTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func ProximityTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ProximityView") as! ProximityVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.proximityTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.VolumeButtonTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func VolumeButtonTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "VRVC") as! VolumeRockerVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.volumeTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.EarphoneTest(rsltJson)
-                
-            }
-            
-            /*
-            DispatchQueue.main.async() {
-                
-                switch UIDevice.current.currentModelName {
-                case "iPhone 4","iPhone 4s","iPhone 5","iPhone 5c","iPhone 5s","iPhone 6","iPhone 6 Plus","iPhone 6s","iPhone 6s Plus":
-                                
-                    //self.EarphoneTest()
-                    self.CameraTest()
-                    break
-                default:
-                    
-                    //self.ChargerTest()
-                    self.CameraTest()
-                    break
-                }
-                
-            }*/
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func EarphoneTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "EarphoneVC") as! EarphoneJackVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.earphoneTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.ChargerTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func ChargerTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChargerVC") as! DeviceChargerVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.chargerTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.CameraTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func CameraTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.cameraTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.BiometricTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func BiometricTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.biometricTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.WiFiTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func WiFiTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "WiFiTestVC") as! WiFiTestVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.wifiTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.BackgroundTest(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func BackgroundTest(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.backgroundTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                self.TestResultScreen(rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-    }
-    
-    func TestResultScreen(_ testResultJSON : JSON) {
-        
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-        vc.modalPresentationStyle = .overFullScreen
-        vc.resultJSON = testResultJSON
-        
-        vc.testResultTestDiagnosis = { rsltJson in
-            DispatchQueue.main.async() {
-                
-                print("rsltJson",rsltJson)
-                
-            }
-        }
-        self.present(vc, animated: true, completion: nil)
-                
-    }
-    
-    
-
-
-}

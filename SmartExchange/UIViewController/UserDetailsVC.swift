@@ -83,7 +83,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
     // MARK: IBAction
     @IBAction func continueBtnClicked(_ sender: UIButton) {
         
-        if isHtml {
+        if self.isHtml {
 //            let vc = OrderFinalVC()
 //            vc.orderID = self.placedOrderId
 //            vc.finalPrice = self.finalPriced
@@ -175,7 +175,10 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
         if let cell = self.userDetailTableView.cellForRow(at: ndx) as? TextBoxCell {
             
             if cell.txtField.text?.isEmpty ?? false {
-                self.bankDict[cell.txtField.placeholder ?? ""] = ""
+                //self.bankDict[cell.txtField.placeholder ?? ""] = ""
+                
+                self.bankDict[self.placeHold] = ""
+                
             }else {
                 self.bankDict[self.placeHold] = cell.txtField.text ?? ""
             }
@@ -208,16 +211,22 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
         }
         
         if let cell = self.userDetailTableView.cellForRow(at: ndx) as? SelectTextCell {
+            
             if cell.selectTextField.text?.isEmpty ?? false {
-                self.bankDict[cell.selectTextField.placeholder ?? ""] = ""
+                //self.bankDict[cell.selectTextField.placeholder ?? ""] = ""
+                
+                self.bankDict[self.placeHold] = ""
             }else {
                 self.bankDict[self.placeHold] = cell.selectTextField.text ?? ""
             }
         }
         
         if let cell = self.userDetailTableView.cellForRow(at: ndx) as? MobileNumberCell {
+            
             if cell.mobileNumberTxtField.text?.isEmpty ?? false {
-                self.bankDict[cell.mobileNumberTxtField.placeholder ?? ""] = ""
+                //self.bankDict[cell.mobileNumberTxtField.placeholder ?? ""] = ""
+                
+                self.bankDict[self.placeHold] = ""
             }else {
                 self.bankDict[self.placeHold] = cell.mobileNumberTxtField.text ?? ""
             }
@@ -263,7 +272,9 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -661,6 +672,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             guard let dataThis = data, error == nil else {
                 //SwiftSpinner.hide()
+                
                 /*
                 DispatchQueue.main.async {
                     self.hud.dismiss()
@@ -668,10 +680,13 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                     print("error=\(error.debugDescription)")
                     
                     self.view.makeToast("Please Check Internet conection.", duration: 2.0, position: .bottom)
-                }*/
+                }
+                */
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
                 
                 return
@@ -857,7 +872,8 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 debugPrint(error as Any)
                 
                 DispatchQueue.main.async {
-                    self.view.makeToast("oops,something went wrong", duration: 2.0, position: .bottom)
+                    //self.view.makeToast("oops,something went wrong", duration: 2.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
             }
         })
@@ -911,7 +927,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             cellTextBox.txtField.layer.cornerRadius = 5.0
             cellTextBox.txtField.layer.borderWidth = 1.0
-            cellTextBox.txtField.layer.borderColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
+            cellTextBox.txtField.layer.borderColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
             cellTextBox.seperatorLbl.backgroundColor = .clear
             
             return cellTextBox
@@ -942,7 +958,9 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             cellTextSelect.selectTextField.layer.cornerRadius = 5.0
             cellTextSelect.selectTextField.layer.borderWidth = 1.0
-            cellTextSelect.selectTextField.layer.borderColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
+            
+            cellTextSelect.selectTextField.layer.borderColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
+            //cellTextSelect.selectTextField.layer.borderColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
             cellTextSelect.seperatorLbl.backgroundColor = .clear
             
             return cellTextSelect
@@ -966,7 +984,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             cellMobNum.mobileNumberTxtField.layer.cornerRadius = 5.0
             cellMobNum.mobileNumberTxtField.layer.borderWidth = 1.0
-            cellMobNum.mobileNumberTxtField.layer.borderColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
+            cellMobNum.mobileNumberTxtField.layer.borderColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
             cellMobNum.seperatorLbl.backgroundColor = .clear
             
             cellMobNum.mobileNumberTxtField.tag = indexPath.row

@@ -102,7 +102,6 @@ extension UIColor
     }
 }
 
-
 extension UIView {
     
     //to add Shadow and Radius On desired UIView
@@ -163,4 +162,93 @@ extension String {
         return  dateFormatter.string(from: date)
     }
     
+}
+
+@IBDesignable class GradientBGView: UIView {
+    
+    private var gradientLayer: CAGradientLayer!
+    
+    override class var layerClass: AnyClass {
+        return CAGradientLayer.self
+    }
+    
+    override func layoutSubviews() {
+        self.gradientLayer = self.layer as? CAGradientLayer
+        self.gradientLayer.colors = [UIColor.white.cgColor, UIColor().HexToColor(hexString:"#05ADEF").cgColor]
+    
+        //self.gradientLayer.startPoint = CGPoint(x: 0.0, y: 1.0)
+        //self.gradientLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
+        
+        self.gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+        self.gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        
+    }
+    
+    @IBInspectable var cornerRadius: CGFloat = 0 {
+        didSet {
+            
+            self.layer.cornerRadius = cornerRadius
+            self.layer.masksToBounds = true
+            setNeedsLayout()
+        }
+    }
+    
+}
+
+@IBDesignable class shadowCornerView: UIView {
+    
+    @IBInspectable var cornerRadius: CGFloat = 0 {
+        didSet {
+            
+            self.layer.cornerRadius = cornerRadius
+            self.layer.masksToBounds = true
+            setNeedsLayout()
+        }
+    }
+    
+    @IBInspectable var shadowRadius: CGFloat = 0 {
+        didSet {
+            
+            self.layer.masksToBounds = false
+            self.layer.shadowOffset = CGSize(width: 0, height: 2)
+            self.layer.shadowColor = UIColor.darkGray.withAlphaComponent(0.4).cgColor
+            self.layer.shadowRadius = shadowRadius
+            self.layer.shadowOpacity = 1
+            
+            let backgroundCGColor = backgroundColor?.cgColor
+            backgroundColor = nil
+            layer.backgroundColor =  backgroundCGColor
+            
+            setNeedsLayout()
+        }
+    }
+}
+
+@IBDesignable class shadowCornerButton: UIButton {
+    
+    @IBInspectable var cornerRadius: CGFloat = 0 {
+        didSet {
+            
+            self.layer.cornerRadius = cornerRadius
+            self.layer.masksToBounds = true
+            setNeedsLayout()
+        }
+    }
+    
+    @IBInspectable var shadowRadius: CGFloat = 0 {
+        didSet {
+            
+            self.layer.masksToBounds = false
+            self.layer.shadowOffset = CGSize(width: 0, height: 2)
+            self.layer.shadowColor = UIColor.darkGray.withAlphaComponent(0.4).cgColor
+            self.layer.shadowRadius = shadowRadius
+            self.layer.shadowOpacity = 1
+            
+            let backgroundCGColor = backgroundColor?.cgColor
+            backgroundColor = nil
+            layer.backgroundColor =  backgroundCGColor
+            
+            setNeedsLayout()
+        }
+    }
 }

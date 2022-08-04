@@ -40,7 +40,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         super.viewDidLoad()
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
                 
-        self.lblTitleTests.text = "Summary of Test Results".localized
+        //self.lblTitleTests.text = "Summary of Test Results".localized
         self.tableViewTests.register(UINib(nibName: "TestResultCell", bundle: nil), forCellReuseIdentifier: "testResultCell")
         self.tableViewTests.register(UINib(nibName: "TestResultTitleCell", bundle: nil), forCellReuseIdentifier: "TestResultTitleCell")
         
@@ -541,7 +541,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                     
                     let cellfailed = tableView.dequeueReusableCell(withIdentifier: "TestResultTitleCell", for: indexPath) as! TestResultTitleCell
                     cellfailed.lblTitle.text = "Functional Checks".localized
-                    cellfailed.lblTitle.textColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
+                    cellfailed.lblTitle.textColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
                     cellfailed.lblSeperator.isHidden = true
                     
                     return cellfailed
@@ -581,7 +581,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 let cellfailed = tableView.dequeueReusableCell(withIdentifier: "TestResultTitleCell", for: indexPath) as! TestResultTitleCell
                 cellfailed.lblTitle.text = "Functional Checks".localized
                 cellfailed.lblSeperator.isHidden = true
-                cellfailed.lblTitle.textColor = #colorLiteral(red: 0.1254901961, green: 0.2509803922, blue: 0.6039215686, alpha: 1)
+                cellfailed.lblTitle.textColor = #colorLiteral(red: 0.01960784314, green: 0.6784313725, blue: 0.937254902, alpha: 1)
                 
                 return cellfailed
             }else {
@@ -885,7 +885,8 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             
             guard let data = data, error == nil else {
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 2.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 2.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
                 return
             }
@@ -922,7 +923,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 }
             }catch {
                 DispatchQueue.main.async() {
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
                 }
             }
             

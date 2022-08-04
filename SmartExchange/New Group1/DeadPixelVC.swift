@@ -24,36 +24,38 @@ class DeadPixelVC: UIViewController {
     @IBOutlet weak var startTestBtn: UIButton!
     @IBOutlet weak var deadPixelInfoImage: UIImageView!
     @IBOutlet weak var deadPixelInfo: UILabel!
-    @IBOutlet weak var deadPixelNavBar: UINavigationBar!
+    //@IBOutlet weak var deadPixelNavBar: UINavigationBar!
+    @IBOutlet weak var pixelView: UIView!
     
-    var timer: Timer?
-    var timerIndex = 0
+    var testPixelView = UIView()
+    
+    var pixelTimer: Timer?
+    var pixelTimerIndex = 0
     var resultJSON = JSON()
     var audioPlayer = AVAudioPlayer()
     
     var isComingFromTestResult = false
-    
     let audioSession = AVAudioSession.sharedInstance()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
-        deadPixelInfoImage.loadGif(name: "dead_pixel")
+        self.deadPixelInfoImage.loadGif(name: "dead_pixel")
 
         //self.checkMicrophone()
         //self.checkVibrator()
         //self.playSound()
         
-        DispatchQueue.main.async {
+        //DispatchQueue.main.async {
             //self.configureAudioSessionCategory()
             //self.playSound()
-        }
+        //}
            
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             //self.checkVibrator()
-        }
-        
+        //}
         
     }
 
@@ -62,33 +64,124 @@ class DeadPixelVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: IBAction
+    @IBAction func startDeadPixelTest(_ sender: UIButton) {
+        
+        let screenSize: CGRect = UIScreen.main.bounds
+        self.testPixelView.frame = screenSize
+        self.testPixelView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        self.view.addSubview(self.testPixelView)
+     
+        //self.pixelView.isHidden = !self.pixelView.isHidden
+        
+        self.pixelTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+        
+        
+        /* Sameer 1/8/22
+        checkVibrator()
+        playSound()
+                
+        self.deadPixelNavBar.isHidden = true
+        
+        // Sameer
+        //self.resultJSON["Speakers"].int = 1
+        //self.resultJSON["MIC"].int = 1
+        //UserDefaults.standard.set(true, forKey: "mic")
+        
+        self.pixelTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+        self.view.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+        self.startTestBtn.isHidden = true
+        self.deadPixelInfo.isHidden = true
+        self.deadPixelInfoImage.isHidden = true
+        */
+        
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Dead Pixel Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Dead Pixel Skipped!")
+                
+                self.resultJSON["Dead Pixels"].int = -1
+                UserDefaults.standard.set(false, forKey: "deadPixel")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+               break
+                                
+            default:
+                
+                break
+                                
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
+    }
+    
     @objc func setRandomBackgroundColor() {
-        timerIndex += 1
+        self.pixelTimerIndex += 1
+        
         let colors = [
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1),
-            UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+            #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),#colorLiteral(red: 0, green: 0.003921568627, blue: 0.9843137255, alpha: 1),#colorLiteral(red: 0.003921568627, green: 0.003921568627, blue: 0.003921568627, alpha: 1),#colorLiteral(red: 0.9960784314, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 0, green: 1, blue: 0.003921568627, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         ]
-        switch timerIndex {
+        
+        switch self.pixelTimerIndex {
+            
         case 5:
-            self.view.backgroundColor = colors[0]
-            timer?.invalidate()
-            timer = nil
+            
+            self.testPixelView.removeFromSuperview()
+            //self.pixelView.isHidden = !self.pixelView.isHidden
+            
+            //self.view.backgroundColor = colors[pixelTimerIndex]
+            pixelTimer?.invalidate()
+            pixelTimer = nil
             
             
+            self.ShowGlobalPopUp()
+            
+            
+            /*
             // Prepare the popup assets
             let title = "Dead_Pixel_Test".localized
             let message = "dead_pixel_msg".localized
             
             
             // Create the dialog
-            let popup = PopupDialog(title: title, message: message,buttonAlignment: .horizontal, transitionStyle: .bounceDown, tapGestureDismissal: false, panGestureDismissal :false)
+            let popup = PopupDialog(title: title, message: message, buttonAlignment: .horizontal, transitionStyle: .bounceDown, tapGestureDismissal: false, panGestureDismissal :false)
             
             // Create buttons
             let buttonOne = CancelButton(title: "Yes".localized) {
+                
                 self.resultJSON["Dead Pixels"].int = 0
                 UserDefaults.standard.set(false, forKey: "deadPixel")
                 print("Dead Pixel Failed!")
@@ -128,6 +221,7 @@ class DeadPixelVC: UIViewController {
             }
             
             let buttonTwo = DefaultButton(title: "No".localized) {
+                
                 self.resultJSON["Dead Pixels"].int = 1
                 UserDefaults.standard.set(true, forKey: "deadPixel")
                 print("Dead Pixel Passed!")
@@ -168,12 +262,17 @@ class DeadPixelVC: UIViewController {
             
             let buttonThree = DefaultButton(title: "retry".localized) {
                 
-                self.timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+                /* Sameer 1/8/22
+                self.pixelTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
                 self.view.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
                 self.startTestBtn.isHidden = true
                 self.deadPixelInfo.isHidden = true
                 self.deadPixelInfoImage.isHidden = true
                 self.timerIndex = 0
+                */
+                
+                self.pixelTimerIndex = 0
+                self.startDeadPixelTest(UIButton())
                 
             }
             
@@ -183,6 +282,7 @@ class DeadPixelVC: UIViewController {
             // to add a single button
             popup.addButtons([buttonOne, buttonTwo,buttonThree])
             popup.dismiss(animated: true, completion: nil)
+            
             // Customize dialog appearance
             let pv = PopupDialogDefaultView.appearance()
             pv.titleFont    = UIFont(name: GlobalUtility().AppFontMedium, size: 20)!
@@ -191,7 +291,8 @@ class DeadPixelVC: UIViewController {
             
             // Customize the container view appearance
             let pcv = PopupDialogContainerView.appearance()
-            pcv.cornerRadius    = 2
+            pcv.cornerRadius    = 10
+            //pcv.cornerRadius    = 2
             pcv.shadowEnabled   = true
             pcv.shadowColor     = .black
             
@@ -214,34 +315,86 @@ class DeadPixelVC: UIViewController {
             
             // Present dialog
             self.present(popup, animated: true, completion: nil)
+            */
+            
             break
             
         default:
-            self.view.backgroundColor = colors[0]
+            //self.view.backgroundColor = colors[0]
+            
+            self.testPixelView.backgroundColor = colors[pixelTimerIndex]
         }
         
     }
    
-    
-    @IBAction func startDeadPixelTest(_ sender: AnyObject) {
-//        checkVibrator()
-//        playSound()
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Dead Pixel Test"
+        popUpVC.strMessage = "Did you see any black or white spots on the screen?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = "Retry"
+        popUpVC.isShowThirdBtn = true
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
                 
-        self.deadPixelNavBar.isHidden = true
+                self.resultJSON["Dead Pixels"].int = 0
+                UserDefaults.standard.set(false, forKey: "deadPixel")
+                print("Dead Pixel Failed!")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+                self.resultJSON["Dead Pixels"].int = 1
+                UserDefaults.standard.set(true, forKey: "deadPixel")
+                print("Dead Pixel Passed!")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            default:
+                
+                self.pixelTimerIndex = 0
+                self.startDeadPixelTest(UIButton())
+                                
+            }
+        }
         
-        // Sameer
-        //self.resultJSON["Speakers"].int = 1
-        //self.resultJSON["MIC"].int = 1
-        //UserDefaults.standard.set(true, forKey: "mic")
-        
-        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
-        self.view.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        self.startTestBtn.isHidden = true
-        self.deadPixelInfo.isHidden = true
-        self.deadPixelInfoImage.isHidden = true
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
         
     }
-    
+        
     func configureAudioSessionCategory() {
         print("Configuring audio session")
         do {
@@ -270,6 +423,7 @@ class DeadPixelVC: UIViewController {
 //            print(error)
 //        }
 //    }
+    
     
     func playSound() {
 

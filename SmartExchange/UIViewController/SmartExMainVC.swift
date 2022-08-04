@@ -31,9 +31,7 @@ class SmartExMainVC: UIViewController {
         let device = Luminous.System.Hardware.Device.current
         productNameLabel.text = self.productName
         productMAxPrice.text = "₹ \(self.productPrice)"
-        
-        // Do any additional setup after loading the view.
-        
+                
     }
 
     override func didReceiveMemoryWarning() {

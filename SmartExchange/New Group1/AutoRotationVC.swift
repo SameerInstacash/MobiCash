@@ -17,10 +17,12 @@ class AutoRotationVC: UIViewController {
     var rotationTestDiagnosis: ((_ testJSON: JSON) -> Void)?
     
     @IBOutlet weak var beginBtn: UIButton!
-    @IBOutlet weak var AutoRotationText: UITextView!
     @IBOutlet weak var AutoRotationImage: UIImageView!
     @IBOutlet weak var AutoRotationImageView: UIImageView!
-    @IBOutlet weak var screenRotationInfo: UITextView!
+    //@IBOutlet weak var screenRotationInfo: UITextView!
+    //@IBOutlet weak var AutoRotationText: UITextView!
+    @IBOutlet weak var AutoRotationText: UILabel!
+    
     var hasStarted = false
     var resultJSON = JSON()
     var isComingFromTestResult = false
@@ -28,9 +30,45 @@ class AutoRotationVC: UIViewController {
     let motion = CMMotionManager()
     var timer : Timer?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        self.AutoRotationImage.loadGif(name: "rotation")
+        //self.screenRotationInfo.text = "rota_info".localized
+        self.AutoRotationText.text = "rota_info".localized
+        
+        //NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+                
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
     @IBAction func beginBtnClicked(_ sender: Any) {
         
+        self.hasStarted = true
+        self.AutoRotationText.text = "landscape_mode".localized
+        //self.beginBtn.setTitle("skip".localized,for: .normal)
+        self.AutoRotationImage.isHidden = true
+        self.AutoRotationImageView.isHidden = false
+        self.AutoRotationImageView.image = UIImage(named: "landscape_image")!
+                    
+        NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        
+        
+        /*
         if self.hasStarted {
+            
+            self.ShowGlobalPopUp()
+            
+            /*
             // Prepare the popup assets
             let title = "rotation_test".localized
             let message = "skip_info".localized
@@ -92,7 +130,8 @@ class AutoRotationVC: UIViewController {
             
             // Customize the container view appearance
             let pcv = PopupDialogContainerView.appearance()
-            pcv.cornerRadius    = 2
+            pcv.cornerRadius    = 10
+            //pcv.cornerRadius    = 2
             pcv.shadowEnabled   = true
             pcv.shadowColor     = .black
             
@@ -115,6 +154,7 @@ class AutoRotationVC: UIViewController {
             
             // Present dialog
             self.present(popup, animated: true, completion: nil)
+            */
             
         }else{
             self.hasStarted = true
@@ -126,21 +166,65 @@ class AutoRotationVC: UIViewController {
                         
             NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         }
+        */
+        
+        
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
-        
-        self.AutoRotationImage.loadGif(name: "rotation")
-        self.screenRotationInfo.text = "rota_info".localized
-        
-        //NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Auto Rotation Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Rotation Skipped!")
+                
+                UserDefaults.standard.set(false, forKey: "rotation")
+                self.resultJSON["Rotation"].int = -1
+                
+                NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.rotationRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.rotationTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
     
     @objc func rotated()

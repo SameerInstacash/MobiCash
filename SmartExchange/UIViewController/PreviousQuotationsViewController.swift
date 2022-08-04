@@ -32,8 +32,8 @@ class PreviousQuotationsViewController: UIViewController {
     @IBAction func homeBtnClicked(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
         
-        let imei = UserDefaults.standard.string(forKey: "imei_number")
-        vc.IMEINumber = imei ?? ""
+        let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
+        vc.IMEINumber = imei
         self.present(vc, animated: true, completion: nil)
     }
     
@@ -65,9 +65,9 @@ class PreviousQuotationsViewController: UIViewController {
         let preferences = UserDefaults.standard
         //        let postString = "productId=\(productId!)&customerId=\(customerId!)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
         var postString = ""
-        let imei = UserDefaults.standard.string(forKey: "imei_number")
+        let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
         
-        postString = "IMEINumber=\(imei!)&quotationId=\(ref)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
+        postString = "IMEINumber=\(imei)&quotationId=\(ref)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
         request.httpBody = postString.data(using: .utf8)
         
         print("url is :",request,"\nParam is :",postString)
@@ -95,7 +95,8 @@ class PreviousQuotationsViewController: UIViewController {
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
                 
                 return

@@ -16,7 +16,8 @@ class VolumeRockerVC: UIViewController {
     var volumeRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
     var volumeTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
-    @IBOutlet weak var btnInfo: UITextView!
+    //@IBOutlet weak var btnInfo: UITextView!
+    @IBOutlet weak var lblInfo: UILabel!
     @IBOutlet weak var volumeUpImg: UIImageView!
     @IBOutlet weak var volumeDownImg: UIImageView!
     var resultJSON = JSON()
@@ -30,7 +31,7 @@ class VolumeRockerVC: UIViewController {
         super.viewDidLoad()
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
                 
-        self.btnInfo.text = "hard_btn_info".localized
+        //self.lblInfo.text = "hard_btn_info".localized
       
         /*
         self.volumeButtonHandler = JPSVolumeButtonHandler(up: {
@@ -137,15 +138,14 @@ class VolumeRockerVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        // SAM comment on 18/4/22
-        self.listenVolumeButton()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         // SAM comment on 18/4/22
-        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+        //self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
     }
     
     var volDown = false
@@ -201,7 +201,7 @@ class VolumeRockerVC: UIViewController {
                     
                     if (self.volDown == true) {
                         
-                        //self.audioSession.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
                         
                         print("Volume test passed")
                         
@@ -246,7 +246,7 @@ class VolumeRockerVC: UIViewController {
                     
                     if (self.volUp == true) {
                         
-                        //self.audioSession.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
                         
                         print("Volume test passed")
                         
@@ -290,7 +290,17 @@ class VolumeRockerVC: UIViewController {
         //}
     }
     
-    @IBAction func volumeRockerSkipPressed(_ sender: Any) {
+    //MARK: IBAction
+    @IBAction func volumeButtonStartPressed(_ sender: UIButton) {
+        // SAM comment on 18/4/22
+        self.listenVolumeButton()
+    }
+        
+    @IBAction func volumeRockerSkipPressed(_ sender: UIButton) {
+        
+        self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         let title = "hardware_test".localized
         let message = "skip_info".localized
@@ -356,7 +366,8 @@ class VolumeRockerVC: UIViewController {
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.cornerRadius    = 2
+        pcv.cornerRadius    = 10
+        //pcv.cornerRadius    = 2
         pcv.shadowEnabled   = true
         pcv.shadowColor     = .black
         
@@ -380,10 +391,62 @@ class VolumeRockerVC: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
         
     }
     
-    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Hardware Button Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                
+                print("Hardware Buttons Skipped!")
+                
+                self.tearDown()
+                UserDefaults.standard.set(false, forKey: "volume")
+                self.resultJSON["Hardware Buttons"].int = -1
+              
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
+    }
 
     /*
     // MARK: - Navigation

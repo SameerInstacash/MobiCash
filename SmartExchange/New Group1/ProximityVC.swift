@@ -21,8 +21,43 @@ class ProximityVC: UIViewController {
     @IBOutlet weak var proximityImageView: UIImageView!
     @IBOutlet weak var proximityText: UILabel!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        self.proximityText.isHidden = false
+        self.proximityImageView.loadGif(name: "proximity")
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        //NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: nil)
+        
+    }
+    
+    //MARK: IBAction
+    @IBAction func proXimityStartPressed(_ sender: Any) {
+        
+        let device = UIDevice.current
+        device.isProximityMonitoringEnabled = true
+        
+        if device.isProximityMonitoringEnabled {
+            NotificationCenter.default.addObserver(self, selector: #selector((self.proximityChanged)), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
+        }
+        
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
     @IBAction func proXimitySkipPressed(_ sender: Any) {
         
+        //self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         let title = "Proximity_test".localized
         let message = "skip_info".localized
@@ -85,7 +120,8 @@ class ProximityVC: UIViewController {
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.cornerRadius    = 2
+        pcv.cornerRadius    = 10
+        //pcv.cornerRadius    = 2
         pcv.shadowEnabled   = true
         pcv.shadowColor     = .black
         
@@ -108,27 +144,59 @@ class ProximityVC: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        //NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: nil)
+        */
         
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+    func ShowGlobalPopUp() {
         
-        proximityText.isHidden = false
-        proximityImageView.loadGif(name: "proximity")
-        let device = UIDevice.current
-        device.isProximityMonitoringEnabled = true
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        if device.isProximityMonitoringEnabled {
-            NotificationCenter.default.addObserver(self, selector: #selector((self.proximityChanged)), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
+        popUpVC.strTitle = "Proximity Sensor Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Proximity Skipped!")
+                
+                UserDefaults.standard.set(false, forKey: "proximity")
+                self.resultJSON["Proximity"].int = -1
+                
+                NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: nil)
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.proximityRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.proximityTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
         }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
         
     }
     

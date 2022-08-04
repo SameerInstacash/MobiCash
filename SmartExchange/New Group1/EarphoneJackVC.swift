@@ -21,7 +21,52 @@ class EarphoneJackVC: UIViewController {
     @IBOutlet weak var earphoneInfoImage: UIImageView!
     var isComingFromTestResult = false
     
+    let session = AVAudioSession.sharedInstance()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        self.earphoneInfoImage.loadGif(name: "earphone_jack")
+                
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK: IBAction
+    @IBAction func startbuttonPressed(_ sender: UIButton) {
+    
+        let currentRoute = self.session.currentRoute
+        if currentRoute.outputs.count != 0 {
+            for description in currentRoute.outputs {
+                if description.portType == AVAudioSessionPortHeadphones {
+                    print("headphone plugged in")
+                } else {
+                    print("headphone pulled out")
+                }
+            }
+        } else {
+            print("requires connection to device")
+        }
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(self.audioRouteChangeListener),
+            name: NSNotification.Name.AVAudioSessionRouteChange,
+            object: nil)
+        
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
     @IBAction func earphoneSkipPressed(_ sender: Any) {
+        
+        /*
         // Prepare the popup assets
         let title = "earphone_test".localized
         let message = "skip_info".localized
@@ -83,7 +128,8 @@ class EarphoneJackVC: UIViewController {
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.cornerRadius    = 2
+        pcv.cornerRadius    = 10
+        //pcv.cornerRadius    = 2
         pcv.shadowEnabled   = true
         pcv.shadowColor     = .black
         
@@ -107,43 +153,59 @@ class EarphoneJackVC: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
+        
     }
     
-    
-    let session = AVAudioSession.sharedInstance()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+    func ShowGlobalPopUp() {
         
-        earphoneInfoImage.loadGif(name: "earphone_jack")
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        let currentRoute = self.session.currentRoute
-        if currentRoute.outputs.count != 0 {
-            for description in currentRoute.outputs {
-                if description.portType == AVAudioSessionPortHeadphones {
-                    print("headphone plugged in")
-                } else {
-                    print("headphone pulled out")
+        popUpVC.strTitle = "Earphone Jack Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Earphone Skipped!")
+                
+                UserDefaults.standard.set(false, forKey: "earphone")
+                self.resultJSON["Earphone"].int = -1
+             
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.earphoneRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
                 }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.earphoneTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
             }
-        } else {
-            print("requires connection to device")
         }
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.audioRouteChangeListener),
-            name: NSNotification.Name.AVAudioSessionRouteChange,
-            object: nil)
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     @objc dynamic private func audioRouteChangeListener(notification:NSNotification) {
         

@@ -11,6 +11,7 @@
 		5902CB46287541850066DEA4 /* speech.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB44287541850066DEA4 /* speech.gif */; };
 		5902CB47287541850066DEA4 /* dead_pixel.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB45287541850066DEA4 /* dead_pixel.gif */; };
 		5902CB49287553AA0066DEA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */; };
+		5935F62B2897B79D00C55BF8 /* DeviceDetectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */; };
 		5941862C282E277900DB2723 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418623282E276200DB2723 /* Poppins-Thin.ttf */; };
 		5941862D282E277900DB2723 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418624282E276800DB2723 /* Poppins-Light.ttf */; };
 		5941862E282E277900DB2723 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418625282E276A00DB2723 /* Poppins-ExtraBold.ttf */; };
@@ -48,6 +49,7 @@
 		59BDBE39283F396B00A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE33283F396800A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		59BDBE3A283F396B00A7890F /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */; };
 		59BDBE3B283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE37283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m */; };
+		59C75CA7289B95950037B81E /* GlobalSkipPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C75CA6289B95950037B81E /* GlobalSkipPopUpVC.swift */; };
 		59CF225A28447D1C00E28F15 /* UserDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CF225928447D1C00E28F15 /* UserDetailsVC.swift */; };
 		59CF22622844846B00E28F15 /* SelectTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CF225E2844846A00E28F15 /* SelectTextCell.swift */; };
 		59CF22632844846B00E28F15 /* HtmlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CF225F2844846A00E28F15 /* HtmlCell.swift */; };
@@ -133,6 +135,7 @@
 		5902CB44287541850066DEA4 /* speech.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = speech.gif; sourceTree = "<group>"; };
 		5902CB45287541850066DEA4 /* dead_pixel.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dead_pixel.gif; sourceTree = "<group>"; };
 		5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetectVC.swift; sourceTree = "<group>"; };
 		59418623282E276200DB2723 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		59418624282E276800DB2723 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		59418625282E276A00DB2723 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -176,6 +179,7 @@
 		59BDBE35283F396A00A7890F /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		59BDBE37283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
+		59C75CA6289B95950037B81E /* GlobalSkipPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSkipPopUpVC.swift; sourceTree = "<group>"; };
 		59CF225928447D1C00E28F15 /* UserDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsVC.swift; sourceTree = "<group>"; };
 		59CF225E2844846A00E28F15 /* SelectTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTextCell.swift; sourceTree = "<group>"; };
 		59CF225F2844846A00E28F15 /* HtmlCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlCell.swift; sourceTree = "<group>"; };
@@ -342,8 +346,9 @@
 		59418637282E2A1700DB2723 /* UIViewController */ = {
 			isa = PBXGroup;
 			children = (
-				C39948221E54270600F01384 /* ViewController.swift */,
 				C37A34E32074075C004A4986 /* IMEIViewController.swift */,
+				C39948221E54270600F01384 /* ViewController.swift */,
+				5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */,
 				C39F31DB1E7A969C00959100 /* SmartExMainVC.swift */,
 				C31CFDF020871398003870BE /* Question.swift */,
 				C3DED6BE207C83B800324995 /* Answer.swift */,
@@ -388,6 +393,7 @@
 				59420D28262EBFA30048B712 /* WiFiTestVC.swift */,
 				C3E76E691E7D5C5900228428 /* InternalTests.swift */,
 				C393FA88207625C600D43AEB /* ResultsViewController.swift */,
+				59C75CA6289B95950037B81E /* GlobalSkipPopUpVC.swift */,
 			);
 			name = AllTestVC;
 			path = "New Group1";
@@ -952,6 +958,7 @@
 				5966EF42261480DB00E91F21 /* TestResultTitleCell.swift in Sources */,
 				C37A34E42074075C004A4986 /* IMEIViewController.swift in Sources */,
 				59BDBE38283F396B00A7890F /* TPKeyboardAvoidingTableView.m in Sources */,
+				59C75CA7289B95950037B81E /* GlobalSkipPopUpVC.swift in Sources */,
 				C3DED6BF207C83B800324995 /* Answer.swift in Sources */,
 				59DA342E283B8ED3005AC9CA /* Msg.swift in Sources */,
 				C393FA89207625C600D43AEB /* ResultsViewController.swift in Sources */,
@@ -993,6 +1000,7 @@
 				C3FAA26522F44FF100233503 /* PreviousQuotationsViewController.swift in Sources */,
 				C343A76F1E7FBFA500C355DD /* EarphoneJackVC.swift in Sources */,
 				59420D29262EBFA30048B712 /* WiFiTestVC.swift in Sources */,
+				5935F62B2897B79D00C55BF8 /* DeviceDetectVC.swift in Sources */,
 				C363AE36208F05F400D2AC54 /* FirstQViewController.swift in Sources */,
 				C39F31DC1E7A969C00959100 /* SmartExMainVC.swift in Sources */,
 				59BDBE3B283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m in Sources */,

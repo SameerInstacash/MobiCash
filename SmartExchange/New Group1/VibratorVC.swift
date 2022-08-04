@@ -63,14 +63,14 @@ class VibratorVC: UIViewController {
         self.lblCheckingVibrator.text = "Checking Vibrator".localized
         self.lblPleaseEnsure.text = "Count how many times your phone has vibrated and then type it in the text box provided".localized
         
-        self.btnStart.setTitle("Start".localized, for: UIControlState.normal)
+        self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)
         self.btnSkip.setTitle("Skip".localized, for: UIControlState.normal)
     }
     
     //MARK:- button action methods
     @IBAction func onClickStart(sender: UIButton) {
         
-        if sender.titleLabel?.text == "Start".localized {
+        if sender.titleLabel?.text == "Start Test".localized {
             sender.setTitle("Submit".localized, for: .normal)
             
             self.startTest()
@@ -112,17 +112,17 @@ class VibratorVC: UIViewController {
         print("Number: \(randomNumber)")
         self.num1 = randomNumber
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+        self.gameTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
      
     }
     
     @objc func runTimedCode() {
         
-        runCount += 1
+        self.runCount += 1
         self.checkVibrator()
         
-        if runCount == self.num1 {
-            gameTimer?.invalidate()
+        if self.runCount == self.num1 {
+            self.gameTimer?.invalidate()
             self.txtFieldNum.isHidden = false
         }
         
@@ -182,6 +182,9 @@ class VibratorVC: UIViewController {
     
     func skipTest() {
         
+        self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         
         //let title = "Vibrator Test".localized
@@ -241,7 +244,7 @@ class VibratorVC: UIViewController {
         
         let buttonTwo = DefaultButton(title: "No".localized) {
             //Do Nothing
-            self.btnStart.setTitle("Start".localized, for: .normal)
+            self.btnStart.setTitle("Start Test".localized, for: .normal)
             popup.dismiss(animated: true, completion: nil)
         }
         
@@ -280,6 +283,58 @@ class VibratorVC: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
+        
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Vibrator Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Vibrator Skipped!")
+                
+                self.resultJSON["Vibrator"].int = -1
+                UserDefaults.standard.set(false, forKey: "Vibrator")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.vibratorRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.vibratorTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+                self.btnStart.setTitle("Start Test".localized, for: .normal)
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
     
 

@@ -21,7 +21,35 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
     @IBOutlet weak var chargerInfoImage: UIImageView!
     var isComingFromTestResult = false
     
+    var imagePicker: UIImagePickerController!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        self.chargerInfoImage.loadGif(name: "charging")
+                
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //MARK: IBAction
+    @IBAction func startChargerTestBtnPressed(_ sender: Any) {
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        NotificationCenter.default.addObserver(self, selector: #selector(self.batteryStateDidChange), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.batteryLevelDidChange), name: NSNotification.Name.UIDeviceBatteryLevelDidChange, object: nil)
+    }
+    
+    @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
     @IBAction func chargerSkipPressed(_ sender: Any) {
+        
+        /*
         // Prepare the popup assets
         let title = "charger_test".localized
         let message = "skip_info".localized
@@ -85,7 +113,8 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
         
         // Customize the container view appearance
         let pcv = PopupDialogContainerView.appearance()
-        pcv.cornerRadius    = 2
+        pcv.cornerRadius    = 10
+        //pcv.cornerRadius    = 2
         pcv.shadowEnabled   = true
         pcv.shadowColor     = .black
         
@@ -109,28 +138,62 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
-    }
-    
-    
-    var imagePicker: UIImagePickerController!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
-        
-        chargerInfoImage.loadGif(name: "charging")
-        UIDevice.current.isBatteryMonitoringEnabled = true
-        NotificationCenter.default.addObserver(self, selector: #selector(self.batteryStateDidChange), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.batteryLevelDidChange), name: NSNotification.Name.UIDeviceBatteryLevelDidChange, object: nil)
+        */
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Device Charger Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("charger Skipped!")
+                
+                UserDefaults.standard.set(false, forKey: "charger")
+                self.resultJSON["USB"].int = -1
+              
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.chargerRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.chargerTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                
+            case 2:
+                
+                break
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
     
     @objc func batteryStateDidChange(notification: NSNotification){
+        
         // The stage did change: plugged, unplugged, full charge...
         print("Device plugged in.")
         DispatchQueue.main.async() {

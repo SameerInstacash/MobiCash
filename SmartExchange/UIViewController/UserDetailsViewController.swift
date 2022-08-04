@@ -385,7 +385,8 @@ class UserDetailsViewController: UIViewController, UITextFieldDelegate {
                 }*/
                 
                 DispatchQueue.main.async() {
-                    self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
                 }
                 
                 return

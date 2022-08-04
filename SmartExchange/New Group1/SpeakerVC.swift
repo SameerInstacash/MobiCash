@@ -70,7 +70,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         self.lblCheckingSpeaker.text = "Checking Speaker".localized
         self.lblPleaseEnsure.text = "Your phone will play some numbers out loud, and then type it in the text box provided.".localized
         
-        self.btnStart.setTitle("Start".localized, for: UIControlState.normal)
+        self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)
         self.btnSkip.setTitle("Skip".localized, for: UIControlState.normal)
     }
     
@@ -94,7 +94,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     //MARK:- button action methods
     @IBAction func onClickStart(sender: UIButton) {
         
-        if sender.titleLabel?.text == "Start".localized {
+        if sender.titleLabel?.text == "Start Test".localized {
             sender.setTitle("Submit".localized, for: .normal)
             
             self.configureAudioSessionCategory()
@@ -160,7 +160,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         do {
             try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
             try self.audioSession?.setActive(true)
-            print("Successfully configured audio session (SPEAKER-Bottom).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
+            //print("Successfully configured audio session (SPEAKER-Bottom).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
         } catch let error as NSError {
             print("#configureAudioSessionToSpeaker Error \(error.localizedDescription)")
         }
@@ -214,7 +214,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             do {
                 try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
                 try self.audioSession?.setActive(true)
-                print("Successfully configured audio session (SPEAKER-Upper).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
+                //print("Successfully configured audio session (SPEAKER-Upper).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs)
             } catch let error as NSError {
                 print("#configureAudioSessionToEarpieceSpeaker Error \(error.localizedDescription)")
             }
@@ -390,6 +390,9 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
  
     func skipTest() {
         
+        self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         
         //let title = "Speaker Test".localized
@@ -449,7 +452,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         
         let buttonTwo = DefaultButton(title: "No".localized) {
             //Do Nothing
-            self.btnStart.setTitle("Start".localized, for: .normal)
+            self.btnStart.setTitle("Start Test".localized, for: .normal)
             popup.dismiss(animated: true, completion: nil)
         }
         
@@ -488,6 +491,58 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
+        
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "Speakers Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("Speakers Skipped!")
+                
+                self.resultJSON["Speakers"].int = -1
+                UserDefaults.standard.set(false, forKey: "Speakers")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.speakerRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.speakerTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+                self.btnStart.setTitle("Start Test".localized, for: .normal)
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
     
 }

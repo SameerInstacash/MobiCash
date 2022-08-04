@@ -64,7 +64,7 @@ class TorchVC: UIViewController {
     // MARK:- IBActions
     @IBAction func startButtonPressed(_ sender: UIButton) {
         
-        if sender.titleLabel?.text == "Start".localized {
+        if sender.titleLabel?.text == "Start Test".localized {
             sender.setTitle("Submit".localized, for: .normal)
             
             self.startTest()
@@ -113,12 +113,12 @@ class TorchVC: UIViewController {
     
     @objc func runTimedCode() {
         
-        runCount += 1
+        self.runCount += 1
         
         self.toggleTorch(on: true)
         
         if runCount == self.num1 {
-            gameTimer?.invalidate()
+            self.gameTimer?.invalidate()
             self.numberTxtField.isHidden = false
         }
         
@@ -220,6 +220,9 @@ class TorchVC: UIViewController {
     
     func skipTest() {
         
+        self.ShowGlobalPopUp()
+        
+        /*
         // Prepare the popup assets
         
         let title = "FlashLight Test".localized
@@ -278,7 +281,7 @@ class TorchVC: UIViewController {
         
         let buttonTwo = DefaultButton(title: "No".localized) {
             //Do Nothing
-            self.startBtn.setTitle("Start", for: .normal)
+            self.startBtn.setTitle("Start Test", for: .normal)
             popup.dismiss(animated: true, completion: nil)
         }
         
@@ -323,6 +326,58 @@ class TorchVC: UIViewController {
         
         // Present dialog
         self.present(popup, animated: true, completion: nil)
+        */
+        
+    }
+    
+    func ShowGlobalPopUp() {
+        
+        let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
+        
+        popUpVC.strTitle = "FlashLight Diagnosis"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
+        popUpVC.strBtnYesTitle = "Yes"
+        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strBtnRetryTitle = ""
+        popUpVC.isShowThirdBtn = false
+        
+        popUpVC.userConsent = { btnTag in
+            switch btnTag {
+            case 1:
+                
+                print("FlashLight Skipped!")
+                
+                self.resultJSON["Torch"].int = -1
+                UserDefaults.standard.set(false, forKey: "Torch")
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.flashLightRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.flashLightTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                                
+            case 2:
+                
+                self.startBtn.setTitle("Start Test", for: .normal)
+                
+            default:
+                                
+                break
+            }
+        }
+        
+        popUpVC.modalPresentationStyle = .overFullScreen
+        self.present(popUpVC, animated: false) { }
+        
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
