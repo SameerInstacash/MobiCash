@@ -20,6 +20,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     
     @IBOutlet weak var lblCheckingMicrophone: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
+    @IBOutlet weak var lblTimerCount: UILabel!
     
     @IBOutlet weak var btnStart: UIButton!
     @IBOutlet weak var btnSkip: UIButton!
@@ -61,21 +62,24 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             try self.recordingSession?.setActive(true)
             
             self.recordingSession?.requestRecordPermission() { [unowned self] allowed in
-                DispatchQueue.main.async {
-                    if allowed {
-                        //self.loadRecordingUI()
-                        
-                        self.btnStart.isHidden = false
+                
+                if allowed {
+                    //self.loadRecordingUI()
+                    
+                    //self.btnStart.isHidden = false
+                    
+                    DispatchQueue.main.async {
                         self.createRecorder()
-                        
-                    } else {
-                        // failed to record!
-                        DispatchQueue.main.async() {
-                            self.view.makeToast("failed to record!", duration: 2.0, position: .bottom)
-                        }
-                        
                     }
+                    
+                } else {
+                    // failed to record!
+                    DispatchQueue.main.async() {
+                        self.view.makeToast("failed to record!", duration: 2.0, position: .bottom)
+                    }
+                    
                 }
+                
             }
         } catch {
             // failed to record!
@@ -90,6 +94,8 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     override func viewWillAppear(_ animated: Bool) {
         //AppOrientationUtility.lockOrientation(.portrait)
         //self.changeLanguageOfUI()
+        
+        // Earphones plugged in. Please remove the Earphones and click on the start button below to start the test
     }
 
     func changeLanguageOfUI() {
@@ -102,8 +108,8 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     }
     
     open func createRecorder() {
-        recording = Recording(to: "recording.m4a")
-        recording.delegate = self
+        self.recording = Recording(to: "recording.m4a")
+        self.recording.delegate = self
         
         // Optionally, you can prepare the recording in the background to
         // make it start recording faster when you hit `record()`.
@@ -121,7 +127,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     open func startRecording(url: URL) {
         recordDuration = 0
         do {
-            Timer.scheduledTimer(timeInterval: 5,
+            Timer.scheduledTimer(timeInterval: 4,
                                  target: self,
                                  selector: #selector(self.stopRecording),
                                  userInfo: nil,
@@ -130,18 +136,25 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             try recording.record()
             //self.playUsingAVAudioPlayer(url: url)
         } catch {
+            
         }
     }
     
     @objc func stopRecording() {
-        recordDuration = 0
-        recording.stop()
+        self.gameTimer = nil
+        self.gameTimer?.invalidate()
         
-        if isBitRate {
-            self.finishRecording(success: isBitRate)
-        }else {
-            self.finishRecording(success: isBitRate)
+        self.recordDuration = 0
+        self.recording.stop()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            if self.isBitRate {
+                self.finishRecording(success: self.isBitRate)
+            }else {
+                self.finishRecording(success: self.isBitRate)
+            }
         }
+        
     
         
         /*
@@ -167,7 +180,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         }
         
         print(rate)
-        recordDuration += 1
+        self.recordDuration += 1
     }
 
     //MARK:- button action methods
@@ -178,7 +191,9 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             //self.startTest()
             
             //sender.isHidden = true
-            self.speechImgView.isHidden = false
+            //self.speechImgView.isHidden = false
+            //self.speechImgView.loadGif(name: "speech")
+            
             
             /*
             // Load GIF In Image view
@@ -188,7 +203,12 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             self.speechImgView.startAnimating()
             */
             
-            self.speechImgView.loadGif(name: "speech")
+            sender.isHidden = true
+            self.lblTimerCount.text = "4"
+            
+            //Run Timer for 4 Seconds to record the audio
+            self.gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.runTimerForReverseCounter), userInfo: nil, repeats: true)
+            
             
             let audioFilename = getDocumentsDirectory().appendingPathComponent("recording.m4a")
             self.startRecording(url: audioFilename)
@@ -203,6 +223,17 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         self.skipTest()
     }
     
+    @objc func runTimerForReverseCounter() {
+        self.runCount += 1
+        
+        if self.runCount <= 4 {
+            self.lblTimerCount.text = "\(4 - self.runCount)"
+        }else {
+            
+        }
+        
+    }
+    
     func startTest() {
         
         if audioRecorder == nil {
@@ -211,33 +242,40 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             finishRecording(success: false)
         }
         
-        
         //Run Timer for 4 Seconds to record the audio
-        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+        self.gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
      
     }
     
     @objc func runTimedCode() {
-        runCount += 1
+        self.runCount += 1
         
-        if runCount > 4 {
+        if self.runCount > 4 {
             self.finishRecording(success: self.isBitRate)
         }
     }
     
     func finishRecording(success: Bool) {
         //audioRecorder.stop()
-        audioRecorder = nil
+        self.audioRecorder = nil
         
         self.gameTimer?.invalidate()
-        recording.recorder?.deleteRecording()
+        self.recording.recorder?.deleteRecording()
 
         if success {
             
             self.resultJSON["MIC"].int = 1
             UserDefaults.standard.set(true, forKey: "mic")
             
-            self.goNext()
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                
+                self.goNext()
+                
+            }
             
         } else {
             
@@ -423,10 +461,10 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Microphone Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

@@ -38,12 +38,14 @@ class ProximityVC: UIViewController {
     }
     
     //MARK: IBAction
-    @IBAction func proXimityStartPressed(_ sender: Any) {
+    @IBAction func proXimityStartPressed(_ sender: UIButton) {
         
         let device = UIDevice.current
         device.isProximityMonitoringEnabled = true
         
         if device.isProximityMonitoringEnabled {
+            sender.isHidden = true
+            
             NotificationCenter.default.addObserver(self, selector: #selector((self.proximityChanged)), name: NSNotification.Name(rawValue: "UIDeviceProximityStateDidChangeNotification"), object: device)
         }
         
@@ -152,10 +154,10 @@ class ProximityVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Proximity Sensor Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -222,18 +224,26 @@ class ProximityVC: UIViewController {
                 self.present(vc, animated: true, completion: nil)
             }*/
             
-            if self.isComingFromTestResult {
-                
-                guard let didFinishRetryDiagnosis = self.proximityRetryDiagnosis else { return }
-                didFinishRetryDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
-                
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
             }
-            else{
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                 
-                guard let didFinishTestDiagnosis = self.proximityTestDiagnosis else { return }
-                didFinishTestDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.proximityRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.proximityTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
                 
             }
 

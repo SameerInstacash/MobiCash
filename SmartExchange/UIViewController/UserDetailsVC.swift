@@ -274,7 +274,21 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 DispatchQueue.main.async() {
                     //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
                     
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.getXtraCoverForm()
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
                 }
                 
                 return
@@ -686,7 +700,21 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 DispatchQueue.main.async() {
                     //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
                     
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.setXtraCoverFormToServer()
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
                 }
                 
                 return

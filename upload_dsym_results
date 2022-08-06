@@ -2,19 +2,53 @@ uploading map to new relic
 executing upload_map_file_to_new_relic
 New Relic: map file upload attempt #1 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
+Traceback (most recent call last):
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 267, in <module>
+    r = requests.post("/".join((url,"map")), files=files, headers=headers)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 542, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 655, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/adapters.py", line 516, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='mobile-symbol-upload.newrelic.com', port=443): Max retries exceeded with url: /map (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x102014750>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known',))
 New Relic: map file upload attempt #2 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
 Traceback (most recent call last):
-  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/4:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
-    os.mkdir(workDir)
-OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-avizchhlvpnfjbaazxcqzruflqac/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/tmp'
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 267, in <module>
+    r = requests.post("/".join((url,"map")), files=files, headers=headers)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 542, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 655, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/adapters.py", line 516, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='mobile-symbol-upload.newrelic.com', port=443): Max retries exceeded with url: /map (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x110d25750>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known',))
 New Relic: map file upload attempt #3 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
 Traceback (most recent call last):
-  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/4:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 96, in <module>
-    os.mkdir(workDir)
-OSError: [Errno 17] File exists: '/Users/sameerkhan/Library/Developer/Xcode/DerivedNew Relic: map file upload attempt #3 (of 3)
-Using URL: https://mobile-symbol-upload.eu01.nr-data.net
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/generateMap.py", line 267, in <module>
+    r = requests.post("/".join((url,"map")), files=files, headers=headers)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 542, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/sessions.py", line 655, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/6:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/requests/adapters.py", line 516, in send
+    raise ConnectionError(e, request=request)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='mobile-symbol-upload.newrelic.com', port=443): Max retries exceeded with url: /map (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x106ce6750>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known',))
 executing upload_dsym_to_new_relic
-new relic: successfully uploaded dsym files
- successfully uploaded dsym files
+new relic: error "000" while uploading "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip" to "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip"
+new relic: error "000" while uploading "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip" to "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip"
+new relic: error "000" while uploading "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip" to "/Users/sameerkhan/Library/Developer/Xcode/DerivedData/SmartExchange-flipmprcwqvyeffcnlumtlozusxb/Build/Intermediates.noindex/SmartExchange.build/Debug-iphoneos/SmartExchange.build/NewRelic.framework.dSYM-1659780833.zip"

@@ -100,13 +100,13 @@ class WiFiTestVC: UIViewController {
             self.resultJSON["WIFI"].int = 1
             UserDefaults.standard.setValue(true, forKey: "WIFI")
             
-            isWiFiPass = true
+            self.isWiFiPass = true
         }
         else{
             self.resultJSON["WIFI"].int = 0
             UserDefaults.standard.setValue(false, forKey: "WIFI")
             
-            isWiFiPass = false
+            self.isWiFiPass = false
         }
         
         if count > 3 {
@@ -144,20 +144,50 @@ class WiFiTestVC: UIViewController {
            
         }*/
         
-        if self.isComingFromTestResult {
+        if self.isWiFiPass {
             
-            guard let didFinishRetryDiagnosis = self.wifiRetryDiagnosis else { return }
-            didFinishRetryDiagnosis(self.resultJSON)
-            self.dismiss(animated: false, completion: nil)
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.wifiRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.wifiTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+            
+            }
+            
+        }else {
+            
+            if self.isComingFromTestResult {
+                
+                guard let didFinishRetryDiagnosis = self.wifiRetryDiagnosis else { return }
+                didFinishRetryDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
+            else{
+                
+                guard let didFinishTestDiagnosis = self.wifiTestDiagnosis else { return }
+                didFinishTestDiagnosis(self.resultJSON)
+                self.dismiss(animated: false, completion: nil)
+                
+            }
             
         }
-        else{
-            
-            guard let didFinishTestDiagnosis = self.wifiTestDiagnosis else { return }
-            didFinishTestDiagnosis(self.resultJSON)
-            self.dismiss(animated: false, completion: nil)
-            
-        }
+        
         
     }
     
@@ -176,10 +206,10 @@ class WiFiTestVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "WiFi Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

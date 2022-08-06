@@ -44,7 +44,7 @@ class CameraViewController: UIViewController {
     }
     */
     
-    @IBAction func clickPictureBtnPressed(_ sender: Any) {
+    @IBAction func clickPictureBtnPressed(_ sender: UIButton) {
         
         let camera = DKCamera()
         
@@ -67,7 +67,7 @@ class CameraViewController: UIViewController {
                 self.isBackClick = true
                 if self.isFrontClick == false {
                     camera.currentDevice = camera.currentDevice == camera.captureDeviceRear ?
-                        camera.captureDeviceFront : camera.captureDeviceRear
+                    camera.captureDeviceFront : camera.captureDeviceRear
                     camera.setupCurrentDevice()
                 }
             }
@@ -79,36 +79,53 @@ class CameraViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "camera")
                 self.resultJSON["Camera"].int = 1
                 
+                
                 if self.isComingFromTestResult {
                     
                     camera.dismiss(animated: false) {
-                        guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
-                        didFinishRetryDiagnosis(self.resultJSON)
-                        self.dismiss(animated: false, completion: nil)
+                        
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                            guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
+                            didFinishRetryDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                        }
+                        
                     }
                     
                 }
                 else{
                     
                     camera.dismiss(animated: false) {
-                        guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
-                        didFinishTestDiagnosis(self.resultJSON)
-                        self.dismiss(animated: false, completion: nil)
+                        
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                            guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
+                            didFinishTestDiagnosis(self.resultJSON)
+                            self.dismiss(animated: false, completion: nil)
+                        }
+                        
                     }
                     
                 }
                 
                 
                 /*
-                if self.isComingFromTestResult {
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                    vc.resultJSON = self.resultJSON
-                    self.present(vc, animated: true, completion: nil)
-                }else {
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
-                    vc.resultJSON = self.resultJSON
-                    self.present(vc, animated: true, completion: nil)
-                }*/
+                 if self.isComingFromTestResult {
+                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+                 vc.resultJSON = self.resultJSON
+                 self.present(vc, animated: true, completion: nil)
+                 }else {
+                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "FingerPrintVC") as! FingerprintViewController
+                 vc.resultJSON = self.resultJSON
+                 self.present(vc, animated: true, completion: nil)
+                 }*/
                 
             }
         }
@@ -217,10 +234,10 @@ class CameraViewController: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Camera Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

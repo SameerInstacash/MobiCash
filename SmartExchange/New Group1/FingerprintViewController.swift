@@ -39,15 +39,15 @@ class FingerprintViewController: UIViewController {
                 self.biometricImage.image = yourImage
                 
                 self.lblTestTitle.text = "Testing Face ID"
-                self.lblTitleMessage.text = "First, enable the face-Id function on your phone" + "\n" +
-                "During the test place your face on the scanner as you normally would to unlock your phone"
+                self.lblTitleMessage.text = "First, enable the face-Id function on your phone." +
+                "During the test place your face on the scanner as you normally would to unlock your phone."
                 
             }else {
                 self.biometricImage.image = UIImage(named: "fingerprint")!
                 
                 self.lblTestTitle.text = "Testing fingerprint"
-                self.lblTitleMessage.text = "First, please enable fingerprint function" + "\n\n" +
-                "Then you will place your finger on the fingerprint scanner like you normally would during unlock"
+                self.lblTitleMessage.text = "First, please enable fingerprint function." +
+                "Then you will place your finger on the fingerprint scanner like you normally would during unlock."
             }
             
         }else {
@@ -137,8 +137,8 @@ class FingerprintViewController: UIViewController {
                 self.biometricImage.image = yourImage
                 
                 self.lblTestTitle.text = "Testing Face ID"
-                self.lblTitleMessage.text = "First, enable the face-Id function on your phone" + "\n" +
-                "During the test place your face on the scanner as you normally would to unlock your phone"
+                self.lblTitleMessage.text = "First, enable the face-Id function on your phone." +
+                "During the test place your face on the scanner as you normally would to unlock your phone."
                               
                 break
             default:
@@ -172,18 +172,26 @@ class FingerprintViewController: UIViewController {
                 self.present(vc, animated: true, completion: nil)
             }*/
             
-            if self.isComingFromTestResult {
-                
-                guard let didFinishRetryDiagnosis = self.biometricRetryDiagnosis else { return }
-                didFinishRetryDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
-                
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
             }
-            else{
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                 
-                guard let didFinishTestDiagnosis = self.biometricTestDiagnosis else { return }
-                didFinishTestDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.biometricRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.biometricTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
                 
             }
             
@@ -239,7 +247,7 @@ class FingerprintViewController: UIViewController {
                     self?.view.makeToast("\(error.message())", duration: 2.0, position: .bottom)
                 }
                     
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                     
                     /*
                     if self?.isComingFromTestResult ?? false {
@@ -378,10 +386,10 @@ class FingerprintViewController: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "FingerPrint Scanner Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

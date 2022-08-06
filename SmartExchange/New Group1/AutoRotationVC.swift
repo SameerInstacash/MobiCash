@@ -34,7 +34,7 @@ class AutoRotationVC: UIViewController {
         super.viewDidLoad()
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
-        self.AutoRotationImage.loadGif(name: "rotation")
+        //self.AutoRotationImage.loadGif(name: "rotation")
         //self.screenRotationInfo.text = "rota_info".localized
         self.AutoRotationText.text = "rota_info".localized
         
@@ -51,14 +51,18 @@ class AutoRotationVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func beginBtnClicked(_ sender: Any) {
+    @IBAction func beginBtnClicked(_ sender: UIButton) {
+        
+        sender.isHidden = true
+    
         
         self.hasStarted = true
         self.AutoRotationText.text = "landscape_mode".localized
         //self.beginBtn.setTitle("skip".localized,for: .normal)
-        self.AutoRotationImage.isHidden = true
-        self.AutoRotationImageView.isHidden = false
-        self.AutoRotationImageView.image = UIImage(named: "landscape_image")!
+        //self.AutoRotationImage.isHidden = true
+        
+        //self.AutoRotationImageView.isHidden = false
+        //self.AutoRotationImageView.image = UIImage(named: "landscape_image")!
                     
         NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
@@ -179,10 +183,10 @@ class AutoRotationVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Auto Rotation Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -235,7 +239,7 @@ class AutoRotationVC: UIViewController {
         {
             print("LandScape")
             self.AutoRotationText.text = "portrait_mode".localized
-            self.AutoRotationImageView.image = UIImage(named: "portrait_image")!
+            //self.AutoRotationImageView.image = UIImage(named: "portrait_image")!
         }
         
         if (UIDeviceOrientationIsPortrait(UIDevice.current.orientation))
@@ -259,19 +263,26 @@ class AutoRotationVC: UIViewController {
             }
             */
             
-            
-            if self.isComingFromTestResult {
-                
-                guard let didFinishRetryDiagnosis = self.rotationRetryDiagnosis else { return }
-                didFinishRetryDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
-                
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
             }
-            else{
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                 
-                guard let didFinishTestDiagnosis = self.rotationTestDiagnosis else { return }
-                didFinishTestDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.rotationRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.rotationTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
                 
             }
             

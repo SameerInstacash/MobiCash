@@ -23,7 +23,7 @@ class DeadPixelVC: UIViewController {
 
     @IBOutlet weak var startTestBtn: UIButton!
     @IBOutlet weak var deadPixelInfoImage: UIImageView!
-    @IBOutlet weak var deadPixelInfo: UILabel!
+    //@IBOutlet weak var deadPixelInfo: UILabel!
     //@IBOutlet weak var deadPixelNavBar: UINavigationBar!
     @IBOutlet weak var pixelView: UIView!
     
@@ -42,7 +42,7 @@ class DeadPixelVC: UIViewController {
         
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
-        self.deadPixelInfoImage.loadGif(name: "dead_pixel")
+        //self.deadPixelInfoImage.loadGif(name: "dead_pixel")
 
         //self.checkMicrophone()
         //self.checkVibrator()
@@ -74,7 +74,7 @@ class DeadPixelVC: UIViewController {
      
         //self.pixelView.isHidden = !self.pixelView.isHidden
         
-        self.pixelTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+        self.pixelTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
         
         
         /* Sameer 1/8/22
@@ -98,13 +98,17 @@ class DeadPixelVC: UIViewController {
     }
     
     @IBAction func skipbuttonPressed(_ sender: UIButton) {
+        self.ShowGlobalPopUp()
+    }
+    
+    func ShowGlobalPopUp() {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Dead Pixel Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -163,11 +167,11 @@ class DeadPixelVC: UIViewController {
             //self.pixelView.isHidden = !self.pixelView.isHidden
             
             //self.view.backgroundColor = colors[pixelTimerIndex]
-            pixelTimer?.invalidate()
-            pixelTimer = nil
+            self.pixelTimer?.invalidate()
+            self.pixelTimer = nil
             
             
-            self.ShowGlobalPopUp()
+            self.ShowPopUpForDeadPixel()
             
             
             /*
@@ -327,12 +331,12 @@ class DeadPixelVC: UIViewController {
         
     }
    
-    func ShowGlobalPopUp() {
+    func ShowPopUpForDeadPixel() {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Dead Pixel Test"
-        popUpVC.strMessage = "Did you see any black or white spots on the screen?"
+        popUpVC.strTitle = "Dead Pixels"
+        popUpVC.strMessage = "Did you find any spot?"
         popUpVC.strBtnYesTitle = "Yes"
         popUpVC.strBtnNoTitle = "No"
         popUpVC.strBtnRetryTitle = "Retry"
@@ -346,6 +350,7 @@ class DeadPixelVC: UIViewController {
                 UserDefaults.standard.set(false, forKey: "deadPixel")
                 print("Dead Pixel Failed!")
                 
+                
                 if self.isComingFromTestResult {
                     
                     guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
@@ -360,28 +365,36 @@ class DeadPixelVC: UIViewController {
                     self.dismiss(animated: false, completion: nil)
                     
                 }
-                                
+                
             case 2:
                 
                 self.resultJSON["Dead Pixels"].int = 1
                 UserDefaults.standard.set(true, forKey: "deadPixel")
                 print("Dead Pixel Passed!")
                 
-                if self.isComingFromTestResult {
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                     
-                    guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
-                    didFinishRetryDiagnosis(self.resultJSON)
-                    self.dismiss(animated: false, completion: nil)
+                    if self.isComingFromTestResult {
+                        
+                        guard let didFinishRetryDiagnosis = self.deadPixelRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
+                    else{
+                        
+                        guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
                     
                 }
-                else{
-                    
-                    guard let didFinishTestDiagnosis = self.deadPixelTestDiagnosis else { return }
-                    didFinishTestDiagnosis(self.resultJSON)
-                    self.dismiss(animated: false, completion: nil)
-                    
-                }
-                                
+                
             default:
                 
                 self.pixelTimerIndex = 0

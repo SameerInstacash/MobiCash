@@ -23,6 +23,8 @@ class VolumeRockerVC: UIViewController {
     var resultJSON = JSON()
     var isComingFromTestResult = false
     
+    @IBOutlet weak var btnStartTest: UIButton!
+    
     private var audioLevel : Float = 0.0
     //var audioSession = AVAudioSession.sharedInstance()
     var audioSession : AVAudioSession?
@@ -180,6 +182,9 @@ class VolumeRockerVC: UIViewController {
             self.audioSession?.addObserver(self, forKeyPath: "outputVolume",
                                      options: NSKeyValueObservingOptions.new, context: nil)
             self.audioLevel = (self.audioSession?.outputVolume ?? 0.0)
+            
+            self.btnStartTest.isHidden = true
+            
         } catch {
             print("Error")
         }
@@ -219,18 +224,26 @@ class VolumeRockerVC: UIViewController {
                             self.present(vc, animated: true, completion: nil)
                         }*/
                         
-                        if self.isComingFromTestResult {
-                            
-                            guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
-                            didFinishRetryDiagnosis(self.resultJSON)
-                            self.dismiss(animated: false, completion: nil)
-                            
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
                         }
-                        else{
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                             
-                            guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
-                            didFinishTestDiagnosis(self.resultJSON)
-                            self.dismiss(animated: false, completion: nil)
+                            if self.isComingFromTestResult {
+                                
+                                guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                                didFinishRetryDiagnosis(self.resultJSON)
+                                self.dismiss(animated: false, completion: nil)
+                                
+                            }
+                            else{
+                                
+                                guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                                didFinishTestDiagnosis(self.resultJSON)
+                                self.dismiss(animated: false, completion: nil)
+                                
+                            }
                             
                         }
                         
@@ -264,18 +277,26 @@ class VolumeRockerVC: UIViewController {
                             self.present(vc, animated: true, completion: nil)
                         }*/
                         
-                        if self.isComingFromTestResult {
-                            
-                            guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
-                            didFinishRetryDiagnosis(self.resultJSON)
-                            self.dismiss(animated: false, completion: nil)
-                            
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
                         }
-                        else{
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                             
-                            guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
-                            didFinishTestDiagnosis(self.resultJSON)
-                            self.dismiss(animated: false, completion: nil)
+                            if self.isComingFromTestResult {
+                                
+                                guard let didFinishRetryDiagnosis = self.volumeRetryDiagnosis else { return }
+                                didFinishRetryDiagnosis(self.resultJSON)
+                                self.dismiss(animated: false, completion: nil)
+                                
+                            }
+                            else{
+                                
+                                guard let didFinishTestDiagnosis = self.volumeTestDiagnosis else { return }
+                                didFinishTestDiagnosis(self.resultJSON)
+                                self.dismiss(animated: false, completion: nil)
+                                
+                            }
                             
                         }
                         
@@ -294,6 +315,8 @@ class VolumeRockerVC: UIViewController {
     @IBAction func volumeButtonStartPressed(_ sender: UIButton) {
         // SAM comment on 18/4/22
         self.listenVolumeButton()
+        
+        //sender.isHidden = true
     }
         
     @IBAction func volumeRockerSkipPressed(_ sender: UIButton) {
@@ -399,10 +422,10 @@ class VolumeRockerVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Hardware Button Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

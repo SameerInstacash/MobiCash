@@ -17,14 +17,25 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     var speakerRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
     var speakerTestDiagnosis: ((_ testJSON: JSON) -> Void)?
     
-    @IBOutlet weak var lblCheckingSpeaker: UILabel!
-    @IBOutlet weak var lblPleaseEnsure: UILabel!
-    
-    @IBOutlet weak var txtFieldNum: UITextField!
+    //@IBOutlet weak var lblCheckingSpeaker: UILabel!
+    //@IBOutlet weak var lblPleaseEnsure: UILabel!
+    //@IBOutlet weak var txtFieldNum: UITextField!
     
     @IBOutlet weak var btnStart: UIButton!
     @IBOutlet weak var btnSkip: UIButton!
     
+    //Speaker
+    @IBOutlet weak var btnSpeakerPlayPause: UIButton!
+    @IBOutlet weak var txtFieldSpeakerCode: UITextField!
+    @IBOutlet weak var btnSpeakerVerifyCode: UIButton!
+    
+    //Receiver
+    @IBOutlet weak var btnReceiverPlayPause: UIButton!
+    @IBOutlet weak var txtFieldReceiverCode: UITextField!
+    @IBOutlet weak var btnReceiverVerifyCode: UIButton!
+    
+    var isSpeakerCodeEntered = false
+    var isReceiverCodeEntered = false
     
     var resultJSON = JSON()
     var num1 = 0
@@ -47,13 +58,21 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         self.hideKeyboardWhenTappedAround()
         
-        self.txtFieldNum.layer.cornerRadius = 10.0
-        self.txtFieldNum.layer.borderWidth = 1.0
-        self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
+        //self.txtFieldNum.layer.cornerRadius = 10.0
+        //self.txtFieldNum.layer.borderWidth = 1.0
+        //self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
+        
+        self.txtFieldSpeakerCode.layer.cornerRadius = 20.0
+        self.txtFieldSpeakerCode.layer.borderWidth = 1.0
+        self.txtFieldSpeakerCode.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
+        
+        self.txtFieldReceiverCode.layer.cornerRadius = 20.0
+        self.txtFieldReceiverCode.layer.borderWidth = 1.0
+        self.txtFieldReceiverCode.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
                 
         //self.setStatusBarColor()
         
-        if isComingFromTestResult == false && isComingFromProductquote == false {
+        if self.isComingFromTestResult == false && self.isComingFromProductquote == false {
             //userDefaults.removeObject(forKey: "Speakers")
             //userDefaults.setValue(false, forKey: "Speakers")
         }
@@ -67,11 +86,11 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
 
     func changeLanguageOfUI() {
   
-        self.lblCheckingSpeaker.text = "Checking Speaker".localized
-        self.lblPleaseEnsure.text = "Your phone will play some numbers out loud, and then type it in the text box provided.".localized
+        //self.lblCheckingSpeaker.text = "Checking Speaker".localized
+        //self.lblPleaseEnsure.text = "Your phone will play some numbers out loud, and then type it in the text box provided.".localized
         
-        self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)
-        self.btnSkip.setTitle("Skip".localized, for: UIControlState.normal)
+        //self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)
+        //self.btnSkip.setTitle("Skip".localized, for: UIControlState.normal)
     }
     
     func configureAudioSessionCategory() {
@@ -91,11 +110,295 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         }
     }
     
-    //MARK:- button action methods
+    //MARK: button action methods
+    @IBAction func btnSpeakerPlayPauseClicked(sender: UIButton) {
+        
+        if sender.isSelected {
+            
+            sender.isSelected = !sender.isSelected
+            sender.setImage(UIImage.init(named: "play"), for: .normal)
+            
+            self.audioSession = nil
+            self.audioPlayer.pause()
+            self.audioPlayer = nil
+            
+        }else {
+            
+            self.txtFieldSpeakerCode.text = ""
+            
+            sender.isSelected = !sender.isSelected
+            sender.setImage(UIImage.init(named: "pause"), for: .normal)
+            
+            self.audioSession = nil
+            self.audioPlayer = nil
+            
+            self.btnSpeakerPlayPause.isUserInteractionEnabled = false
+            
+            self.playSoundFromSpeaker()
+        }
+    
+    }
+    
+    @IBAction func btnSpeakerVerifyCodeClicked(sender: UIButton) {
+        
+        guard !(self.txtFieldSpeakerCode.text?.isEmpty ?? false) else {
+            DispatchQueue.main.async() {
+                self.view.makeToast("Please Enter Speaker Code", duration: 2.0, position: .bottom)
+            }
+            
+            return
+        }
+        
+        if self.txtFieldSpeakerCode.text == String(self.num1) + String(self.num2) {
+            
+            if self.isReceiverCodeEntered {
+                
+                self.resultJSON["Speakers"].int = 1
+                UserDefaults.standard.set(true, forKey: "Speakers")
+                
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                    
+                    self.goNext()
+                }
+                    
+            }else {
+                self.isSpeakerCodeEntered = true
+                
+                self.btnSpeakerVerifyCode.isHidden = true
+                self.btnSpeakerPlayPause.isUserInteractionEnabled = false
+            }
+
+            //self.resultJSON["Speakers"].int = 1
+            //UserDefaults.standard.set(true, forKey: "Speakers")
+            //self.goNext()
+            
+        }else {
+            
+            //self.resultJSON["Speakers"].int = 0
+            //UserDefaults.standard.set(false, forKey: "Speakers")
+            //self.goNext()
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong Code Entered", duration: 2.0, position: .bottom)
+            }
+            
+        }
+    
+    }
+        
+    @IBAction func btnReceiverPlayPauseClicked(sender: UIButton) {
+    
+        if sender.isSelected {
+            
+            sender.isSelected = !sender.isSelected
+            sender.setImage(UIImage.init(named: "play"), for: .normal)
+            
+            self.audioSession = nil
+            self.audioPlayer.pause()
+            self.audioPlayer = nil
+            
+        }else {
+            
+            self.txtFieldReceiverCode.text = ""
+            
+            sender.isSelected = !sender.isSelected
+            sender.setImage(UIImage.init(named: "pause"), for: .normal)
+            
+            self.audioSession = nil
+            self.audioPlayer = nil
+            
+            self.btnReceiverPlayPause.isUserInteractionEnabled = false
+            
+            self.playSoundFromReceiver()
+        }
+        
+    }
+    
+    @IBAction func btnReceiverVerifyCodeClicked(sender: UIButton) {
+        
+        guard !(self.txtFieldReceiverCode.text?.isEmpty ?? false) else {
+            DispatchQueue.main.async() {
+                self.view.makeToast("Please Enter Receiver Code", duration: 2.0, position: .bottom)
+            }
+            
+            return
+        }
+        
+        if self.txtFieldReceiverCode.text == String(self.num3) + String(self.num4) {
+            
+            if self.isSpeakerCodeEntered {
+                
+                self.resultJSON["Speakers"].int = 1
+                UserDefaults.standard.set(true, forKey: "Speakers")
+                
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                    
+                    self.goNext()
+                }
+                
+            }else {
+                self.isReceiverCodeEntered = true
+                
+                self.btnReceiverVerifyCode.isHidden = true
+                self.btnReceiverPlayPause.isUserInteractionEnabled = false
+            }
+            
+            //self.resultJSON["Speakers"].int = 1
+            //UserDefaults.standard.set(true, forKey: "Speakers")
+            //self.goNext()
+            
+        }else {
+            
+            //self.resultJSON["Speakers"].int = 0
+            //UserDefaults.standard.set(false, forKey: "Speakers")
+            //self.goNext()
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong Code Entered", duration: 2.0, position: .bottom)
+            }
+            
+        }
+    
+    }
+    
+    func playSoundFromSpeaker() {
+        
+        let randomSoundFile = Int(arc4random_uniform(UInt32(soundFiles.count)))
+        print(randomSoundFile)
+        self.num1 = randomSoundFile
+        
+        guard let filePath = Bundle.main.path(forResource: self.soundFiles[randomSoundFile], ofType: "wav") else {
+            return
+        }
+        
+        // This is to audio output from bottom (main) speaker
+        self.audioSession = AVAudioSession.sharedInstance()
+        print("Configuring audio session")
+    
+        do {
+            
+            //try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try self.audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+            try self.audioSession?.setActive(true)
+            print("AVAudio Session out options: ", self.audioSession?.currentRoute ?? "")
+            print("Successfully configured audio session (SPEAKER-Bottom).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs ?? 0)
+            
+        } catch let error as NSError {
+            print("#configureAudioSessionToSpeaker Error \(error.localizedDescription)")
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+            self.audioPlayer.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            
+            let randomSoundFile = Int(arc4random_uniform(UInt32(self.soundFiles.count)))
+            print(randomSoundFile)
+            self.num2 = randomSoundFile
+            
+            guard let filePath = Bundle.main.path(forResource: self.soundFiles[randomSoundFile], ofType: "wav") else {
+                return
+            }
+            
+            do {
+                self.audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+                self.audioPlayer.play()
+                
+                self.btnSpeakerPlayPause.setImage(UIImage.init(named: "play"), for: .normal)
+                self.btnSpeakerPlayPause.isUserInteractionEnabled = true
+                self.btnSpeakerPlayPause.isSelected = !self.btnSpeakerPlayPause.isSelected
+                                
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            
+        }
+        
+    }
+    
+    func playSoundFromReceiver() {
+        
+        // To play number from earpiece speaker (upper speaker)
+        let randomSoundFile = Int(arc4random_uniform(UInt32(self.soundFiles.count)))
+        print(randomSoundFile)
+        self.num3 = randomSoundFile
+        
+        guard let filePath = Bundle.main.path(forResource: self.soundFiles[randomSoundFile], ofType: "wav") else {
+            return
+        }
+        
+        // To play number from earpiece speaker (upper speaker)
+        self.audioSession = AVAudioSession.sharedInstance()
+        print("Configuring audio session")
+        
+        do {
+            
+            try self.audioSession?.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try self.audioSession?.overrideOutputAudioPort(AVAudioSession.PortOverride.none)
+            try self.audioSession?.setActive(true)
+            print("Successfully configured audio session (SPEAKER-Upper).", "\nCurrent audio route: ",self.audioSession?.currentRoute.outputs ?? 0)
+            
+        } catch let error as NSError {
+            print("#configureAudioSessionToEarpieceSpeaker Error \(error.localizedDescription)")
+        }
+        
+        
+        do {
+            self.audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+            //self.audioPlayer.volume = .greatestFiniteMagnitude
+            self.audioPlayer.play()
+                        
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            
+            let randomSoundFile = Int(arc4random_uniform(UInt32(self.soundFiles.count)))
+            print(randomSoundFile)
+            self.num4 = randomSoundFile
+            
+            guard let filePath = Bundle.main.path(forResource: self.soundFiles[randomSoundFile], ofType: "wav") else {
+                return
+            }
+            
+            do {
+                self.audioPlayer = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: filePath))
+                //self.audioPlayer.volume = .greatestFiniteMagnitude
+                self.audioPlayer.play()
+                
+                self.btnReceiverPlayPause.setImage(UIImage.init(named: "play"), for: .normal)
+                self.btnReceiverPlayPause.isUserInteractionEnabled = true
+                self.btnReceiverPlayPause.isSelected = !self.btnReceiverPlayPause.isSelected
+                
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            
+        }
+        
+    }
+  
     @IBAction func onClickStart(sender: UIButton) {
         
         if sender.titleLabel?.text == "Start Test".localized {
-            sender.setTitle("Submit".localized, for: .normal)
+            //sender.setTitle("Submit".localized, for: .normal)
             
             self.configureAudioSessionCategory()
             self.startTest()
@@ -111,7 +414,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             
         }else {
             
-            guard !(self.txtFieldNum.text?.isEmpty ?? false) else {
+            guard !(self.txtFieldSpeakerCode.text?.isEmpty ?? false) else {
                 DispatchQueue.main.async() {
                     self.view.makeToast("Enter Number", duration: 2.0, position: .bottom)
                 }
@@ -119,7 +422,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            if txtFieldNum.text == String(num1) + String(num2) + String(num3) + String(num4) {
+            if self.txtFieldSpeakerCode.text == String(num1) + String(num2) + String(num3) + String(num4) {
                 self.resultJSON["Speakers"].int = 1
                 //self.resultJSON["Microphone"].int = 1
                 //UserDefaults.standard.set(true, forKey: "Microphone")
@@ -200,7 +503,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         
         
         // To play number from earpiece speaker (upper speaker)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
             
             let randomSoundFile = Int(arc4random_uniform(UInt32(self.soundFiles.count)))
             print(randomSoundFile)
@@ -262,7 +565,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 //self.audioPlayer.volume = .greatestFiniteMagnitude
                 self.audioPlayer.play()
                 
-                self.txtFieldNum.isHidden = false
+                self.txtFieldSpeakerCode.isHidden = false
                 //self.txtFieldNum.delegate = self
                 
             } catch let error {
@@ -313,7 +616,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     //MARK: TextField Delegate
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if textField == txtFieldNum {
+        if textField == self.txtFieldSpeakerCode {
             // YOU SHOULD FIRST CHECK FOR THE BACKSPACE. IF BACKSPACE IS PRESSED ALLOW IT
             
             if string == "" {
@@ -327,7 +630,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                     // RESIGN FIRST RERSPONDER TO HIDE KEYBOARD
                     //return textField.resignFirstResponder()
                     
-                    if txtFieldNum.text == String(num1) + String(num2) {
+                    if self.txtFieldSpeakerCode.text == String(num1) + String(num2) {
                         self.resultJSON["Speakers"].int = 1
                         //self.resultJSON["Microphone"].int = 1
                         UserDefaults.standard.set(true, forKey: "Speakers")
@@ -499,10 +802,10 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Speakers Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

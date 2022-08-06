@@ -843,6 +843,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                     //self.DeadPixelTest()
                                     
                                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeviceDetectVC") as! DeviceDetectVC
+                                    vc.modalPresentationStyle = .overFullScreen
                                     vc.productName = productName.string ?? ""
                                     vc.productImage = productImage.string ?? ""
                                     vc.productPrice = uptoPrice
@@ -886,6 +887,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                         //self.DeadPixelTest()
                                         
                                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "DeviceDetectVC") as! DeviceDetectVC
+                                        vc.modalPresentationStyle = .overFullScreen
                                         vc.productName = productName.string ?? ""
                                         vc.productImage = productImage.string ?? ""
                                         vc.productPrice = uptoPrice

@@ -16,10 +16,11 @@ class TorchVC: UIViewController {
     var flashLightTestDiagnosis: ((_ testJSON: JSON) -> Void)?
 
     @IBOutlet weak var titleLbl: UILabel!
-    @IBOutlet weak var headingLbl: UILabel!
+    //@IBOutlet weak var headingLbl: UILabel!
     @IBOutlet weak var subHeadingLbl: UILabel!
     @IBOutlet weak var numberTxtField: UITextField!
-    @IBOutlet weak var startBtn: UIButton!
+    @IBOutlet weak var playBtn: UIButton!
+    @IBOutlet weak var verifyCodeBtn: UIButton!
     @IBOutlet weak var skipBtn: UIButton!
     @IBOutlet weak var testImgView: UIImageView!
     
@@ -32,7 +33,7 @@ class TorchVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.numberTxtField.layer.cornerRadius = 10.0
+        self.numberTxtField.layer.cornerRadius = 20.0
         self.numberTxtField.layer.borderWidth = 1.0
         self.numberTxtField.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
 
@@ -61,12 +62,68 @@ class TorchVC: UIViewController {
 
     }
     
-    // MARK:- IBActions
+    // MARK: IBActions
+    @IBAction func playButtonPressed(_ sender: UIButton) {
+        
+        self.numberTxtField.text = ""
+        
+        if sender.isSelected {
+            
+            sender.isSelected = !sender.isSelected
+            
+        }else {
+            
+            self.playBtn.setImage(UIImage.init(named: "pause"), for: .normal)
+            
+            sender.isSelected = !sender.isSelected
+            
+            sender.isUserInteractionEnabled = false
+            
+            self.startTest()
+        }
+        
+    }
+    
+    @IBAction func verifyCodeButtonPressed(_ sender: UIButton) {
+        
+        guard !(self.numberTxtField.text?.isEmpty ?? false) else {
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Enter Code", duration: 2.0, position: .bottom)
+            }
+            
+            return
+        }
+        
+        if self.numberTxtField.text == String(num1) {
+            
+            self.resultJSON["Torch"].int = 1
+            UserDefaults.standard.set(true, forKey: "Torch")
+            
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            
+                self.goNext()
+            }
+            
+        }else {
+
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong Code Entered", duration: 2.0, position: .bottom)
+            }
+            
+        }
+    
+    }
+        
     @IBAction func startButtonPressed(_ sender: UIButton) {
         
         if sender.titleLabel?.text == "Start Test".localized {
-            sender.setTitle("Submit".localized, for: .normal)
-            
+            //sender.setTitle("Submit".localized, for: .normal)
+                        
             self.startTest()
         }else {
             
@@ -84,7 +141,15 @@ class TorchVC: UIViewController {
                 self.resultJSON["Torch"].int = 1
                 UserDefaults.standard.set(true, forKey: "Torch")
                 
-                self.goNext()
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                
+                    self.goNext()
+                }
+                
             }else {
 
                 self.resultJSON["Torch"].int = 0
@@ -103,11 +168,11 @@ class TorchVC: UIViewController {
     
     func startTest() {
         
-        let randomNumber = Int.random(in: 1...5)
+        let randomNumber = Int.random(in: 1...4)
         print("Number: \(randomNumber)")
         self.num1 = randomNumber
         
-        self.gameTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(runTimedCode), userInfo: nil, repeats: true)
+        self.gameTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.runTimedCode), userInfo: nil, repeats: true)
      
     }
     
@@ -120,6 +185,9 @@ class TorchVC: UIViewController {
         if runCount == self.num1 {
             self.gameTimer?.invalidate()
             self.numberTxtField.isHidden = false
+            
+            self.playBtn.setImage(UIImage.init(named: "play"), for: .normal)
+            self.playBtn.isUserInteractionEnabled = true
         }
         
     }
@@ -334,10 +402,10 @@ class TorchVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "FlashLight Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -367,7 +435,7 @@ class TorchVC: UIViewController {
                                 
             case 2:
                 
-                self.startBtn.setTitle("Start Test", for: .normal)
+                break
                 
             default:
                                 

@@ -32,8 +32,12 @@ class ScreenViewController: UIViewController {
     
     var recordingSession: AVAudioSession!
     
+    var isTestPass = true
+    
     @IBAction func beginScreenBtnClicked(_ sender: Any) {
-        drawScreenTest()
+        self.isTestPass = true
+        
+        self.drawScreenTest()
     }
     
     func drawScreenTest(){
@@ -90,7 +94,7 @@ class ScreenViewController: UIViewController {
     func checkMicrophone() {
         // Recording audio requires a user's permission to stop malicious apps doing malicious things, so we need to request recording permission from the user.
         
-        recordingSession = AVAudioSession.sharedInstance()
+        self.recordingSession = AVAudioSession.sharedInstance()
 
         do {
             try recordingSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
@@ -200,41 +204,60 @@ class ScreenViewController: UIViewController {
     }
     
     func endTimer(type: Int) {
-        countdownTimer.invalidate()
+        
+        self.countdownTimer.invalidate()
+        
         if type == 1 {
             
-            UserDefaults.standard.set(true, forKey: "screen")
-            resultJSON["Screen"].int = 1
-            
-            /*
-            if self.isComingFromTestResult {
+            if self.isTestPass {
                 
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                vc.resultJSON = self.resultJSON
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true, completion: nil)
+                self.isTestPass = false
+                
+                
+                UserDefaults.standard.set(true, forKey: "screen")
+                resultJSON["Screen"].int = 1
+                
+                /*
+                 if self.isComingFromTestResult {
+                 
+                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+                 vc.resultJSON = self.resultJSON
+                 vc.modalPresentationStyle = .fullScreen
+                 self.present(vc, animated: true, completion: nil)
+                 
+                 }else {
+                 //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+                 
+                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
+                 vc.resultJSON = self.resultJSON
+                 vc.modalPresentationStyle = .fullScreen
+                 self.present(vc, animated: true, completion: nil)
+                 }*/
+                
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                    
+                    if self.isComingFromTestResult {
+                        
+                        guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
+                    else{
+                        
+                        guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                        
+                    }
+                    
+                }
                 
             }else {
-                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
-               
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
-                vc.resultJSON = self.resultJSON
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true, completion: nil)
-            }*/
-            
-            if self.isComingFromTestResult {
-                
-                guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
-                didFinishRetryDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
-                
-            }
-            else{
-                
-                guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
-                didFinishTestDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
                 
             }
             
@@ -243,118 +266,118 @@ class ScreenViewController: UIViewController {
             self.ShowGlobalPopUp()
             
             /*
-            let title = "screen_failed_info".localized
-            let message = "retry_test".localized
-            
-            
-            // Create the dialog
-            let popup = PopupDialog(title: title, message: message,buttonAlignment: .horizontal, transitionStyle: .bounceDown, tapGestureDismissal: false, panGestureDismissal :false)
-            
-            // Create buttons
-            let buttonOne = DefaultButton(title: "Yes".localized) {
-                popup.dismiss(animated: true, completion: nil)
-                
-                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
-                //vc.resultJSON = self.resultJSON
-                //self.present(vc, animated: true, completion: nil)
-                
-                DispatchQueue.main.async {
-                    for v in self.obstacleViews{
-                        v.removeFromSuperview()
-                    }
-                    self.obstacleViews = []
-                    self.flags = []
-                    self.totalTime = 40
-                    self.startTest = false
-                    //self.resultJSON = JSON()
-                    //self.startScreenBtn.isHidden = false
-                    self.screenImageView.isHidden = false
-                }
-                
-            }
-            
-            let buttonTwo = CancelButton(title: "No".localized) {
-                //Do Nothing
-                UserDefaults.standard.set(false, forKey: "screen")
-                self.resultJSON["Screen"].int = 0
-                
-                /*
-                if self.isComingFromTestResult {
-                    
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                    vc.resultJSON = self.resultJSON
-                    vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: true, completion: nil)
-                    
-                }else {
-                    
-                    print("This screen not dismissed")
-                    //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
-                    
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
-                    vc.resultJSON = self.resultJSON
-                    vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: true, completion: nil)
-                }*/
-                
-                if self.isComingFromTestResult {
-                    
-                    guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
-                    didFinishRetryDiagnosis(self.resultJSON)
-                    self.dismiss(animated: false, completion: nil)
-                    
-                }
-                else{
-                    
-                    guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
-                    didFinishTestDiagnosis(self.resultJSON)
-                    self.dismiss(animated: false, completion: nil)
-                    
-                }
-                
-            }
-            
-            
-            
-            // Add buttons to dialog
-            // Alternatively, you can use popup.addButton(buttonOne)
-            // to add a single button
-            popup.addButtons([buttonOne, buttonTwo])
-            popup.dismiss(animated: true, completion: nil)
-            // Customize dialog appearance
-            let pv = PopupDialogDefaultView.appearance()
-            pv.titleFont    = UIFont(name: GlobalUtility().AppFontMedium, size: 20)!
-            pv.messageFont  = UIFont(name: GlobalUtility().AppFontRegular, size: 16)!
-            
-            
-            // Customize the container view appearance
-            let pcv = PopupDialogContainerView.appearance()
-            pcv.cornerRadius    = 10
-            //pcv.cornerRadius    = 2
-            pcv.shadowEnabled   = true
-            pcv.shadowColor     = .black
-            
-            // Customize overlay appearance
-            let ov = PopupDialogOverlayView.appearance()
-            ov.blurEnabled     = true
-            ov.blurRadius      = 30
-            ov.opacity         = 0.7
-            ov.color           = .black
-            
-            // Customize default button appearance
-            let db = DefaultButton.appearance()
-            db.titleFont      = UIFont(name: GlobalUtility().AppFontMedium, size: 16)!
-            
-            
-            
-            // Customize cancel button appearance
-            let cb = CancelButton.appearance()
-            cb.titleFont      = UIFont(name: GlobalUtility().AppFontMedium, size: 16)!
-            
-            
-            // Present dialog
-            self.present(popup, animated: true, completion: nil)
-            */
+             let title = "screen_failed_info".localized
+             let message = "retry_test".localized
+             
+             
+             // Create the dialog
+             let popup = PopupDialog(title: title, message: message,buttonAlignment: .horizontal, transitionStyle: .bounceDown, tapGestureDismissal: false, panGestureDismissal :false)
+             
+             // Create buttons
+             let buttonOne = DefaultButton(title: "Yes".localized) {
+             popup.dismiss(animated: true, completion: nil)
+             
+             //let vc = self.storyboard?.instantiateViewController(withIdentifier: "ScreenVC") as! ScreenViewController
+             //vc.resultJSON = self.resultJSON
+             //self.present(vc, animated: true, completion: nil)
+             
+             DispatchQueue.main.async {
+             for v in self.obstacleViews{
+             v.removeFromSuperview()
+             }
+             self.obstacleViews = []
+             self.flags = []
+             self.totalTime = 40
+             self.startTest = false
+             //self.resultJSON = JSON()
+             //self.startScreenBtn.isHidden = false
+             self.screenImageView.isHidden = false
+             }
+             
+             }
+             
+             let buttonTwo = CancelButton(title: "No".localized) {
+             //Do Nothing
+             UserDefaults.standard.set(false, forKey: "screen")
+             self.resultJSON["Screen"].int = 0
+             
+             /*
+              if self.isComingFromTestResult {
+              
+              let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
+              vc.resultJSON = self.resultJSON
+              vc.modalPresentationStyle = .fullScreen
+              self.present(vc, animated: true, completion: nil)
+              
+              }else {
+              
+              print("This screen not dismissed")
+              //let vc = self.storyboard?.instantiateViewController(withIdentifier: "RotationVC") as! AutoRotationVC
+              
+              let vc = self.storyboard?.instantiateViewController(withIdentifier: "MicrophoneVC") as! MicrophoneVC
+              vc.resultJSON = self.resultJSON
+              vc.modalPresentationStyle = .fullScreen
+              self.present(vc, animated: true, completion: nil)
+              }*/
+             
+             if self.isComingFromTestResult {
+             
+             guard let didFinishRetryDiagnosis = self.screenRetryDiagnosis else { return }
+             didFinishRetryDiagnosis(self.resultJSON)
+             self.dismiss(animated: false, completion: nil)
+             
+             }
+             else{
+             
+             guard let didFinishTestDiagnosis = self.screenTestDiagnosis else { return }
+             didFinishTestDiagnosis(self.resultJSON)
+             self.dismiss(animated: false, completion: nil)
+             
+             }
+             
+             }
+             
+             
+             
+             // Add buttons to dialog
+             // Alternatively, you can use popup.addButton(buttonOne)
+             // to add a single button
+             popup.addButtons([buttonOne, buttonTwo])
+             popup.dismiss(animated: true, completion: nil)
+             // Customize dialog appearance
+             let pv = PopupDialogDefaultView.appearance()
+             pv.titleFont    = UIFont(name: GlobalUtility().AppFontMedium, size: 20)!
+             pv.messageFont  = UIFont(name: GlobalUtility().AppFontRegular, size: 16)!
+             
+             
+             // Customize the container view appearance
+             let pcv = PopupDialogContainerView.appearance()
+             pcv.cornerRadius    = 10
+             //pcv.cornerRadius    = 2
+             pcv.shadowEnabled   = true
+             pcv.shadowColor     = .black
+             
+             // Customize overlay appearance
+             let ov = PopupDialogOverlayView.appearance()
+             ov.blurEnabled     = true
+             ov.blurRadius      = 30
+             ov.opacity         = 0.7
+             ov.color           = .black
+             
+             // Customize default button appearance
+             let db = DefaultButton.appearance()
+             db.titleFont      = UIFont(name: GlobalUtility().AppFontMedium, size: 16)!
+             
+             
+             
+             // Customize cancel button appearance
+             let cb = CancelButton.appearance()
+             cb.titleFont      = UIFont(name: GlobalUtility().AppFontMedium, size: 16)!
+             
+             
+             // Present dialog
+             self.present(popup, animated: true, completion: nil)
+             */
             
         }
         
@@ -364,10 +387,10 @@ class ScreenViewController: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Screen Calibration Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         

@@ -26,6 +26,14 @@ class VibratorVC: UIViewController {
     @IBOutlet weak var btnStart: UIButton!
     @IBOutlet weak var btnSkip: UIButton!
     
+    @IBOutlet weak var numberView: UIView!
+    @IBOutlet weak var btnOneVibration: UIButton!
+    @IBOutlet weak var btnTwoVibration: UIButton!
+    @IBOutlet weak var btnThreeVibration: UIButton!
+    @IBOutlet weak var btnFourVibration: UIButton!
+    @IBOutlet weak var btnNoVibration: UIButton!
+    var strSelectedNumber = ""
+    
 
     var resultJSON = JSON()
     var num1 = 0
@@ -41,9 +49,9 @@ class VibratorVC: UIViewController {
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         self.hideKeyboardWhenTappedAround()
         
-        self.txtFieldNum.layer.cornerRadius = 10.0
-        self.txtFieldNum.layer.borderWidth = 1.0
-        self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
+        //self.txtFieldNum.layer.cornerRadius = 20.0
+        //self.txtFieldNum.layer.borderWidth = 1.0
+        //self.txtFieldNum.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.5)
                 
         //self.setStatusBarColor()
         
@@ -70,12 +78,15 @@ class VibratorVC: UIViewController {
     //MARK:- button action methods
     @IBAction func onClickStart(sender: UIButton) {
         
-        if sender.titleLabel?.text == "Start Test".localized {
-            sender.setTitle("Submit".localized, for: .normal)
+        if sender.titleLabel?.text == "Start Test" {
+            //sender.setTitle("Submit".localized, for: .normal)
             
+            self.btnSkip.isHidden = true
+                        
             self.startTest()
         }else {
             
+            /*
             guard !(self.txtFieldNum.text?.isEmpty ?? false) else {
                 DispatchQueue.main.async() {
                     self.view.makeToast("Enter Number", duration: 2.0, position: .bottom)
@@ -89,13 +100,58 @@ class VibratorVC: UIViewController {
                 self.resultJSON["Vibrator"].int = 1
                 UserDefaults.standard.set(true, forKey: "Vibrator")
                 
-                self.goNext()
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                
+                    self.goNext()
+                }
             }else {
 
                 self.resultJSON["Vibrator"].int = 0
                 UserDefaults.standard.set(false, forKey: "Vibrator")
                 
                 self.goNext()
+            }
+            */
+            
+            guard !(self.strSelectedNumber.isEmpty) else {
+                DispatchQueue.main.async() {
+                    self.view.makeToast("Select Number", duration: 2.0, position: .bottom)
+                }
+                
+                return
+            }
+            
+            if self.strSelectedNumber == String(self.num1) {
+                
+                self.resultJSON["Vibrator"].int = 1
+                UserDefaults.standard.set(true, forKey: "Vibrator")
+                
+                DispatchQueue.main.async {
+                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                    
+                    self.goNext()
+                }
+                
+            }else if self.strSelectedNumber == "0" {
+                
+                self.resultJSON["Vibrator"].int = 0
+                UserDefaults.standard.set(false, forKey: "Vibrator")
+                
+                self.goNext()
+                
+            }else {
+                
+                DispatchQueue.main.async() {
+                    self.view.makeToast("Wrong selection. Please retry or skip", duration: 2.0, position: .bottom)
+                }
+                
             }
             
         }
@@ -108,7 +164,7 @@ class VibratorVC: UIViewController {
     
     func startTest() {
         
-        let randomNumber = Int.random(in: 1...5)
+        let randomNumber = Int.random(in: 1...4)
         print("Number: \(randomNumber)")
         self.num1 = randomNumber
         
@@ -123,7 +179,12 @@ class VibratorVC: UIViewController {
         
         if self.runCount == self.num1 {
             self.gameTimer?.invalidate()
-            self.txtFieldNum.isHidden = false
+            //self.txtFieldNum.isHidden = false
+            
+            self.numberView.isHidden = false
+            self.btnSkip.isHidden = false
+            self.btnStart.setTitle("VERIFY CODE".localized, for: UIControlState.normal)
+            
         }
         
     }
@@ -291,10 +352,10 @@ class VibratorVC: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Vibrator Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -337,6 +398,56 @@ class VibratorVC: UIViewController {
         
     }
     
+    //MARK: IBActions for number of vibrations selection
+    @IBAction func oneVibrationBtnClicked(sender: UIButton) {
+        self.btnOneVibration.isSelected = true
+        self.btnTwoVibration.isSelected = false
+        self.btnThreeVibration.isSelected = false
+        self.btnFourVibration.isSelected = false
+        self.btnNoVibration.isSelected = false
+        
+        self.strSelectedNumber = "1"
+    }
+    
+    @IBAction func twoVibrationBtnClicked(sender: UIButton) {
+        self.btnOneVibration.isSelected = false
+        self.btnTwoVibration.isSelected = true
+        self.btnThreeVibration.isSelected = false
+        self.btnFourVibration.isSelected = false
+        self.btnNoVibration.isSelected = false
+        
+        self.strSelectedNumber = "2"
+    }
+    
+    @IBAction func threeVibrationBtnClicked(sender: UIButton) {
+        self.btnOneVibration.isSelected = false
+        self.btnTwoVibration.isSelected = false
+        self.btnThreeVibration.isSelected = true
+        self.btnFourVibration.isSelected = false
+        self.btnNoVibration.isSelected = false
+        
+        self.strSelectedNumber = "3"
+    }
+    
+    @IBAction func fourVibrationBtnClicked(sender: UIButton) {
+        self.btnOneVibration.isSelected = false
+        self.btnTwoVibration.isSelected = false
+        self.btnThreeVibration.isSelected = false
+        self.btnFourVibration.isSelected = true
+        self.btnNoVibration.isSelected = false
+        
+        self.strSelectedNumber = "4"
+    }
+    
+    @IBAction func noVibrationBtnClicked(sender: UIButton) {
+        self.btnOneVibration.isSelected = false
+        self.btnTwoVibration.isSelected = false
+        self.btnThreeVibration.isSelected = false
+        self.btnFourVibration.isSelected = false
+        self.btnNoVibration.isSelected = true
+        
+        self.strSelectedNumber = "0"
+    }
 
     // MARK: - Navigation
 

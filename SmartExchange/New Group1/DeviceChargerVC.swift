@@ -27,7 +27,7 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
         super.viewDidLoad()
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
         
-        self.chargerInfoImage.loadGif(name: "charging")
+        //self.chargerInfoImage.loadGif(name: "charging")
                 
     }
 
@@ -37,10 +37,12 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
     }
     
     //MARK: IBAction
-    @IBAction func startChargerTestBtnPressed(_ sender: Any) {
+    @IBAction func startChargerTestBtnPressed(_ sender: UIButton) {
         UIDevice.current.isBatteryMonitoringEnabled = true
         NotificationCenter.default.addObserver(self, selector: #selector(self.batteryStateDidChange), name: NSNotification.Name.UIDeviceBatteryStateDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.batteryLevelDidChange), name: NSNotification.Name.UIDeviceBatteryLevelDidChange, object: nil)
+        
+        sender.isHidden = true
     }
     
     @IBAction func skipbuttonPressed(_ sender: UIButton) {
@@ -146,10 +148,10 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Device Charger Diagnosis"
-        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered. Do you still want to skip?"
-        popUpVC.strBtnYesTitle = "Yes"
-        popUpVC.strBtnNoTitle = "No"
+        popUpVC.strTitle = "Are you sure?"
+        popUpVC.strMessage = "If you skip this test there would be a substantial decline in the price offered."
+        popUpVC.strBtnYesTitle = "Skip Test"
+        popUpVC.strBtnNoTitle = "Don't Skip"
         popUpVC.strBtnRetryTitle = ""
         popUpVC.isShowThirdBtn = false
         
@@ -211,18 +213,26 @@ class DeviceChargerVC: UIViewController, UINavigationControllerDelegate, UIImage
                 self.present(vc, animated: true, completion: nil)
             }*/
             
-            if self.isComingFromTestResult {
-                
-                guard let didFinishRetryDiagnosis = self.chargerRetryDiagnosis else { return }
-                didFinishRetryDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
-                
+            DispatchQueue.main.async {
+                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
             }
-            else{
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
                 
-                guard let didFinishTestDiagnosis = self.chargerTestDiagnosis else { return }
-                didFinishTestDiagnosis(self.resultJSON)
-                self.dismiss(animated: false, completion: nil)
+                if self.isComingFromTestResult {
+                    
+                    guard let didFinishRetryDiagnosis = self.chargerRetryDiagnosis else { return }
+                    didFinishRetryDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
+                else{
+                    
+                    guard let didFinishTestDiagnosis = self.chargerTestDiagnosis else { return }
+                    didFinishTestDiagnosis(self.resultJSON)
+                    self.dismiss(animated: false, completion: nil)
+                    
+                }
                 
             }
             

@@ -80,13 +80,15 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let isTradeInOnline = UserDefaults.standard.value(forKey: "Trade_In_Online") as? Bool ?? false
         print("isTradeInOnline value is :", isTradeInOnline)
         
+        self.tradeInOnlineMessageTxtView.text = ""
+        
         if isTradeInOnline {
-            self.addInfoToTextView()
-            self.tradeInOnlineView.isHidden = false
-            UIView.addShadow(baseView: self.tradeInOnlineView)
+            //self.addInfoToTextView()
+            //self.tradeInOnlineView.isHidden = false
+            //UIView.addShadow(baseView: self.tradeInOnlineView)
         }else {
-            self.tradeInOnlineMessageTxtView.text = ""
-            self.tradeInOnlineView.isHidden = true
+            //self.tradeInOnlineMessageTxtView.text = ""
+            //self.tradeInOnlineView.isHidden = true
         }
         
         
@@ -256,7 +258,22 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 DispatchQueue.main.async() {
                     //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
-                    self.view.makeToast("Something went wrong!!".localized, duration: 3.0, position: .bottom)
+                    
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.callAPI()
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
                 }
                 
                 return
@@ -556,8 +573,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         task.resume()
     }
     
-    
+    var holdPrice = ""
     func saveResult(price: String){
+        
+        holdPrice = price
         
         self.hud.textLabel.text = ""
         self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
@@ -630,7 +649,21 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 DispatchQueue.main.async() {
                     //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
                     
-                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.saveResult(price: self.holdPrice)
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
                 }
                 
                 return
@@ -770,142 +803,16 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if sender.titleLabel?.text == "Scan Identity Card (IC) to proceed" {
             
             if (self.isSynced){
+                
                 let camera = DKCamera()
                 camera.didCancel = {
                     self.dismiss(animated: true, completion: nil)
                 }
                 camera.didFinishCapturingImage = { (image: UIImage?, metadata: [AnyHashable : Any]?) in
                     self.dismiss(animated: true, completion: nil)
-                    let newImage = self.resizeImage(image: image ?? UIImage(), newWidth: 800)
                     
+                    self.uploadPhotoId(image ?? UIImage())
                     
-                    let backgroundImage = newImage
-                    let watermarkImage = #imageLiteral(resourceName: "watermark")
-                    UIGraphicsBeginImageContextWithOptions(backgroundImage.size, false, 0.0)
-                    backgroundImage.draw(in: CGRect(x: 0.0, y: 0.0, width: backgroundImage.size.width, height: backgroundImage.size.height))
-                    watermarkImage.draw(in: CGRect(x: 0, y: 0, width: watermarkImage.size.width, height: backgroundImage.size.height))
-                    
-                    
-                    let result = UIGraphicsGetImageFromCurrentImageContext()
-                    UIGraphicsEndImageContext()
-                    
-                    let imageData:NSData = UIImagePNGRepresentation(result ?? newImage) as! NSData
-                    
-                    let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-
-                    var request = URLRequest(url: URL(string: "\(AppBaseUrl)/idProof")!)
-                    request.httpMethod = "POST"
-                    let customerId = UserDefaults.standard.string(forKey: "customer_id") ?? ""
-                    let postString = "customerId=\(customerId)&orderId=\(self.orderId)&photo=\(strBase64)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
-                    
-                    //print("idProof url is :",request,"\nParam is :",postString)
-                    
-                    //SwiftSpinner.show("")
-                    self.hud.textLabel.text = ""
-                    self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
-                    self.hud.show(in: self.view)
-
-                    request.httpBody = postString.data(using: .utf8)
-                    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                        
-                        DispatchQueue.main.async {
-                            self.hud.dismiss()
-                        }
-                        
-                        guard let dataThis = data, error == nil else {
-                            
-                            DispatchQueue.main.async() {
-                                //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
-                                
-                                self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
-                            }
-                            
-                            /* SAMEER-14/6/22
-                            do{
-                                let json = try JSON(data: data ?? Data())
-                                print(" idProof Error Response is:", json)
-                                
-                                let msg = json["msg"].string
-                                DispatchQueue.main.async() {
-                                    self.view.makeToast(msg, duration: 3.0, position: .bottom)
-                                }
-                            }catch {
-                                DispatchQueue.main.async() {
-                                    self.view.makeToast("JSON Exception", duration: 3.0, position: .bottom)
-                                }
-                            }*/
-                          
-                            return
-                        }
-                        
-                        //* SAMEER-14/6/22
-                        do {
-                            let json = try JSON(data: dataThis)
-                            if json["status"] == "Success" {
-                                
-                                DispatchQueue.main.async() {
-                                    self.uploadIdBtn.setTitle("Back to home", for: .normal)
-                                    self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
-                                }
-                                
-                            }else {
-                                let msg = json["msg"].string
-                                DispatchQueue.main.async() {
-                                    self.view.makeToast(msg, duration: 3.0, position: .bottom)
-                                }
-                            }
-                        }catch {
-                            DispatchQueue.main.async() {
-                                self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
-                            }
-                        }
-                        
-                        
-                        /* SAMEER-14/6/22
-                        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           //
-                            //SwiftSpinner.hide()
-                            
-                            do{
-                                let json = try JSON(data: data ?? Data())
-                                print(" idProof Error Response is:", json)
-                                
-                                let msg = json["msg"].string
-                                DispatchQueue.main.async() {
-                                    self.view.makeToast(msg, duration: 3.0, position: .bottom)
-                                }
-                            }catch {
-                                DispatchQueue.main.async() {
-                                    self.view.makeToast("JSON Exception", duration: 3.0, position: .bottom)
-                                }
-                            }
-                            
-                            //DispatchQueue.main.async {
-                                //self.hud.dismiss()
-                                // check for http errors
-                            //}
-
-                        } else{
-                            DispatchQueue.main.async {
-                                //SwiftSpinner.hide()
-                                self.hud.dismiss()
-                                
-                                do {
-                                    let resp = try (JSONSerialization.jsonObject(with: dataThis, options: []) as? [String:Any] ?? [:])
-                                    print(" Form Response is:", resp)
-                                }catch let error as NSError {
-                                    print(error)
-                                    self.view.makeToast("JSON Exception", duration: 2.0, position: .bottom)
-                                }
-                                
-                                self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
-                                
-                            }
-
-                        }*/
-
-                    }
-
-                    task.resume()
                 }
                 self.present(camera, animated: true, completion: nil)
             }else{
@@ -925,6 +832,158 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appDel.window!.makeKeyAndVisible()
             
         }
+        
+    }
+    
+    var holdCaptureImage = UIImage()
+    func uploadPhotoId(_ captureImage: UIImage) {
+        
+        holdCaptureImage = captureImage
+        
+        let newImage = self.resizeImage(image: captureImage, newWidth: 800)
+        
+        let backgroundImage = newImage
+        let watermarkImage = #imageLiteral(resourceName: "watermark")
+        UIGraphicsBeginImageContextWithOptions(backgroundImage.size, false, 0.0)
+        backgroundImage.draw(in: CGRect(x: 0.0, y: 0.0, width: backgroundImage.size.width, height: backgroundImage.size.height))
+        watermarkImage.draw(in: CGRect(x: 0, y: 0, width: watermarkImage.size.width, height: backgroundImage.size.height))
+        
+        
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        let imageData:NSData = UIImagePNGRepresentation(result ?? newImage) as! NSData
+        
+        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+
+        var request = URLRequest(url: URL(string: "\(AppBaseUrl)/idProof")!)
+        request.httpMethod = "POST"
+        let customerId = UserDefaults.standard.string(forKey: "customer_id") ?? ""
+        let postString = "customerId=\(customerId)&orderId=\(self.orderId)&photo=\(strBase64)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
+        
+        //print("idProof url is :",request,"\nParam is :",postString)
+        
+        //SwiftSpinner.show("")
+        self.hud.textLabel.text = ""
+        self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
+        self.hud.show(in: self.view)
+
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            DispatchQueue.main.async {
+                self.hud.dismiss()
+            }
+            
+            guard let dataThis = data, error == nil else {
+                
+                DispatchQueue.main.async() {
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.uploadPhotoId(self.holdCaptureImage)
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
+                }
+                
+                /* SAMEER-14/6/22
+                do{
+                    let json = try JSON(data: data ?? Data())
+                    print(" idProof Error Response is:", json)
+                    
+                    let msg = json["msg"].string
+                    DispatchQueue.main.async() {
+                        self.view.makeToast(msg, duration: 3.0, position: .bottom)
+                    }
+                }catch {
+                    DispatchQueue.main.async() {
+                        self.view.makeToast("JSON Exception", duration: 3.0, position: .bottom)
+                    }
+                }*/
+              
+                return
+            }
+            
+            //* SAMEER-14/6/22
+            do {
+                let json = try JSON(data: dataThis)
+                if json["status"] == "Success" {
+                    
+                    DispatchQueue.main.async() {
+                        self.uploadIdBtn.setTitle("Back to home", for: .normal)
+                        self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
+                    }
+                    
+                }else {
+                    let msg = json["msg"].string
+                    DispatchQueue.main.async() {
+                        self.view.makeToast(msg, duration: 3.0, position: .bottom)
+                    }
+                }
+            }catch {
+                DispatchQueue.main.async() {
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                }
+            }
+            
+            
+            /* SAMEER-14/6/22
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           //
+                //SwiftSpinner.hide()
+                
+                do{
+                    let json = try JSON(data: data ?? Data())
+                    print(" idProof Error Response is:", json)
+                    
+                    let msg = json["msg"].string
+                    DispatchQueue.main.async() {
+                        self.view.makeToast(msg, duration: 3.0, position: .bottom)
+                    }
+                }catch {
+                    DispatchQueue.main.async() {
+                        self.view.makeToast("JSON Exception", duration: 3.0, position: .bottom)
+                    }
+                }
+                
+                //DispatchQueue.main.async {
+                    //self.hud.dismiss()
+                    // check for http errors
+                //}
+
+            } else{
+                DispatchQueue.main.async {
+                    //SwiftSpinner.hide()
+                    self.hud.dismiss()
+                    
+                    do {
+                        let resp = try (JSONSerialization.jsonObject(with: dataThis, options: []) as? [String:Any] ?? [:])
+                        print(" Form Response is:", resp)
+                    }catch let error as NSError {
+                        print(error)
+                        self.view.makeToast("JSON Exception", duration: 2.0, position: .bottom)
+                    }
+                    
+                    self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
+                    
+                }
+
+            }*/
+
+        }
+
+        task.resume()
+
         
     }
 
@@ -1653,12 +1712,18 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         appCodestr = "\(apps[0]);\(apps[1])"
         */
         
-        if (!UserDefaults.standard.bool(forKey: "deadPixel") && apps[1] != "SBRK01"){
-            appCodestring = "\(appCodestring);SPTS03"
-        }
-        
-        if (!UserDefaults.standard.bool(forKey: "screen") && apps[1] != "SBRK01"){
-            appCodestring = "\(appCodestring);SBRK01"
+        if apps.count > 0 {
+            
+            if (!UserDefaults.standard.bool(forKey: "deadPixel") && apps[1] != "SBRK01"){
+                appCodestring = "\(appCodestring);SPTS03"
+            }
+            
+            if apps.count > 1 {
+                if (!UserDefaults.standard.bool(forKey: "screen") && apps[1] != "SBRK01"){
+                    appCodestring = "\(appCodestring);SBRK01"
+                }
+            }
+            
         }
         
         if (!UserDefaults.standard.bool(forKey: "rotation")){

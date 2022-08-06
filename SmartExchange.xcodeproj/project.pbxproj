@@ -11,6 +11,7 @@
 		5902CB46287541850066DEA4 /* speech.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB44287541850066DEA4 /* speech.gif */; };
 		5902CB47287541850066DEA4 /* dead_pixel.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB45287541850066DEA4 /* dead_pixel.gif */; };
 		5902CB49287553AA0066DEA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */; };
+		5919F2D6289E493200DFCD8A /* proximity.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5919F2D5289E492F00DFCD8A /* proximity.gif */; };
 		5935F62B2897B79D00C55BF8 /* DeviceDetectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */; };
 		5941862C282E277900DB2723 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418623282E276200DB2723 /* Poppins-Thin.ttf */; };
 		5941862D282E277900DB2723 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418624282E276800DB2723 /* Poppins-Light.ttf */; };
@@ -66,7 +67,7 @@
 		59E086D62674A709003FDA1C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E086D42674A709003FDA1C /* Reachability.swift */; };
 		59E0CAA32832135000FC493E /* GoogleService-Info-SellnCash.plist in Resources */ = {isa = PBXBuildFile; fileRef = 59E0CAA22832134F00FC493E /* GoogleService-Info-SellnCash.plist */; };
 		9F3B8B721FD07057605F914D /* Pods_SmartExchangeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A605FA6818744F36A4A27C8 /* Pods_SmartExchangeTests.framework */; };
-		C30A6CAA20729B160079FFEB /* proximity.gif in Resources */ = {isa = PBXBuildFile; fileRef = C30A6CA920729B150079FFEB /* proximity.gif */; };
+		C30A6CAA20729B160079FFEB /* proximity-old.gif in Resources */ = {isa = PBXBuildFile; fileRef = C30A6CA920729B150079FFEB /* proximity-old.gif */; };
 		C312E7D622EE201300B4D291 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C312E7D522EE201300B4D291 /* UserDetailsViewController.swift */; };
 		C31CFDED207DE80C003870BE /* ScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31CFDEC207DE80C003870BE /* ScreenViewController.swift */; };
 		C31CFDEF2080E052003870BE /* HardwareQuestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31CFDEE2080E052003870BE /* HardwareQuestionsViewController.swift */; };
@@ -135,6 +136,7 @@
 		5902CB44287541850066DEA4 /* speech.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = speech.gif; sourceTree = "<group>"; };
 		5902CB45287541850066DEA4 /* dead_pixel.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = dead_pixel.gif; sourceTree = "<group>"; };
 		5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5919F2D5289E492F00DFCD8A /* proximity.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = proximity.gif; sourceTree = "<group>"; };
 		5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetectVC.swift; sourceTree = "<group>"; };
 		59418623282E276200DB2723 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		59418624282E276800DB2723 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
@@ -199,7 +201,7 @@
 		6A605FA6818744F36A4A27C8 /* Pods_SmartExchangeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartExchangeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B18DDCEBD9E2021D1AC3896 /* Pods-SmartExchangeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartExchangeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmartExchangeUITests/Pods-SmartExchangeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B83FB648C820D0D2928F7131 /* Pods_SmartExchange.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartExchange.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C30A6CA920729B150079FFEB /* proximity.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = proximity.gif; sourceTree = "<group>"; };
+		C30A6CA920729B150079FFEB /* proximity-old.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "proximity-old.gif"; sourceTree = "<group>"; };
 		C312E7D522EE201300B4D291 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		C319627E241B79F9003FB8BF /* iOSDropDown.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = iOSDropDown.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C31CFDEC207DE80C003870BE /* ScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenViewController.swift; sourceTree = "<group>"; };
@@ -333,8 +335,9 @@
 			children = (
 				5902CB45287541850066DEA4 /* dead_pixel.gif */,
 				5902CB44287541850066DEA4 /* speech.gif */,
-				C30A6CA920729B150079FFEB /* proximity.gif */,
+				C30A6CA920729B150079FFEB /* proximity-old.gif */,
 				C3D253A820723D780017F224 /* charging.gif */,
+				5919F2D5289E492F00DFCD8A /* proximity.gif */,
 				C3D253AB20723D780017F224 /* earphone_jack.gif */,
 				C3D253A920723D780017F224 /* final_touch.gif */,
 				C393FA822075F74000D43AEB /* internal.gif */,
@@ -709,6 +712,7 @@
 				5966EF5A2614812C00E91F21 /* four.wav in Resources */,
 				5941862C282E277900DB2723 /* Poppins-Thin.ttf in Resources */,
 				C381DBD1215787A30052F8E8 /* Localizable.strings in Resources */,
+				5919F2D6289E493200DFCD8A /* proximity.gif in Resources */,
 				C399482B1E54270600F01384 /* LaunchScreen.storyboard in Resources */,
 				5966EF5C2614812C00E91F21 /* two.wav in Resources */,
 				59418630282E277900DB2723 /* Poppins-Medium.ttf in Resources */,
@@ -735,7 +739,7 @@
 				5966EF5F2614812C00E91F21 /* three.wav in Resources */,
 				C3D253AD20723D780017F224 /* charging.gif in Resources */,
 				5902CB46287541850066DEA4 /* speech.gif in Resources */,
-				C30A6CAA20729B160079FFEB /* proximity.gif in Resources */,
+				C30A6CAA20729B160079FFEB /* proximity-old.gif in Resources */,
 				C39948261E54270600F01384 /* Main.storyboard in Resources */,
 				5966EF5B2614812C00E91F21 /* whistle.mp3 in Resources */,
 				5966EF602614812C00E91F21 /* six.wav in Resources */,

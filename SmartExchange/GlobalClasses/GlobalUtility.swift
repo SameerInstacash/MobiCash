@@ -48,6 +48,28 @@ extension UIViewController {
         }
     }
     
+    
+    func showAlert(_ title: String, message: String, alertButtonTitles: [String], alertButtonStyles: [UIAlertAction.Style], vc: UIViewController, completion: @escaping (Int)->Void) -> Void
+    {
+        let alert = UIAlertController(title: title,message: message,preferredStyle: UIAlertController.Style.alert)
+        
+        for title in alertButtonTitles {
+            let actionObj = UIAlertAction(title: title,
+                                          style: alertButtonStyles[alertButtonTitles.index(of: title)!], handler: { action in
+                                            completion(alertButtonTitles.index(of: action.title!)!)
+            })
+            
+            alert.addAction(actionObj)
+        }
+        
+        alert.popoverPresentationController?.sourceView = self.view
+        alert.popoverPresentationController?.sourceRect = self.view.bounds
+        
+        // alert.view.tintColor = Utility.themeColor
+        //vc will be the view controller on which you will present your alert as you cannot use self because this method is static.
+        vc.present(alert, animated: true, completion: nil)
+    }
+    
 }
 
 extension UIColor
