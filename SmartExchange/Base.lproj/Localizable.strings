@@ -23,8 +23,8 @@
 "camer_permission" = "This app is not authorized to use Back Camera.";
 "setting" = "Setting";
 
-"portrait_mode" = "Now rotate your device back to Portrait view.";
-"landscape_mode" = "Please switch the Device to Landscape View.";
+"portrait_mode" = "Now rotate your device back to Portrait mode.";
+"landscape_mode" = "Please switch the Device to Landscape mode.";
 
 "invalid_imei" = "Invalid IMEI Number Entered.";
 "imei_validation_info" = "Please Enter a valid 15-digit IMEI Number";
@@ -34,7 +34,7 @@
 "submit" = "Submit";
 "reference_no" = "Reference No";
 "skip" = "Skip";
-"rota_info" = "Turn on screen auto-rotation, then click 'Start Test' and rotate your device from Portrait to Landscape view";
+"rota_info" = "Turn on screen auto-rotation, then click 'Start Test' and rotate your device from Portrait to Landscape mode";
 "hard_btn_info" = "Please press the following buttons or keys on your phone.";
 "lcd" = "LCD/Screen Glass";
 "cpbp_info" = "Device Body (Side & Back Cover)";

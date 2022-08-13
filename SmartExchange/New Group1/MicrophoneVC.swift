@@ -18,7 +18,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     var micRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
     var micTestDiagnosis: ((_ testJSON: JSON) -> Void)?
     
-    @IBOutlet weak var lblCheckingMicrophone: UILabel!
+    //@IBOutlet weak var lblCheckingMicrophone: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
     @IBOutlet weak var lblTimerCount: UILabel!
     
@@ -100,7 +100,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
 
     func changeLanguageOfUI() {
   
-        self.lblCheckingMicrophone.text = "Checking Microphone"
+        //self.lblCheckingMicrophone.text = "Checking Microphone"
         self.lblPleaseEnsure.text = "Click to start button. after that microphone will listen your voice for 4 seconds to check your microphone is working or not"
         
         self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)
@@ -183,7 +183,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         self.recordDuration += 1
     }
 
-    //MARK:- button action methods
+    //MARK: button action methods
     @IBAction func onClickStart(sender: UIButton) {
         
         if sender.titleLabel?.text == "Start Test".localized {
@@ -221,6 +221,10 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     
     @IBAction func onClickSkip(sender: UIButton) {
         self.skipTest()
+    }
+    
+    @IBAction func onClickRetry(sender: UIButton) {
+        
     }
     
     @objc func runTimerForReverseCounter() {

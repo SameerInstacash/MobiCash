@@ -130,7 +130,8 @@ class IMEIViewController: UIViewController,UITextFieldDelegate {
     }
     
     
-    @IBOutlet weak var imeiEditText: UITextField!
+    @IBOutlet weak var imeiEditText: CustomUITextField!
+    
     @IBAction func continueBtnPressed(_ sender: Any) {
         
         if self.imeiEditText.text?.count == 15 {
@@ -146,11 +147,15 @@ class IMEIViewController: UIViewController,UITextFieldDelegate {
                 }
             }*/
             
-            if (self.imeiEditText.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0) > 0 {
+            //if (self.imeiEditText.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0) > 0 {
+            
+            if self.imeiEditText.text?.range(of: "^[0-9]+$", options: .regularExpression) != nil {
+                
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
                 vc.IMEINumber = imeiEditText.text!
                 UserDefaults.standard.set("\(imeiEditText.text!)", forKey: "imei_number")
                 self.present(vc, animated: true, completion: nil)
+                
             }else{
                 DispatchQueue.main.async {
                     self.view.makeToast("invalid_imei".localized, duration: 2.0, position: .top)
@@ -234,4 +239,13 @@ class IMEIViewController: UIViewController,UITextFieldDelegate {
             currentString.replacingCharacters(in: range, with: string) as NSString
         return newString.length <= maxLength
     }
+}
+
+class CustomUITextField: UITextField {
+   override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(UIResponderStandardEditActions.paste(_:)) {
+            return false
+        }
+        return super.canPerformAction(action, withSender: sender)
+   }
 }

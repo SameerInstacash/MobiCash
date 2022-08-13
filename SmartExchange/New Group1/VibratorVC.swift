@@ -18,7 +18,7 @@ class VibratorVC: UIViewController {
     var vibratorRetryDiagnosis: ((_ testJSON: JSON) -> Void)?
     var vibratorTestDiagnosis: ((_ testJSON: JSON) -> Void)?
     
-    @IBOutlet weak var lblCheckingVibrator: UILabel!
+    //@IBOutlet weak var lblCheckingVibrator: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
     
     @IBOutlet weak var txtFieldNum: UITextField!
@@ -68,7 +68,7 @@ class VibratorVC: UIViewController {
 
     func changeLanguageOfUI() {
   
-        self.lblCheckingVibrator.text = "Checking Vibrator".localized
+        //self.lblCheckingVibrator.text = "Checking Vibrator".localized
         self.lblPleaseEnsure.text = "Count how many times your phone has vibrated and then type it in the text box provided".localized
         
         self.btnStart.setTitle("Start Test".localized, for: UIControlState.normal)

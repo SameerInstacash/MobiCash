@@ -42,10 +42,11 @@ class ScreenViewController: UIViewController {
     
     func drawScreenTest(){
         
-        startScreenBtn.isHidden = true
-        screenImageView.isHidden = true
+        self.startScreenBtn.isHidden = true
+        self.screenImageView.isHidden = true
         //screenNavBar.isHidden = true
-        screenText.isHidden = true
+        self.screenText.isHidden = true
+        
         let screenSize: CGRect = UIScreen.main.bounds
         let screenWidth:Int = Int(screenSize.width)
         let screenHeight:Int = Int(screenSize.height)
@@ -451,6 +452,8 @@ class ScreenViewController: UIViewController {
                 
                 print("Screen Test Retry!")
                 
+                self.startScreenBtn.isHidden = false
+                
                 DispatchQueue.main.async {
                     for v in self.obstacleViews{
                         v.removeFromSuperview()
@@ -487,7 +490,7 @@ class ScreenViewController: UIViewController {
                 }
                 
             default:
-                                
+                
                 break
             }
         }
@@ -511,7 +514,8 @@ class LevelView : UIView {
                                                            height: frame.height),
                                        cornerRadius: 0).cgPath
         
-        levelLayer.fillColor = UIColor.white.cgColor
+        //levelLayer.fillColor = UIColor.white.cgColor
+        levelLayer.fillColor = UIColor.gray.cgColor
         self.layer.addSublayer(levelLayer)
         
     }
