@@ -59,10 +59,10 @@ class AutoRotationVC: UIViewController {
         self.hasStarted = true
         self.AutoRotationText.text = "landscape_mode".localized
         //self.beginBtn.setTitle("skip".localized,for: .normal)
-        //self.AutoRotationImage.isHidden = true
+        self.AutoRotationImage.isHidden = true
         
-        //self.AutoRotationImageView.isHidden = false
-        //self.AutoRotationImageView.image = UIImage(named: "landscape_image")!
+        self.AutoRotationImageView.isHidden = false
+        self.AutoRotationImageView.image = UIImage(named: "landscape_image")!
                     
         NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
@@ -239,7 +239,7 @@ class AutoRotationVC: UIViewController {
         {
             print("LandScape")
             self.AutoRotationText.text = "portrait_mode".localized
-            //self.AutoRotationImageView.image = UIImage(named: "portrait_image")!
+            self.AutoRotationImageView.image = UIImage(named: "portrait_image")!
         }
         
         if (UIDeviceOrientationIsPortrait(UIDevice.current.orientation))
@@ -264,10 +264,10 @@ class AutoRotationVC: UIViewController {
             */
             
             DispatchQueue.main.async {
-                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                 if self.isComingFromTestResult {
                     

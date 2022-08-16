@@ -140,6 +140,7 @@ public extension UIDevice {
 }
 
 extension String {
+    
     func index(from: Int) -> Index {
         return self.index(startIndex, offsetBy: from)
     }
@@ -159,6 +160,7 @@ extension String {
         let endIndex = index(from: r.upperBound)
         return substring(with: startIndex..<endIndex)
     }
+
 }
 
 extension UIView {
@@ -172,7 +174,6 @@ extension UIView {
         self.layer.add(rotateAnimation, forKey: nil)
     }
 }
-
 
 
 class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
@@ -229,9 +230,9 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         //self.imeiLabel.text = IMEINumber
         self.imeiLabel.text = imei
         
-        self.scanQRBtn.layer.cornerRadius = 6
-        self.previousBtn.layer.cornerRadius = 6
-        self.submitStoreBtn.layer.cornerRadius = 6
+        self.scanQRBtn.layer.cornerRadius = 5
+        self.previousBtn.layer.cornerRadius = 5
+        self.submitStoreBtn.layer.cornerRadius = 5
         
         let uuid = UUID().uuidString
         print(uuid)

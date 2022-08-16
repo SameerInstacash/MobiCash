@@ -15,7 +15,7 @@ class DeviceDetectVC: UIViewController {
     @IBOutlet weak var deviceImage: UIImageView!
     @IBOutlet weak var lblDeviceName: UILabel!
     @IBOutlet weak var getQuoteBtn: UIButton!
-    @IBOutlet weak var contactSupportBtn: UIButton!
+    //@IBOutlet weak var contactSupportBtn: UIButton!
     
     var productName = ""
     var productImage = ""

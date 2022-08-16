@@ -55,7 +55,7 @@ class VibratorVC: UIViewController {
                 
         //self.setStatusBarColor()
         
-        if isComingFromTestResult == false && isComingFromProductquote == false {
+        if self.isComingFromTestResult == false && self.isComingFromProductquote == false {
             //userDefaults.removeObject(forKey: "Vibrator")
             //userDefaults.setValue(false, forKey: "Vibrator")
         }
@@ -101,10 +101,10 @@ class VibratorVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "Vibrator")
                 
                 DispatchQueue.main.async {
-                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                    self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                     self.goNext()
                 }
@@ -131,10 +131,10 @@ class VibratorVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "Vibrator")
                 
                 DispatchQueue.main.async {
-                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                    self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     
                     self.goNext()
                 }

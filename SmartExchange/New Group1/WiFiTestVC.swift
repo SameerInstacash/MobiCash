@@ -147,10 +147,10 @@ class WiFiTestVC: UIViewController {
         if self.isWiFiPass {
             
             DispatchQueue.main.async {
-                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                 if self.isComingFromTestResult {
                     

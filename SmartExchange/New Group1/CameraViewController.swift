@@ -85,10 +85,10 @@ class CameraViewController: UIViewController {
                     camera.dismiss(animated: false) {
                         
                         DispatchQueue.main.async {
-                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                            self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
                             didFinishRetryDiagnosis(self.resultJSON)
                             self.dismiss(animated: false, completion: nil)
@@ -102,10 +102,10 @@ class CameraViewController: UIViewController {
                     camera.dismiss(animated: false) {
                         
                         DispatchQueue.main.async {
-                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                            self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
                             didFinishTestDiagnosis(self.resultJSON)
                             self.dismiss(animated: false, completion: nil)

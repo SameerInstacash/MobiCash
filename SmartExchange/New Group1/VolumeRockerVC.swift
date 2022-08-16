@@ -39,7 +39,12 @@ class VolumeRockerVC: UIViewController {
         self.volumeButtonHandler = JPSVolumeButtonHandler(up: {
             
                 print("Volume up pressed")
-                self.volumeUpImg.image = UIImage(named: "volume_up_green")
+                //self.volumeUpImg.image = UIImage(named: "volume_up_green")
+         
+         let image = UIImage(named: "volume_up")?.withRenderingMode(.alwaysTemplate)
+         self.volumeUpImg.image = image
+         self.volumeUpImg.tintColor = UIColor.init(hexString: "#05adef")
+         
                 self.volUp = true
                 
                 if(self.volDown == true){
@@ -83,7 +88,12 @@ class VolumeRockerVC: UIViewController {
             }, downBlock: {
                 
                 print("Volume down pressed")
-                self.volumeDownImg.image = UIImage(named: "volume_down_green")
+                //self.volumeDownImg.image = UIImage(named: "volume_down_green")
+         
+         let image = UIImage(named: "volume_down")?.withRenderingMode(.alwaysTemplate)
+         self.volumeDownImg.image = image
+         self.volumeDownImg.tintColor = UIColor.init(hexString: "#05adef")
+         
                 self.volDown = true
                 
                 if(self.volUp == true){
@@ -201,7 +211,12 @@ class VolumeRockerVC: UIViewController {
                 if (self.audioSession?.outputVolume ?? 0.0) > self.audioLevel {
                     
                     print("Volume up pressed")
-                    self.volumeUpImg.image = UIImage(named: "volume_up_green")
+                    //self.volumeUpImg.image = UIImage(named: "volume_up_green")
+                    
+                    let image = UIImage(named: "volume_up")?.withRenderingMode(.alwaysTemplate)
+                    self.volumeUpImg.image = image
+                    self.volumeUpImg.tintColor = UIColor.init(hexString: "#05adef")
+                    
                     self.volUp = true
                     
                     if (self.volDown == true) {
@@ -225,10 +240,10 @@ class VolumeRockerVC: UIViewController {
                         }*/
                         
                         DispatchQueue.main.async {
-                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                            self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             
                             if self.isComingFromTestResult {
                                 
@@ -254,7 +269,12 @@ class VolumeRockerVC: UIViewController {
                 if (self.audioSession?.outputVolume ?? 0.0) < self.audioLevel {
                     
                     print("Volume down pressed")
-                    self.volumeDownImg.image = UIImage(named: "volume_down_green")
+                    //self.volumeDownImg.image = UIImage(named: "volume_down_green")
+                    
+                    let image = UIImage(named: "volume_down")?.withRenderingMode(.alwaysTemplate)
+                    self.volumeDownImg.image = image
+                    self.volumeDownImg.tintColor = UIColor.init(hexString: "#05adef")
+                    
                     self.volDown = true
                     
                     if (self.volUp == true) {
@@ -278,10 +298,10 @@ class VolumeRockerVC: UIViewController {
                         }*/
                         
                         DispatchQueue.main.async {
-                            self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                            self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                         }
                         
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             
                             if self.isComingFromTestResult {
                                 

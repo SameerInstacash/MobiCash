@@ -39,15 +39,15 @@ class FingerprintViewController: UIViewController {
                 self.biometricImage.image = yourImage
                 
                 self.lblTestTitle.text = "Testing Face ID"
-                self.lblTitleMessage.text = "First, enable the face-Id function on your phone." +
-                "During the test place your face on the scanner as you normally would to unlock your phone."
+                self.lblTitleMessage.text = "Please enable the face-Id feature from settings." + "Disabling the face-Id will result in price drop during evaluation"
+                //"During the test place your face on the scanner as you normally would to unlock your phone."
                 
             }else {
                 self.biometricImage.image = UIImage(named: "fingerprint")!
                 
                 self.lblTestTitle.text = "Testing fingerprint"
-                self.lblTitleMessage.text = "First, please enable fingerprint function." +
-                "Then you will place your finger on the fingerprint scanner like you normally would during unlock."
+                self.lblTitleMessage.text = "Please enable the fingerprint feature from settings." + "Disabling the fingerprint scanner will result in price drop during evaluation"
+                //"Then you will place your finger on the fingerprint scanner like you normally would during unlock."
             }
             
         }else {
@@ -137,8 +137,8 @@ class FingerprintViewController: UIViewController {
                 self.biometricImage.image = yourImage
                 
                 self.lblTestTitle.text = "Testing Face ID"
-                self.lblTitleMessage.text = "First, enable the face-Id function on your phone." +
-                "During the test place your face on the scanner as you normally would to unlock your phone."
+                self.lblTitleMessage.text = "Please enable the face-Id feature from settings." + "Disabling the fingerprint scanner will result in price drop during evaluation"
+                //"During the test place your face on the scanner as you normally would to unlock your phone."
                               
                 break
             default:
@@ -173,10 +173,10 @@ class FingerprintViewController: UIViewController {
             }*/
             
             DispatchQueue.main.async {
-                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                 if self.isComingFromTestResult {
                     

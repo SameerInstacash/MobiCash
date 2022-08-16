@@ -1,12 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "wifi_icon@1x.png",
+      "filename" : "wifi_icon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "wifi_icon@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

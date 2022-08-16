@@ -101,10 +101,10 @@ class TorchVC: UIViewController {
             UserDefaults.standard.set(true, forKey: "Torch")
             
             DispatchQueue.main.async {
-                self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             
                 self.goNext()
             }
@@ -142,10 +142,10 @@ class TorchVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "Torch")
                 
                 DispatchQueue.main.async {
-                    self.view.makeToast("Test Passed!", duration: 2.0, position: .bottom)
+                    self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 
                     self.goNext()
                 }
