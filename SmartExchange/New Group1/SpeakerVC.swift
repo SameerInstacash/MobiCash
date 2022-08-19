@@ -43,7 +43,8 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
     var num3 = 0
     var num4 = 0
     
-    var soundFiles = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    //var soundFiles = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
+    var soundFiles = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"]
     var audioPlayer: AVAudioPlayer!
 
     var isComingFromTestResult = false
@@ -213,7 +214,10 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             
             self.btnReceiverPlayPause.isUserInteractionEnabled = false
             
-            self.playSoundFromReceiver()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.playSoundFromReceiver()
+            }
+            
         }
         
     }

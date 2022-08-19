@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 
-class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate {
     
     var arrQuestionAnswer : Questions?
     var TestDiagnosisForward: (() -> Void)?
@@ -18,9 +18,9 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     var selectedCellIndex = -1
     var arrSelectedCellIndex = [Int]()
     
-    
     @IBOutlet weak var lblQuestionName: UILabel!
-    @IBOutlet weak var cosmeticCollectionView: UICollectionView!
+    //@IBOutlet weak var cosmeticCollectionView: UICollectionView!
+    @IBOutlet weak var cosmeticTableView: UITableView!
     @IBOutlet weak var btnNext: UIButton!
     @IBOutlet weak var btnPrevious: UIButton!
     
@@ -33,6 +33,8 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.cosmeticTableView.layer.cornerRadius = 10.0
         
         if AppQuestionIndex == 0 {
             self.btnPrevious.isHidden = true
@@ -118,6 +120,177 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                         
     }
     
+    // MARK: - UITableView DataSource & Delegates
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
+            return self.arrQuestionAnswer?.specificationValue?.count ?? 0
+        }else {
+            return self.arrQuestionAnswer?.conditionValue?.count ?? 0
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let CosmeticQuestionTblCell = tableView.dequeueReusableCell(withIdentifier: "CosmeticQuestionTblCell", for: indexPath) as! CosmeticQuestionTblCell
+        
+        CosmeticQuestionTblCell.layer.cornerRadius = 5.0
+        CosmeticQuestionTblCell.baseContentView.layer.cornerRadius = 5.0
+        
+        //let iconImgView : UIImageView = CosmeticQuestionTblCell.viewWithTag(10) as! UIImageView
+        //let lblIconName : UILabel = CosmeticQuestionTblCell.viewWithTag(20) as! UILabel
+        
+        if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
+            let answer = self.arrQuestionAnswer?.specificationValue?[indexPath.item]
+            
+            //let str = answer?.value?.removingPercentEncoding
+            let str = answer?.value?.removingPercentEncoding ?? ""
+            CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
+            
+            
+            if let qImage = self.arrQuestionAnswer?.specificationValue?[indexPath.item].image {
+                
+                if let imgUrl = URL(string: qImage) {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = false
+                    CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                }else {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = true
+                }
+                
+            }else {
+                CosmeticQuestionTblCell.iconImgView.isHidden = true
+            }
+            
+        }else {
+            let answer = self.arrQuestionAnswer?.conditionValue?[indexPath.item]
+            
+            //let str = answer?.value?.removingPercentEncoding
+            let str = answer?.value?.removingPercentEncoding ?? ""
+            CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
+            
+        
+            if let qImage = self.arrQuestionAnswer?.conditionValue?[indexPath.item].image {
+                
+                if let imgUrl = URL(string: qImage) {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = false
+                    CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                }else {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = true
+                }
+                
+            }else {
+                CosmeticQuestionTblCell.iconImgView.isHidden = true
+            }
+         
+        }
+        
+        if self.arrQuestionAnswer?.viewType == "checkbox" {
+            
+            if self.arrSelectedCellIndex.contains(indexPath.item) {
+                //CosmeticQuestionTblCell.layer.borderWidth = 1.0
+                //CosmeticQuestionTblCell.layer.borderColor = UIColor.init(hexString: "#05adef").cgColor
+                
+                CosmeticQuestionTblCell.baseContentView.backgroundColor = UIColor.init(hexString: "#05adef")
+                
+            }else {
+                //CosmeticQuestionTblCell.layer.borderWidth = 0.0
+                //CosmeticQuestionTblCell.layer.borderColor = UIColor.clear.cgColor
+                
+                CosmeticQuestionTblCell.baseContentView.backgroundColor = UIColor.white
+            }
+        
+        }else {
+            
+            if self.selectedCellIndex == indexPath.item {
+                //CosmeticQuestionTblCell.layer.borderWidth = 1.0
+                //CosmeticQuestionTblCell.layer.borderColor = UIColor.init(hexString: "#05adef").cgColor
+                
+                CosmeticQuestionTblCell.baseContentView.backgroundColor = UIColor.init(hexString: "#05adef")
+                
+            }else {
+                //CosmeticQuestionTblCell.layer.borderWidth = 0.0
+                //CosmeticQuestionTblCell.layer.borderColor = UIColor.clear.cgColor
+                
+                CosmeticQuestionTblCell.baseContentView.backgroundColor = UIColor.white
+            }
+            
+        }
+        
+        return CosmeticQuestionTblCell
+        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if self.arrQuestionAnswer?.viewType == "checkbox" {
+            
+            if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
+                
+                if self.selectedAppCode == "" {
+                    self.selectedAppCode = self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? ""
+                }else {
+                    if !self.selectedAppCode.contains(self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? "") {
+                        self.selectedAppCode += ";" + (self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? "")
+                    }
+                    
+                }
+                
+            }else {
+                
+                if self.selectedAppCode == "" {
+                    self.selectedAppCode = self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? ""
+                }else {
+                    if !self.selectedAppCode.contains(self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? "") {
+                        self.selectedAppCode += ";" + (self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? "")
+                    }
+                }
+                
+            }
+            
+            print("self.selectedAppCode is:-", self.selectedAppCode)
+            
+            self.arrSelectedCellIndex.append(indexPath.item)
+            //self.selectedCellIndex = indexPath.item
+            self.cosmeticTableView.reloadData()
+            
+        }else {
+            // "radio"
+            // "select"
+            
+            if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
+                self.selectedAppCode = self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? ""
+            }else {
+                self.selectedAppCode = self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? ""
+            }
+            
+            print("self.selectedAppCode is:-", self.selectedAppCode)
+            
+            self.selectedCellIndex = indexPath.item
+            self.cosmeticTableView.reloadData()
+            
+        }
+        
+        
+        /* 14/3/22
+        AppResultString = AppResultString + self.selectedAppCode + ";"
+        
+        guard let didFinishRetryDiagnosis = self.TestDiagnosisForward else { return }
+        didFinishRetryDiagnosis()
+        self.dismiss(animated: false, completion: nil)
+        */
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+  
     // MARK: - UICollectionView DataSource & Delegates
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -228,7 +401,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             
             self.arrSelectedCellIndex.append(indexPath.item)
             //self.selectedCellIndex = indexPath.item
-            self.cosmeticCollectionView.reloadData()
+            self.cosmeticTableView.reloadData()
             
         }else {
             // "radio"
@@ -243,7 +416,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             print("self.selectedAppCode is:-", self.selectedAppCode)
             
             self.selectedCellIndex = indexPath.item
-            self.cosmeticCollectionView.reloadData()
+            self.cosmeticTableView.reloadData()
             
         }
         
@@ -260,7 +433,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize.init(width: self.cosmeticCollectionView.bounds.width, height: 60.0)
+        return CGSize.init(width: collectionView.bounds.width, height: 60.0)
     }
     
     

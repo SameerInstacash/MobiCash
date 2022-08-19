@@ -34,8 +34,8 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var tradeInOnlineView: UIView!
     @IBOutlet weak var tradeInOnlineMessageTxtView: UITextView!
     
-    @IBOutlet weak var uploadIdBtn: UIButton!
-//    @IBOutlet weak var scheduleVisitBtn: UIButton!
+    //@IBOutlet weak var uploadIdBtn: UIButton!
+    //@IBOutlet weak var scheduleVisitBtn: UIButton!
     @IBOutlet weak var offeredPrice: UILabel!
     @IBOutlet weak var diagnosisCharges: UILabel!
     @IBOutlet weak var payableAmount: UILabel!
@@ -684,7 +684,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     DispatchQueue.main.async {
                         
                         self.loaderImage.isHidden = true
-                        self.uploadIdBtn.isHidden = false
+                        ////self.uploadIdBtn.isHidden = false
                         self.refValueLabel.isHidden = false
                         let refno = "reference_no".localized
                         self.refValueLabel.text = "\(refno): \(self.orderId)"
@@ -797,6 +797,62 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     */
     
+    @IBAction func idUploadBtnClicked(_ sender: UIButton) {
+        
+        if (self.isSynced){
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "IdUploadVC") as! IdUploadVC
+            vc.modalPresentationStyle = .overFullScreen
+            self.present(vc, animated: true, completion: nil)
+            
+        }else{
+            DispatchQueue.main.async {
+                self.view.makeToast("Please wait for the results to sync to the server!", duration: 2.0, position: .bottom)
+            }
+        }
+        
+        
+        /*
+        if (self.isSynced){
+            
+            let camera = DKCamera()
+            camera.didCancel = {
+                self.dismiss(animated: true, completion: nil)
+            }
+            camera.didFinishCapturingImage = { (image: UIImage?, metadata: [AnyHashable : Any]?) in
+                self.dismiss(animated: true, completion: nil)
+                
+                self.uploadPhotoId(image ?? UIImage())
+                
+            }
+            self.present(camera, animated: true, completion: nil)
+         
+        }else{
+            DispatchQueue.main.async {
+                self.view.makeToast("Please wait for the results to sync to the server!", duration: 2.0, position: .bottom)
+            }
+        }*/
+        
+    }
+    
+    @IBAction func backToHomeBtnClicked(_ sender: UIButton) {
+        
+        if (self.isSynced){
+            
+            // Navigate to home page
+            let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
+            let mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let centerVC = mainStoryBoard.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
+            appDel.window!.rootViewController = centerVC
+            appDel.window!.makeKeyAndVisible()
+            
+        }else{
+            DispatchQueue.main.async {
+                self.view.makeToast("Please wait for the results to sync to the server!", duration: 2.0, position: .bottom)
+            }
+        }
+        
+    }
     
     @IBAction func uploadIdBtnClicked(_ sender: UIButton) {
         
@@ -921,7 +977,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if json["status"] == "Success" {
                     
                     DispatchQueue.main.async() {
-                        self.uploadIdBtn.setTitle("Back to home", for: .normal)
+                        ////self.uploadIdBtn.setTitle("Back to home", for: .normal)
                         self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
                     }
                     

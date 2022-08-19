@@ -50,6 +50,8 @@
 		59BDBE39283F396B00A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE33283F396800A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		59BDBE3A283F396B00A7890F /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */; };
 		59BDBE3B283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE37283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m */; };
+		59BE71BF28AF764E0022639B /* CosmeticQuestionTblCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BE71BE28AF764E0022639B /* CosmeticQuestionTblCell.swift */; };
+		59BE71C128AF91840022639B /* IdUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BE71C028AF91840022639B /* IdUploadVC.swift */; };
 		59C75CA7289B95950037B81E /* GlobalSkipPopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C75CA6289B95950037B81E /* GlobalSkipPopUpVC.swift */; };
 		59CF225A28447D1C00E28F15 /* UserDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CF225928447D1C00E28F15 /* UserDetailsVC.swift */; };
 		59CF22622844846B00E28F15 /* SelectTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59CF225E2844846A00E28F15 /* SelectTextCell.swift */; };
@@ -181,6 +183,8 @@
 		59BDBE35283F396A00A7890F /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
 		59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		59BDBE37283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingCollectionView.m; sourceTree = "<group>"; };
+		59BE71BE28AF764E0022639B /* CosmeticQuestionTblCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmeticQuestionTblCell.swift; sourceTree = "<group>"; };
+		59BE71C028AF91840022639B /* IdUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdUploadVC.swift; sourceTree = "<group>"; };
 		59C75CA6289B95950037B81E /* GlobalSkipPopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSkipPopUpVC.swift; sourceTree = "<group>"; };
 		59CF225928447D1C00E28F15 /* UserDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsVC.swift; sourceTree = "<group>"; };
 		59CF225E2844846A00E28F15 /* SelectTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTextCell.swift; sourceTree = "<group>"; };
@@ -359,6 +363,7 @@
 				C31CFDEE2080E052003870BE /* HardwareQuestionsViewController.swift */,
 				59DA3423283B78FC005AC9CA /* QuestionsVC.swift */,
 				C363AE48208F270E00D2AC54 /* PriceViewController.swift */,
+				59BE71C028AF91840022639B /* IdUploadVC.swift */,
 				C312E7D522EE201300B4D291 /* UserDetailsViewController.swift */,
 				59CF225928447D1C00E28F15 /* UserDetailsVC.swift */,
 				C3FAA26422F44FF100233503 /* PreviousQuotationsViewController.swift */,
@@ -373,6 +378,7 @@
 				5966EF3F261480D600E91F21 /* TestResultCell.xib */,
 				5966EF3E261480D300E91F21 /* TestResultTitleCell.swift */,
 				5966EF41261480DB00E91F21 /* TestResultTitleCell.xib */,
+				59BE71BE28AF764E0022639B /* CosmeticQuestionTblCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -973,6 +979,7 @@
 				5966EF4D2614810500E91F21 /* SpeakerVC.swift in Sources */,
 				5966EF4A2614810500E91F21 /* VibratorVC.swift in Sources */,
 				59CF22642844846B00E28F15 /* MobileNumberCell.swift in Sources */,
+				59BE71BF28AF764E0022639B /* CosmeticQuestionTblCell.swift in Sources */,
 				C3E1C2ED1E7FA8760043DB5C /* AutoRotationVC.swift in Sources */,
 				C363AE43208F068300D2AC54 /* Q6ViewController.swift in Sources */,
 				C39948231E54270600F01384 /* ViewController.swift in Sources */,
@@ -980,6 +987,7 @@
 				C31CFDED207DE80C003870BE /* ScreenViewController.swift in Sources */,
 				59DA3424283B78FC005AC9CA /* QuestionsVC.swift in Sources */,
 				C39948211E54270600F01384 /* AppDelegate.swift in Sources */,
+				59BE71C128AF91840022639B /* IdUploadVC.swift in Sources */,
 				C363AE3E208F063F00D2AC54 /* Q4ViewController.swift in Sources */,
 				59E086D52674A709003FDA1C /* StoreUrlData.swift in Sources */,
 				C363AE41208F065400D2AC54 /* Q5ViewController.swift in Sources */,

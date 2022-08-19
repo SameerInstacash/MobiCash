@@ -43,6 +43,7 @@ class DeviceDetectVC: UIViewController {
     //MARK: IBActions
     @IBAction func getQuoteBtnClicked(_ sender: Any) {
         self.DeadPixelTest()
+        //self.BackgroundTest(JSON())
     }
     
     @IBAction func contactSupportBtnClicked(_ sender: Any) {

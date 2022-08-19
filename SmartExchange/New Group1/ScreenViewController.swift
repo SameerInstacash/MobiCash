@@ -439,7 +439,7 @@ class ScreenViewController: UIViewController {
         
         let popUpVC = self.storyboard?.instantiateViewController(withIdentifier: "GlobalSkipPopUpVC") as! GlobalSkipPopUpVC
         
-        popUpVC.strTitle = "Screen Diagnosis Test Failed!"
+        popUpVC.strTitle = "Test Failed!"
         popUpVC.strMessage = "Do you want to retry the test?"
         popUpVC.strBtnYesTitle = "Yes"
         popUpVC.strBtnNoTitle = "No"
@@ -451,7 +451,12 @@ class ScreenViewController: UIViewController {
             case 1:
                 
                 print("Screen Test Retry!")
+                self.totalTime = 40
                 
+                self.startTest = true
+                self.startTimer()
+                
+                /*
                 self.startScreenBtn.isHidden = false
                 
                 DispatchQueue.main.async {
@@ -465,8 +470,8 @@ class ScreenViewController: UIViewController {
                     //self.resultJSON = JSON()
                     //self.startScreenBtn.isHidden = false
                     self.screenImageView.isHidden = false
-                }
-                                
+                }*/
+                                                
             case 2:
                 
                 print("Screen Test Failed!")

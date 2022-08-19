@@ -23,11 +23,29 @@ class PreviousQuotationsViewController: UIViewController {
     @IBOutlet weak var mobText: UILabel!
     @IBOutlet weak var emailText: UILabel!
     @IBOutlet weak var tableView: UILabel!
+    @IBOutlet weak var htmlTxtView: UITextView!
+    
     var ref = ""
     var endPoint = ""
-    @IBOutlet weak var smartExLoadingImage: UIImageView!
+    //@IBOutlet weak var smartExLoadingImage: UIImageView!
     
     let hud = JGProgressHUD()
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        referenceNumText.placeholder = "reference_no".localized
+        let sub = "continue".localized
+        submitBtnPrev.setTitle(sub, for: .normal)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+                
+        self.hideKeyboardWhenTappedAround()
+    }
+    
     
     @IBAction func homeBtnClicked(_ sender: Any) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "HomeVC") as! ViewController
@@ -37,33 +55,33 @@ class PreviousQuotationsViewController: UIViewController {
         self.present(vc, animated: true, completion: nil)
     }
     
-    
     @IBAction func submitBtnClicked(_ sender: Any) {
         ref = referenceNumText.text ?? "0"
-        if (ref.length ?? 0 > 1)  {
+        if (ref.length > 1)  {
             //smartExLoadingImage.isHidden = false
             //smartExLoadingImage.rotate360Degrees()
             
-            self.hud.textLabel.text = ""
-            self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
-            self.hud.show(in: self.view)
+                
+                //self.hud.textLabel.text = ""
+                //self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
+                //self.hud.show(in: self.view)
+                
+                
+                self.modAPI()
             
-            modAPI()
         }
     }
-    
     
     func modAPI()
     {
         //self.endPoint = "https://exchange.buyblynk.com/api/v1/public/" // Blynk
        
-        
         self.endPoint = AppBaseUrl
         
         var request = URLRequest(url: URL(string: "\(endPoint)/getSessionIdbyIMEI")!)
         request.httpMethod = "POST"
-        let preferences = UserDefaults.standard
-        //        let postString = "productId=\(productId!)&customerId=\(customerId!)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
+        _ = UserDefaults.standard
+        //let postString = "productId=\(productId!)&customerId=\(customerId!)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
         var postString = ""
         let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
         
@@ -101,21 +119,21 @@ class PreviousQuotationsViewController: UIViewController {
                 
                 return
             }
-            
-            
+          
             //* SAMEER-14/6/22
             do {
                 let json = try JSON(data: data)
                 if json["status"] == "Success" {
-                    
+                                        
                     print(json)
                     DispatchQueue.main.async() {
+                        
                         let msg = json["msg"]
                         let id = msg["id"].string ?? ""
                         let name = msg["name"].string ?? ""
                         let mobileNumber = msg["mobileNumber"].string ?? ""
                         let email = msg["email"].string ?? ""
-                        let productSummary = msg["productSummary"] ?? ""
+                        let productSummary = msg["productSummary"]
                         self.mobText.text = mobileNumber
                         self.nameText.text = name
                         self.emailText.text = email
@@ -125,7 +143,10 @@ class PreviousQuotationsViewController: UIViewController {
                         self.secondStack.isHidden = false
                         self.submitBtnPrev.isHidden = true
                         self.referenceNumText.isHidden = true
-                        self.tableView.isHidden = false
+                        
+                        //self.tableView.isHidden = false
+                        self.htmlTxtView.isHidden = false
+                        
                         let htmlString = productSummary.string ?? ""
                         // works even without <html><body> </body></html> tags, BTW
                         let data = htmlString.data(using: String.Encoding.unicode)! // mind "!"
@@ -134,7 +155,8 @@ class PreviousQuotationsViewController: UIViewController {
                             options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html],
                             documentAttributes: nil)
                         // suppose we have an UILabel, but any element with NSAttributedString will do
-                        self.tableView.attributedText = attrStr
+                        //self.tableView.attributedText = attrStr
+                        self.htmlTxtView.attributedText = attrStr
                         
                     }
                 }else {
@@ -214,24 +236,7 @@ class PreviousQuotationsViewController: UIViewController {
         }
         task.resume()
     }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
-        
-        referenceNumText.placeholder = "reference_no".localized
-        let sub = "continue".localized
-        submitBtnPrev.setTitle(sub, for: .normal)
-        
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
-        
-        view.addGestureRecognizer(tap)
-        
-        
-        self.hideKeyboardWhenTappedAround()
-    }
-    
+
     
     @objc override func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.

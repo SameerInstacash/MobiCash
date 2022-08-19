@@ -20,7 +20,6 @@ class VibratorVC: UIViewController {
     
     //@IBOutlet weak var lblCheckingVibrator: UILabel!
     @IBOutlet weak var lblPleaseEnsure: UILabel!
-    
     @IBOutlet weak var txtFieldNum: UITextField!
     
     @IBOutlet weak var btnStart: UIButton!
@@ -32,9 +31,9 @@ class VibratorVC: UIViewController {
     @IBOutlet weak var btnThreeVibration: UIButton!
     @IBOutlet weak var btnFourVibration: UIButton!
     @IBOutlet weak var btnNoVibration: UIButton!
+    
     var strSelectedNumber = ""
     
-
     var resultJSON = JSON()
     var num1 = 0
     var gameTimer: Timer?
@@ -81,10 +80,33 @@ class VibratorVC: UIViewController {
         if sender.titleLabel?.text == "Start Test" {
             //sender.setTitle("Submit".localized, for: .normal)
             
-            self.btnSkip.isHidden = true
-                        
+            self.num1 = 0
+            self.runCount = 0
+            self.gameTimer?.invalidate()
+            
+            self.btnOneVibration.isSelected = false
+            self.btnTwoVibration.isSelected = false
+            self.btnThreeVibration.isSelected = false
+            self.btnFourVibration.isSelected = false
+            
+            self.btnStart.isHidden = true
             self.startTest()
-        }else {
+            
+        }else if sender.titleLabel?.text == "Retry" {
+            
+            self.num1 = 0
+            self.runCount = 0
+            self.gameTimer?.invalidate()
+            
+            self.btnOneVibration.isSelected = false
+            self.btnTwoVibration.isSelected = false
+            self.btnThreeVibration.isSelected = false
+            self.btnFourVibration.isSelected = false
+            
+            self.btnStart.isHidden = true
+            self.startTest()
+            
+        } else {
             
             /*
             guard !(self.txtFieldNum.text?.isEmpty ?? false) else {
@@ -182,7 +204,7 @@ class VibratorVC: UIViewController {
             //self.txtFieldNum.isHidden = false
             
             self.numberView.isHidden = false
-            self.btnSkip.isHidden = false
+            self.btnStart.isHidden = false
             self.btnStart.setTitle("VERIFY CODE".localized, for: UIControlState.normal)
             
         }
@@ -407,6 +429,16 @@ class VibratorVC: UIViewController {
         self.btnNoVibration.isSelected = false
         
         self.strSelectedNumber = "1"
+        
+        if String(self.num1) != self.strSelectedNumber {
+            self.btnStart.setTitle("Retry", for: .normal)
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong selection. Please retry or skip", duration: 2.0, position: .bottom)
+            }
+            
+        }
+        
     }
     
     @IBAction func twoVibrationBtnClicked(sender: UIButton) {
@@ -417,6 +449,16 @@ class VibratorVC: UIViewController {
         self.btnNoVibration.isSelected = false
         
         self.strSelectedNumber = "2"
+        
+        if String(self.num1) != self.strSelectedNumber {
+            self.btnStart.setTitle("Retry", for: .normal)
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong selection. Please retry or skip", duration: 2.0, position: .bottom)
+            }
+            
+        }
+        
     }
     
     @IBAction func threeVibrationBtnClicked(sender: UIButton) {
@@ -427,6 +469,16 @@ class VibratorVC: UIViewController {
         self.btnNoVibration.isSelected = false
         
         self.strSelectedNumber = "3"
+        
+        if String(self.num1) != self.strSelectedNumber {
+            self.btnStart.setTitle("Retry", for: .normal)
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong selection. Please retry or skip", duration: 2.0, position: .bottom)
+            }
+            
+        }
+        
     }
     
     @IBAction func fourVibrationBtnClicked(sender: UIButton) {
@@ -437,6 +489,16 @@ class VibratorVC: UIViewController {
         self.btnNoVibration.isSelected = false
         
         self.strSelectedNumber = "4"
+        
+        if String(self.num1) != self.strSelectedNumber {
+            self.btnStart.setTitle("Retry", for: .normal)
+            
+            DispatchQueue.main.async() {
+                self.view.makeToast("Wrong selection. Please retry or skip", duration: 2.0, position: .bottom)
+            }
+            
+        }
+        
     }
     
     @IBAction func noVibrationBtnClicked(sender: UIButton) {
@@ -447,6 +509,7 @@ class VibratorVC: UIViewController {
         self.btnNoVibration.isSelected = true
         
         self.strSelectedNumber = "0"
+        
     }
 
     // MARK: - Navigation

@@ -73,6 +73,10 @@ class TorchVC: UIViewController {
             
         }else {
             
+            self.num1 = 0
+            self.gameTimer?.invalidate()
+            self.runCount = 0
+            
             self.playBtn.setImage(UIImage.init(named: "pause"), for: .normal)
             
             sender.isSelected = !sender.isSelected
@@ -125,6 +129,7 @@ class TorchVC: UIViewController {
             //sender.setTitle("Submit".localized, for: .normal)
                         
             self.startTest()
+            
         }else {
             
             guard !(self.numberTxtField.text?.isEmpty ?? false) else {

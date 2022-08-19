@@ -76,7 +76,7 @@
 		018FA7BD8D615B8465ADFBF24729E0EA /* FLLRBValueNode.h in Headers */ = {isa = PBXBuildFile; fileRef = F7CD402EEDE39D9663E38B554ABDD235 /* FLLRBValueNode.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		0195899306D8FDF8C659F997F53F6A23 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F81119B213E56AA586A84574634E974D /* MediaPlayer.framework */; };
 		01BED414B424B9C73ABE683DD6B44747 /* TransitionButton-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FD063DB729A89B7EEF6132FC48CC22ED /* TransitionButton-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		01D2EB30256F2E339C213A6DB6C4924D /* DateTimePicker-DateTimePicker in Resources */ = {isa = PBXBuildFile; fileRef = B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker-DateTimePicker */; };
+		01D2EB30256F2E339C213A6DB6C4924D /* DateTimePicker.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker.bundle */; };
 		01ED1DDA2BEAAB0D927533A521DA181B /* GPUImageLuminosity.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B4C5704A47153A99C8BB4AAD5FDDAB /* GPUImageLuminosity.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		023B34838C03C23D7C0EA68C508FAF62 /* FIRCLSInternalLogging.c in Sources */ = {isa = PBXBuildFile; fileRef = 8EDDF3C1BC2573CC39198D12315D033E /* FIRCLSInternalLogging.c */; };
 		024C42FF4C9A5BEF190AF352B4248954 /* FIRDatabaseReference.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EDBCE930EFC79A0A06DF06D6F5CC41A /* FIRDatabaseReference.m */; };
@@ -3221,7 +3221,7 @@
 		AFB4E60DE2715B780F962452BAAB7B31 /* GPUImageLinearBurnBlendFilter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPUImageLinearBurnBlendFilter.h; path = framework/Source/GPUImageLinearBurnBlendFilter.h; sourceTree = "<group>"; };
 		AFDB77FD684295DE5066816F79AE6CDD /* log_writer.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = log_writer.cc; path = db/log_writer.cc; sourceTree = "<group>"; };
 		AFEA8D7E035B3E3229272A534D44F18D /* FTupleObjects.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleObjects.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleObjects.m; sourceTree = "<group>"; };
-		B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker-DateTimePicker */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "DateTimePicker-DateTimePicker"; path = DateTimePicker.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DateTimePicker.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		B102ACD68EC961A4F6E334150073798B /* FLimitedFilter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLimitedFilter.m; path = FirebaseDatabase/Sources/Core/View/Filter/FLimitedFilter.m; sourceTree = "<group>"; };
 		B16EEA02A9F89DF394CCDB737F215FB1 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
 		B243A1F3C2885BE9780484FD2DF682CA /* GPUImageLuminosityBlendFilter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GPUImageLuminosityBlendFilter.h; path = framework/Source/GPUImageLuminosityBlendFilter.h; sourceTree = "<group>"; };
@@ -6364,7 +6364,7 @@
 				3F282D213AB9D1ECA1228C986CC9D2BA /* BEMCheckBox */,
 				9D6744EB8F82ACDFA76A6968B000CC82 /* BiometricAuthentication */,
 				B26CB6AD16677CB8E5B8A5059EA05677 /* DateTimePicker */,
-				B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker-DateTimePicker */,
+				B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker.bundle */,
 				10E8CBD03C03A819852CED0B0B557828 /* Deviice */,
 				CA033A3D1AF6D02A993B8BCEE298B0C4 /* DKCamera.framework */,
 				9B6725B782188F18CB76A740433F14E4 /* DropDown */,
@@ -8196,7 +8196,7 @@
 			);
 			name = "DateTimePicker-DateTimePicker";
 			productName = DateTimePicker;
-			productReference = B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker-DateTimePicker */;
+			productReference = B04C1EBC2EC90A2DFFEDDD0CF4473840 /* DateTimePicker.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		E30FF5B0268E3027AF18D788DB9BB7E7 /* TransitionButton */ = {
@@ -8279,6 +8279,11 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1240;
 				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					E0775EC5F6DBAA5D2C37BCFB14908273 = {
+						DevelopmentTeam = FPA74MVT87;
+					};
+				};
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -8351,7 +8356,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01D2EB30256F2E339C213A6DB6C4924D /* DateTimePicker-DateTimePicker in Resources */,
+				01D2EB30256F2E339C213A6DB6C4924D /* DateTimePicker.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11938,6 +11943,7 @@
 			baseConfigurationReference = 4E7235E18AED713316B7CA73E8C44107 /* DateTimePicker.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DateTimePicker";
+				DEVELOPMENT_TEAM = FPA74MVT87;
 				IBSC_MODULE = DateTimePicker;
 				INFOPLIST_FILE = "Target Support Files/DateTimePicker/ResourceBundle-DateTimePicker-DateTimePicker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -12592,6 +12598,7 @@
 			baseConfigurationReference = A2B828FFA47E5DA54CD02477B7023354 /* DateTimePicker.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/DateTimePicker";
+				DEVELOPMENT_TEAM = FPA74MVT87;
 				IBSC_MODULE = DateTimePicker;
 				INFOPLIST_FILE = "Target Support Files/DateTimePicker/ResourceBundle-DateTimePicker-DateTimePicker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
