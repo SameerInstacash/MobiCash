@@ -34,6 +34,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var tradeInOnlineView: UIView!
     @IBOutlet weak var tradeInOnlineMessageTxtView: UITextView!
     
+    @IBOutlet weak var uploadPhotoIdBtn: UIButton!
     //@IBOutlet weak var uploadIdBtn: UIButton!
     //@IBOutlet weak var scheduleVisitBtn: UIButton!
     @IBOutlet weak var offeredPrice: UILabel!
@@ -762,9 +763,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         task.resume()
     }
-    
-    
-    
+        
     func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
@@ -802,7 +801,13 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (self.isSynced){
             
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "IdUploadVC") as! IdUploadVC
+            vc.orderID = self.orderId
             vc.modalPresentationStyle = .overFullScreen
+            
+            vc.isPhotoIdUploaded = {
+                self.uploadPhotoIdBtn.isHidden = true
+            }
+            
             self.present(vc, animated: true, completion: nil)
             
         }else{

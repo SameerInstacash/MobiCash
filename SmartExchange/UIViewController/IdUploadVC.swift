@@ -9,14 +9,22 @@
 import UIKit
 import DKCamera
 import Photos
+import SwiftyJSON
+import JGProgressHUD
 
 class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+    
+    var isIDUpload = false
+    var isPhotoIdUploaded : (() -> Void)?
     
     @IBOutlet weak var IdFrontImageView: UIImageView!
     @IBOutlet weak var IdBackImageView: UIImageView!
     
     let imagePicker = UIImagePickerController()
     var btnTap = 0
+    var orderID = ""
+    
+    let hud = JGProgressHUD()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +57,31 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
     
     //MARK: IBActions
     @IBAction func popUpCloseBtnClicked(_ sender: UIButton) {
-        self.dismiss(animated: true)
+        
+        if self.isIDUpload {
+            
+            guard let didFinishIdUpload = self.isPhotoIdUploaded else { return }
+            didFinishIdUpload()
+            self.dismiss(animated: true, completion: nil)
+            
+        }else {
+            self.dismiss(animated: true)
+        }
+        
+    }
+    
+    @IBAction func submitBtnClicked(_ sender: UIButton) {
+        
+        if self.isIDUpload {
+            
+            guard let didFinishIdUpload = self.isPhotoIdUploaded else { return }
+            didFinishIdUpload()
+            self.dismiss(animated: true, completion: nil)
+            
+        }else {
+            self.dismiss(animated: true)
+        }
+        
     }
     
     @IBAction func IdFrontImageBtnClicked(_ sender: UIButton) {
@@ -65,10 +97,7 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
         self.SetActionSetForMoreOptionForImageUpload()
         
     }
-    
-    @IBAction func submitBtnClicked(_ sender: UIButton) {
-        self.dismiss(animated: true)
-    }
+
     
     //MARK: action sheet method
     
@@ -131,9 +160,14 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
         switch self.btnTap {
             
         case 1:
-            self.IdFrontImageView.image = image
+            //self.IdFrontImageView.image = image
+            
+            self.uploadPhotoId(image, "")
+            
         default:
-            self.IdBackImageView.image = image
+            //self.IdBackImageView.image = image
+            
+            self.uploadPhotoId(image, "back")
         }
         
         dismiss(animated: true) { }
@@ -143,6 +177,123 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss(animated: true, completion: nil)
     }
+    
+    var holdCaptureImage = UIImage()
+    var holdImgType = String()
+    func uploadPhotoId(_ captureImage: UIImage, _ imgType : String) {
+        
+        holdCaptureImage = captureImage
+        holdImgType = imgType
+        
+        let newImage = self.resizeImage(image: captureImage, newWidth: 800)
+        
+        let backgroundImage = newImage
+        let watermarkImage = #imageLiteral(resourceName: "watermark")
+        UIGraphicsBeginImageContextWithOptions(backgroundImage.size, false, 0.0)
+        backgroundImage.draw(in: CGRect(x: 0.0, y: 0.0, width: backgroundImage.size.width, height: backgroundImage.size.height))
+        watermarkImage.draw(in: CGRect(x: 0, y: 0, width: watermarkImage.size.width, height: backgroundImage.size.height))
+        
+        
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        let imageData:NSData = UIImagePNGRepresentation(result ?? newImage) as! NSData
+        
+        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+
+        var request = URLRequest(url: URL(string: "\(AppBaseUrl)/idProof")!)
+        request.httpMethod = "POST"
+        let customerId = UserDefaults.standard.string(forKey: "customer_id") ?? ""
+        let postString = "customerId=\(customerId)&orderId=\(self.orderID)&photo=\(strBase64)&type=\(imgType)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
+        
+        //print("idProof url is :",request,"\nParam is :",postString)
+        
+        //SwiftSpinner.show("")
+        self.hud.textLabel.text = ""
+        self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
+        self.hud.show(in: self.view)
+
+        request.httpBody = postString.data(using: .utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            
+            DispatchQueue.main.async {
+                self.hud.dismiss()
+            }
+            
+            guard let dataThis = data, error == nil else {
+                
+                DispatchQueue.main.async() {
+                    //self.view.makeToast(error?.localizedDescription, duration: 3.0, position: .bottom)
+                    
+                    print(error?.localizedDescription ?? "")
+                    
+                    if ((error?.localizedDescription.contains("The request timed out.")) != nil) {
+                        
+                        self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
+                            
+                            if index == 0 {
+                                self.uploadPhotoId(self.holdCaptureImage, self.holdImgType)
+                            }
+                            
+                        }
+                        
+                    }else {
+                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                    }
+                }
+                
+                return
+            }
+            
+            //* SAMEER-14/6/22
+            do {
+                let json = try JSON(data: dataThis)
+                if json["status"] == "Success" {
+                    
+                    DispatchQueue.main.async() {
+                        ////self.uploadIdBtn.setTitle("Back to home", for: .normal)
+                        
+                        if self.btnTap == 1 {
+                            self.IdFrontImageView.image = captureImage
+                        }else {
+                            self.IdBackImageView.image = captureImage
+                        }
+                        
+                        self.isIDUpload = true
+                        
+                        self.view.makeToast("Photo Id uploaded successfully!", duration: 1.0, position: .bottom)
+                    }
+                    
+                }else {
+                    
+                    let msg = json["msg"].string
+                    DispatchQueue.main.async() {
+                        self.view.makeToast(msg, duration: 3.0, position: .bottom)
+                    }
+                    
+                }
+            }catch {
+                DispatchQueue.main.async() {
+                    self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                }
+            }
+            
+        }
+
+        task.resume()
+        
+    }
+    
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
+        let scale = newWidth / image.size.width
+        let newHeight = image.size.height * scale
+        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+        image.draw(in: CGRect(x: 0, y: 0, width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? UIImage()
+    }
+
     
     // MARK: - Navigation
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21223" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cMU-6X-LPQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cMU-6X-LPQ">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -1553,22 +1553,22 @@ experience</string>
                                                 </constraints>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="MyCell" id="uDe-pL-XOG">
-                                                        <rect key="frame" x="0.0" y="50" width="365" height="44"/>
+                                                        <rect key="frame" x="0.0" y="44.5" width="365" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="uDe-pL-XOG" id="mom-QL-SXi">
                                                             <rect key="frame" x="0.0" y="0.0" width="365" height="44"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
-                                                                <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rSt-3J-z1i">
+                                                                <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="rSt-3J-z1i">
                                                                     <rect key="frame" x="5" y="5" width="355" height="34"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" tag="10" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q4e-WZ-lTZ">
+                                                                        <label opaque="NO" userInteractionEnabled="NO" tag="10" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q4e-WZ-lTZ">
                                                                             <rect key="frame" x="0.0" y="0.0" width="172.5" height="34"/>
                                                                             <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" tag="20" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHj-ry-qym">
+                                                                        <label opaque="NO" userInteractionEnabled="NO" tag="20" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHj-ry-qym">
                                                                             <rect key="frame" x="182.5" y="0.0" width="172.5" height="34"/>
                                                                             <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="17"/>
                                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1698,6 +1698,7 @@ experience</string>
                         <outlet property="refValueLabel" destination="8jr-Re-nei" id="qmf-ZS-oS2"/>
                         <outlet property="tradeInOnlineMessageTxtView" destination="w2n-Yd-oUD" id="JeF-so-hWx"/>
                         <outlet property="tradeInOnlineView" destination="VlC-zj-7NJ" id="F01-h7-GJH"/>
+                        <outlet property="uploadPhotoIdBtn" destination="MG1-VD-gcu" id="q2i-DH-RSv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rVI-cu-yT0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -4586,7 +4587,7 @@ experience</string>
                                 <color key="tintColor" red="0.019607843140000001" green="0.67843137249999996" blue="0.93725490199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CosmeticQuestionTblCell" id="32f-a7-hDh" customClass="CosmeticQuestionTblCell" customModule="MobiCash" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="335" height="100"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="335" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="32f-a7-hDh" id="IXk-WC-oPR">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="100"/>
@@ -4754,7 +4755,7 @@ experience</string>
                                 <color key="tintColor" red="0.12549019610000001" green="0.25098039220000001" blue="0.60392156860000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SelectTextCell" rowHeight="52" id="doD-Lh-7BH" customClass="SelectTextCell" customModule="MobiCash" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="335" height="52"/>
+                                        <rect key="frame" x="0.0" y="44.5" width="335" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="doD-Lh-7BH" id="QTO-21-poZ">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="52"/>
@@ -4802,7 +4803,7 @@ experience</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="MobileNumberCell" rowHeight="212" id="LY5-xW-6At" customClass="MobileNumberCell" customModule="MobiCash" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="102" width="335" height="212"/>
+                                        <rect key="frame" x="0.0" y="96.5" width="335" height="212"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LY5-xW-6At" id="IGz-Yd-7n9">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="212"/>
@@ -4887,7 +4888,7 @@ experience</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="HtmlCell" rowHeight="168" id="ZIv-68-DUq" customClass="HtmlCell" customModule="SellNCash">
-                                        <rect key="frame" x="0.0" y="314" width="335" height="168"/>
+                                        <rect key="frame" x="0.0" y="308.5" width="335" height="168"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZIv-68-DUq" id="Y92-VK-yB8">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="168"/>
@@ -4921,7 +4922,7 @@ experience</string>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="TextBoxCell" rowHeight="52" id="hpm-Zn-kYR" customClass="TextBoxCell" customModule="MobiCash" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="482" width="335" height="52"/>
+                                        <rect key="frame" x="0.0" y="476.5" width="335" height="52"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hpm-Zn-kYR" id="Iay-Ir-q2m">
                                             <rect key="frame" x="0.0" y="0.0" width="335" height="52"/>
@@ -6793,7 +6794,7 @@ experience</string>
         <image name="Screen-gray" width="735" height="1295"/>
         <image name="XtraCover_Logo" width="1024" height="1024"/>
         <image name="camera" width="256" height="256"/>
-        <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="checkmark.circle.fill" catalog="system" width="128" height="121"/>
         <image name="circle" width="16" height="16"/>
         <image name="connect_usb_image" width="720" height="720"/>
         <image name="cross" width="40" height="40"/>
@@ -6829,7 +6830,7 @@ experience</string>
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="labelColor">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
