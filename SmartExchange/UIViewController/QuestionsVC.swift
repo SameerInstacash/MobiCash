@@ -57,7 +57,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     @IBAction func previousBtnPressed(_ sender: UIButton) {
         
         arrAppQuestionsAppCodes?.remove(at: AppQuestionIndex-1)
-        print("arrQuestionsAppCodes are :", arrAppQuestionsAppCodes ?? [])
+        print("arrQuestionsAppCodes are when back:", arrAppQuestionsAppCodes ?? [])
         
         hardwareQuestionsCount += 2
         AppQuestionIndex -= 2
@@ -76,7 +76,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             if self.selectedAppCode == "" {
                 
                 arrAppQuestionsAppCodes?.append(self.selectedAppCode)
-                print("arrQuestionsAppCodes are :", arrAppQuestionsAppCodes ?? [])
+                print("arrQuestionsAppCodes are when forward:", arrAppQuestionsAppCodes ?? [])
                 
                 guard let didFinishRetryDiagnosis = self.TestDiagnosisForward else { return }
                 didFinishRetryDiagnosis()
@@ -85,7 +85,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             }else {
                 
                 arrAppQuestionsAppCodes?.append(self.selectedAppCode)
-                print("arrQuestionsAppCodes are :", arrAppQuestionsAppCodes ?? [])
+                print("arrQuestionsAppCodes are when forward:", arrAppQuestionsAppCodes ?? [])
                 
                 // 14/3/22
                 //AppResultString = AppResultString + self.selectedAppCode + ";"
@@ -106,7 +106,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             }else {
                 
                 arrAppQuestionsAppCodes?.append(self.selectedAppCode)
-                print("arrQuestionsAppCodes are :", arrAppQuestionsAppCodes ?? [])
+                print("arrQuestionsAppCodes are when forward:", arrAppQuestionsAppCodes ?? [])
                 
                 // 14/3/22
                 //AppResultString = AppResultString + self.selectedAppCode + ";"
@@ -272,6 +272,15 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             
             self.selectedCellIndex = indexPath.item
             self.cosmeticTableView.reloadData()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                arrAppQuestionsAppCodes?.append(self.selectedAppCode)
+                print("arrQuestionsAppCodes are when forward:", arrAppQuestionsAppCodes ?? [])
+                                
+                guard let didFinishRetryDiagnosis = self.TestDiagnosisForward else { return }
+                didFinishRetryDiagnosis()
+                self.dismiss(animated: false, completion: nil)
+            }
             
         }
         
