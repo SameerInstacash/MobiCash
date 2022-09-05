@@ -2,12 +2,12 @@ uploading map to new relic
 executing upload_map_file_to_new_relic
 New Relic: map file upload attempt #1 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
-/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/29:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
+/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/September-22/5:9:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
 New Relic: map file upload attempt #2 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
-/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/29:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
+/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/September-22/5:9:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
 New Relic: map file upload attempt #3 (of 3)
 Using URL: https://mobile-symbol-upload.eu01.nr-data.net
-/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/August-22/29:8:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
+/Users/sameerkhan/Desktop/InstaCash Projects/Mobicash/September-22/5:9:22/MobiCash/Pods/NewRelicAgent/NewRelic.xcframework/Resources/newrelic_postbuild.sh: line 83: python: command not found
 executing upload_dsym_to_new_relic
 new relic: successfully uploaded dsym files

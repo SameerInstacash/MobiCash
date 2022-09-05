@@ -74,7 +74,10 @@ class DeadPixelVC: UIViewController {
      
         //self.pixelView.isHidden = !self.pixelView.isHidden
         
-        self.pixelTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+        DispatchQueue.main.async {
+            self.pixelTimer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.setRandomBackgroundColor), userInfo: nil, repeats: true)
+        }
+        
         
         
         /* Sameer 1/8/22
@@ -326,7 +329,10 @@ class DeadPixelVC: UIViewController {
         default:
             //self.view.backgroundColor = colors[0]
             
-            self.testPixelView.backgroundColor = colors[pixelTimerIndex]
+            DispatchQueue.main.async {
+                self.testPixelView.backgroundColor = colors[self.pixelTimerIndex]
+            }
+            
         }
         
     }

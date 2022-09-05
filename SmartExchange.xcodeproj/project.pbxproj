@@ -660,7 +660,7 @@
 				TargetAttributes = {
 					C399481C1E54270600F01384 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = FPA74MVT87;
+						DevelopmentTeam = 9MWPG4LSJS;
 						LastSwiftMigration = 1330;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -671,14 +671,14 @@
 					};
 					C39948301E54270600F01384 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = XB2L4N73F9;
+						DevelopmentTeam = 9MWPG4LSJS;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C399481C1E54270600F01384;
 					};
 					C399483B1E54270600F01384 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = XB2L4N73F9;
+						DevelopmentTeam = 9MWPG4LSJS;
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C399481C1E54270600F01384;
@@ -1222,7 +1222,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FPA74MVT87;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1247,10 +1247,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "SmartExchange/Blynk Exchange.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FPA74MVT87;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1259,7 +1259,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MobiCash;
 				PRODUCT_NAME = MobiCash;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AdHoc_ProProfile;
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartExchange/SmartExchange-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "SmartExchange-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -1274,7 +1274,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XB2L4N73F9;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				INFOPLIST_FILE = SmartExchangeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = in.co.zerowaste.SmartExchangeTests;
@@ -1291,7 +1291,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = XB2L4N73F9;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				INFOPLIST_FILE = SmartExchangeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = in.co.zerowaste.SmartExchangeTests;
@@ -1307,7 +1307,7 @@
 			baseConfigurationReference = 64CE37AA01A63F11FAC23EED /* Pods-SmartExchangeUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = XB2L4N73F9;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				INFOPLIST_FILE = SmartExchangeUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = in.co.zerowaste.SmartExchangeUITests;
@@ -1323,7 +1323,7 @@
 			baseConfigurationReference = 6B18DDCEBD9E2021D1AC3896 /* Pods-SmartExchangeUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				DEVELOPMENT_TEAM = XB2L4N73F9;
+				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				INFOPLIST_FILE = SmartExchangeUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = in.co.zerowaste.SmartExchangeUITests;

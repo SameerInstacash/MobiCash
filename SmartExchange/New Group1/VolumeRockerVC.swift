@@ -158,6 +158,13 @@ class VolumeRockerVC: UIViewController {
         
         // SAM comment on 18/4/22
         //self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+        
+        if let observerAdded = self.audioSession?.observationInfo {
+            self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+            print("observerAdded", observerAdded)
+            print("now added outputVolume observer remove")
+        }
+        
     }
     
     var volDown = false
@@ -221,7 +228,7 @@ class VolumeRockerVC: UIViewController {
                     
                     if (self.volDown == true) {
                         
-                        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                        //self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
                         
                         print("Volume test passed")
                         
@@ -279,7 +286,7 @@ class VolumeRockerVC: UIViewController {
                     
                     if (self.volUp == true) {
                         
-                        self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                        //self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
                         
                         print("Volume test passed")
                         
@@ -453,7 +460,7 @@ class VolumeRockerVC: UIViewController {
             switch btnTag {
             case 1:
                 
-                self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
+                //self.audioSession?.removeObserver(self, forKeyPath: "outputVolume", context: nil)
                 
                 print("Hardware Buttons Skipped!")
                 
