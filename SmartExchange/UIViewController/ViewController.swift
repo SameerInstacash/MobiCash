@@ -240,7 +240,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         
     
         
-        self.lblDescription.text = " \u{2022} Please click on ‘Scan QR Code’ or enter ‘Retail code’ below to begin Diagnostics. \n \u{2022} To view previous results, click on ‘Previous Quotation’"
+        self.lblDescription.text = " \u{2022} Enter ‘Retail code’ below to begin Diagnostics. \n \u{2022} To view previous results, click on ‘Previous Quotation’"
         
     }
     

@@ -32,7 +32,8 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
     var connection = true
     var manager:CBCentralManager!
     var resultJSON = JSON()
-    var endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
+    //var endPoint = "https://exchange.getinstacash.com.my/stores-asia/api/v1/public/"
+    var endPoint = ""
     
     var isComingFromTestResult = false
     let hud = JGProgressHUD()

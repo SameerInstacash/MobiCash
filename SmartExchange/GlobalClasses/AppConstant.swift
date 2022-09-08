@@ -13,11 +13,11 @@ var AppUserName = "planetm"
 var AppApiKey = "fd9a42ed13c8b8a27b5ead10d054caaf"
 
 
-var AppBaseUrl = "https://mgarage-uat.getinstacash.in/mgexchange/api/v1/public/" // Staging
-//var AppBaseUrl = "" // Live
+//var AppBaseUrl = "https://mgarage-uat.getinstacash.in/mgexchange/api/v1/public/" // Staging
+var AppBaseUrl = "https://sell.mobi-cash.com/mgexchange/api/v1/public/" // Live
 
-var AppBaseTnc = "https://mgarage-uat.getinstacash.in/mgexchange/tnc.php"  // Staging
-//var AppBaseTnc = ""  // Live
+//var AppBaseTnc = "https://mgarage-uat.getinstacash.in/mgexchange/tnc.php"  // Staging
+var AppBaseTnc = "https://sell.mobi-cash.com/mgexchange/tnc.php"  // Live
 
 
 // Api Name
