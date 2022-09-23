@@ -91,8 +91,13 @@ public extension UIDevice {
         case "iPhone14,3":                              return "iPhone 13 Pro Max"
             
         case "iPhone14,6":                              return "iPhone SE 3rd Gen"
-             
-                        
+            
+        case "iPhone14,7":                              return "iPhone 14"
+        case "iPhone14,8":                              return "iPhone 14 Plus"
+        case "iPhone15,2":                              return "iPhone 14 Pro"
+        case "iPhone15,3":                              return "iPhone 14 Pro Max"
+            
+            
         //iPad
         case "iPad1,1", "iPad1,2":                      return "iPad (1st generation)"
         case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4":return "iPad (2nd generation)"

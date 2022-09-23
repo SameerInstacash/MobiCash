@@ -1867,7 +1867,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.appCodeStr += "STON01"
         }
         
-        //print("self.appCodeStr",self.appCodeStr)
+        print("self.appCodeStr",self.appCodeStr)
     }
     
 }

@@ -329,8 +329,10 @@ class DeadPixelVC: UIViewController {
         default:
             //self.view.backgroundColor = colors[0]
             
-            DispatchQueue.main.async {
-                self.testPixelView.backgroundColor = colors[self.pixelTimerIndex]
+            if self.pixelTimerIndex < colors.count {
+                DispatchQueue.main.async {
+                    self.testPixelView.backgroundColor = colors[self.pixelTimerIndex]
+                }
             }
             
         }
