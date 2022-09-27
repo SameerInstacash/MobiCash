@@ -1118,9 +1118,11 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }else {
                     
                     let cellfailed = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                    cellfailed.imgReTry.image = UIImage(named: "unverified")
                     cellfailed.lblName.text = self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType.localized
+                    
+                    cellfailed.imgReTry.image = UIImage(named: "unverified")
                     cellfailed.imgReTry.isHidden = true
+                    
                     cellfailed.lblReTry.isHidden = false
                     //cellfailed.lblReTry.text = "ReTry".localized
                     cellfailed.lblReTry.text = ""
@@ -1153,14 +1155,18 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cellfailed.lblSeperator.isHidden = true
                     
                     return cellfailed
+                    
                 }else {
                     
                     let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                    cellFunction.imgReTry.image = UIImage(named: "rightGreen")
                     cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
-                    cellFunction.imgReTry.isHidden = false
-                    cellFunction.lblReTry.isHidden = true
                     
+                    //cellFunction.imgReTry.image = UIImage(named: "rightGreen")
+                    //cellFunction.imgReTry.isHidden = false
+                    
+                    cellFunction.lblReTry.isHidden = false
+                    cellFunction.lblReTry.textColor = #colorLiteral(red: 0.1568627451, green: 0.6901960784, blue: 0.2392156863, alpha: 1)
+                    cellFunction.lblReTry.text = "Passed"
                     
                     DispatchQueue.main.async {
                         cellFunction.lblSeperator.isHidden = false
@@ -1195,11 +1201,16 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }else {
                 
                 let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                cellFunction.imgReTry.image = UIImage(named: "rightGreen")
                 cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
-                cellFunction.imgReTry.isHidden = false
-                cellFunction.lblReTry.isHidden = true
                 
+                //cellFunction.imgReTry.image = UIImage(named: "rightGreen")
+                //cellFunction.imgReTry.isHidden = false
+                
+                //cellFunction.lblReTry.isHidden = true
+                
+                cellFunction.lblReTry.isHidden = false
+                cellFunction.lblReTry.textColor = #colorLiteral(red: 0.1568627451, green: 0.6901960784, blue: 0.2392156863, alpha: 1)
+                cellFunction.lblReTry.text = "Passed"
             
                 DispatchQueue.main.async {
                     cellFunction.lblSeperator.isHidden = false
@@ -1630,6 +1641,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         */
         
+        /*
         if (!UserDefaults.standard.bool(forKey: "GSM")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 20
@@ -1641,7 +1653,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             model.priority = 0
             model.strTestType = "SMS Verification"
             self.arrFunctionalTest.append(model)
-        }
+        }*/
         
         if (!UserDefaults.standard.bool(forKey: "Storage")) {
             let model = ModelCompleteDiagnosticFlow()

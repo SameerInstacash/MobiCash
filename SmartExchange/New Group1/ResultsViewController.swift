@@ -448,6 +448,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
         */
         
+        /*
         if (!UserDefaults.standard.bool(forKey: "GSM")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 20
@@ -459,7 +460,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             model.priority = 0
             model.strTestType = "SMS Verification"
             arrFunctionalTest.append(model)
-        }
+        }*/
         
         if (!UserDefaults.standard.bool(forKey: "Storage")) {
             let model = ModelCompleteDiagnosticFlow()
@@ -579,9 +580,12 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 }else {
                     
                     let cellfailed = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                    cellfailed.imgReTry.image = UIImage(named: "unverified")
+                    
                     cellfailed.lblName.text = self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType.localized
+                    
+                    cellfailed.imgReTry.image = UIImage(named: "unverified")
                     cellfailed.imgReTry.isHidden = true
+                    
                     cellfailed.lblReTry.isHidden = false
                     cellfailed.lblReTry.text = "ReTry".localized
                     
@@ -617,11 +621,12 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                 }else {
                     
                     let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                    cellFunction.imgReTry.image = UIImage(named: "rightGreen")
                     cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
-                    cellFunction.imgReTry.isHidden = false
-                    cellFunction.lblReTry.isHidden = true
                     
+                    cellFunction.imgReTry.image = UIImage(named: "rightGreen")
+                    cellFunction.imgReTry.isHidden = false
+                    
+                    cellFunction.lblReTry.isHidden = true
                     
                     DispatchQueue.main.async {
                         cellFunction.lblSeperator.isHidden = false
@@ -656,9 +661,11 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             }else {
                 
                 let cellFunction = tableView.dequeueReusableCell(withIdentifier: "testResultCell", for: indexPath) as! TestResultCell
-                cellFunction.imgReTry.image = UIImage(named: "rightGreen")
                 cellFunction.lblName.text = self.arrFunctionalTest[indexPath.row - 1].strTestType.localized
+                
+                cellFunction.imgReTry.image = UIImage(named: "rightGreen")
                 cellFunction.imgReTry.isHidden = false
+                
                 cellFunction.lblReTry.isHidden = true
                 
             

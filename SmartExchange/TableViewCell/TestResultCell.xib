@@ -15,7 +15,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="testResultCell" rowHeight="60" id="KGk-i7-Jjw" customClass="TestResultCell" customModule="Blynk_Exchange" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="testResultCell" rowHeight="60" id="KGk-i7-Jjw" customClass="TestResultCell" customModule="MobiCash" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
@@ -46,7 +46,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nyp-LD-xNt">
-                        <rect key="frame" x="285" y="17.5" width="25" height="25"/>
+                        <rect key="frame" x="270" y="17.5" width="25" height="25"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="25" id="OdN-I4-iOs"/>
                             <constraint firstAttribute="width" constant="25" id="pR2-xz-l4O"/>
@@ -71,7 +71,7 @@
                     <constraint firstItem="MuJ-Zk-1g7" firstAttribute="leading" secondItem="u0G-fk-9wI" secondAttribute="trailing" constant="8" id="gmW-vk-hpE"/>
                     <constraint firstItem="MuJ-Zk-1g7" firstAttribute="centerY" secondItem="nyp-LD-xNt" secondAttribute="centerY" id="gwH-tz-CDE"/>
                     <constraint firstItem="u0G-fk-9wI" firstAttribute="centerY" secondItem="p3W-fv-IqK" secondAttribute="centerY" id="iES-CW-M2x"/>
-                    <constraint firstAttribute="trailing" secondItem="nyp-LD-xNt" secondAttribute="trailing" constant="10" id="j0H-ZK-pvK"/>
+                    <constraint firstAttribute="trailing" secondItem="nyp-LD-xNt" secondAttribute="trailing" constant="25" id="j0H-ZK-pvK"/>
                     <constraint firstAttribute="trailing" secondItem="ziw-BM-30x" secondAttribute="trailing" constant="15" id="lI7-yj-ko2"/>
                     <constraint firstItem="u0G-fk-9wI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="uz4-b3-Fda"/>
                 </constraints>
