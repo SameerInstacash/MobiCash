@@ -749,7 +749,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                             }
                             
                             print("Result JSON 4: \(self.resultJOSN)")
-                            vc.resultJOSN = self.resultJOSN
+                            vc.resultJSON = self.resultJOSN
                             
                             vc.modalPresentationStyle = .fullScreen
                             self.present(vc, animated: true, completion: nil)

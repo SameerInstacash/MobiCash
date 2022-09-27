@@ -47,7 +47,7 @@ class CameraViewController: UIViewController {
     @IBAction func clickPictureBtnPressed(_ sender: UIButton) {
         
         let camera = DKCamera()
-        
+     
         DispatchQueue.main.async {
             camera.cameraSwitchButton.isUserInteractionEnabled = false
             camera.cameraSwitchButton.isHidden = true
@@ -60,11 +60,20 @@ class CameraViewController: UIViewController {
         camera.didFinishCapturingImage = { (image: UIImage?, metadata: [AnyHashable : Any]?) in
             
             let isFront = camera.currentDevice == camera.captureDeviceFront
+            
             if isFront {
                 self.isFrontClick = true
+                
+                UserDefaults.standard.set(true, forKey: "Front_Camera")
+                self.resultJSON["Front Camera"].int = 1
+               
             }
             else {
                 self.isBackClick = true
+                
+                UserDefaults.standard.set(true, forKey: "Back_Camera")
+                self.resultJSON["Back Camera"].int = 1
+                
                 if self.isFrontClick == false {
                     camera.currentDevice = camera.currentDevice == camera.captureDeviceRear ?
                     camera.captureDeviceFront : camera.captureDeviceRear
@@ -76,8 +85,8 @@ class CameraViewController: UIViewController {
                 
                 //self.dismiss(animated: true, completion: nil)
                 
-                UserDefaults.standard.set(true, forKey: "camera")
-                self.resultJSON["Camera"].int = 1
+                //UserDefaults.standard.set(true, forKey: "camera")
+                //self.resultJSON["Camera"].int = 1
                 
                 
                 if self.isComingFromTestResult {
@@ -245,10 +254,22 @@ class CameraViewController: UIViewController {
             switch btnTag {
             case 1:
                 
-                print("Camera Skipped!")
+                print("Both Camera tests Skipped!")
                 
-                UserDefaults.standard.set(false, forKey: "camera")
-                self.resultJSON["Camera"].int = -1
+                //UserDefaults.standard.set(false, forKey: "camera")
+                //self.resultJSON["Camera"].int = -1
+                
+                
+                if !self.isFrontClick {
+                    UserDefaults.standard.set(false, forKey: "Front_Camera")
+                    self.resultJSON["Front Camera"].int = -1
+                }
+                
+                if !self.isBackClick {
+                    UserDefaults.standard.set(false, forKey: "Back_Camera")
+                    self.resultJSON["Back Camera"].int = -1
+                }
+                
               
                 if self.isComingFromTestResult {
                     

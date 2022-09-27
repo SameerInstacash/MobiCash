@@ -101,7 +101,7 @@ class Q8ViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // change 2 to desired number of
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "PriceVC") as! PriceViewController
                     vc.appCodeStr = self.appCodeStr
-                    vc.resultJOSN = self.resultJSON
+                    vc.resultJSON = self.resultJSON
                     self.present(vc, animated: true, completion: nil)
                 }
                 

@@ -83,7 +83,10 @@
 "earphone_info" = "Earphone Jack: Defective";
 "charger_info" = "Device Charger: Defective";
 "camera_info" = "Camera: Defective";
-"fingerprint_info" = "Device Biometrics: Defective";
+"front_camera_info" = "Front Camera: Defective";
+"back_camera_info" = "Back Camera: Defective";
+"fingerprint_info" = "Fingerprint: Defective";
+"faceId_info" = "FaceId: Defective";
 "wifi_info" = "WIFI: Defective";
 "gsm_info" = "GSM: Defective";
 "bluetooth_info" = "Bluetooth: Defective";

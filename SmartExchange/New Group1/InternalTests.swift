@@ -365,7 +365,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                 //AppUserDefaults.setValue(true, forKey: "GSM")
                 
                 self.resultJSON["GSM"].int = -2
-                self.resultJSON.setValue(true, forKey: "GSM")
+                UserDefaults.standard.set(false, forKey: "GSM")
                 
             }
             

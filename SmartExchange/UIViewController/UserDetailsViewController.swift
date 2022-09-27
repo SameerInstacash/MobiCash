@@ -410,7 +410,7 @@ class UserDetailsViewController: UIViewController, UITextFieldDelegate {
                         }
                         
                         print("Result JSON 4: \(self.resultJOSN)")
-                        vc.resultJOSN = self.resultJOSN
+                        vc.resultJSON = self.resultJOSN
                         //vc.myArray = myArray
                         //print(myArray)
                         vc.modalPresentationStyle = .fullScreen

@@ -24,14 +24,22 @@ class FingerprintViewController: UIViewController {
     var isComingFromTestResult = false
     
     var resultJSON = JSON()
+    var isFaceIdAvailable = false
+    var isTouchIdAvailable = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
                 
         if BioMetricAuthenticator.canAuthenticate() {
             
             if BioMetricAuthenticator.shared.faceIDAvailable() {
+                
+                self.isFaceIdAvailable = true
+                UserDefaults.standard.set(false, forKey: "fingerprint")
+                self.resultJSON["Fingerprint Scanner"].int = -2
+                                    
                 
                 print("hello faceid available")
                 // device supports face id recognition.
@@ -43,6 +51,12 @@ class FingerprintViewController: UIViewController {
                 //"During the test place your face on the scanner as you normally would to unlock your phone."
                 
             }else {
+                
+                self.isTouchIdAvailable = true
+                UserDefaults.standard.set(false, forKey: "FaceId")
+                self.resultJSON["FaceId"].int = -2
+                
+                
                 self.biometricImage.image = UIImage(named: "fingerprint")!
                 
                 self.lblTestTitle.text = "Testing fingerprint"
@@ -81,23 +95,32 @@ class FingerprintViewController: UIViewController {
                 
                 let cancelAction = UIAlertAction(title: "Cancel".localized, style: .default) { (_) -> Void in
                     
-                    UserDefaults.standard.set(false, forKey: "fingerprint")
-                    self.resultJSON["Fingerprint Scanner"].int = 0
+                    //UserDefaults.standard.set(false, forKey: "fingerprint")
+                    //self.resultJSON["Fingerprint Scanner"].int = 0
                     
-                    /*
-                    if self.isComingFromTestResult {
-                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                        vc.resultJSON = self.resultJSON
-                        vc.modalPresentationStyle = .fullScreen
-                        self.present(vc, animated: true, completion: nil)
-                    }else {
-                        //let vc = self.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
-                        let vc = self.storyboard?.instantiateViewController(withIdentifier: "WiFiTestVC") as! WiFiTestVC
-                        vc.resultJSON = self.resultJSON
-                        vc.modalPresentationStyle = .fullScreen
-                        self.present(vc, animated: true, completion: nil)
-                    }*/
+                    switch UIDevice.current.moName {
+                    case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max", "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max", "iPad Pro (11-inch) (1st generation)", "iPad Pro (11-inch) (2nd generation)", "iPad Pro (12.9-inch) (3rd generation)", "iPad Pro (12.9-inch) (4th generation)" :
+                                               
+                        UserDefaults.standard.set(false, forKey: "FaceId")
+                        self.resultJSON["FaceId"].int = 0
+                        
+                        UserDefaults.standard.set(false, forKey: "fingerprint")
+                        self.resultJSON["Fingerprint Scanner"].int = -2
+                       
+                        break
+                        
+                    default:
+                        
+                        UserDefaults.standard.set(false, forKey: "FaceId")
+                        self.resultJSON["FaceId"].int = -2
+                        
+                        UserDefaults.standard.set(false, forKey: "fingerprint")
+                        self.resultJSON["Fingerprint Scanner"].int = 0
+                        
+                        break
+                    }
                     
+                 
                     
                     if self.isComingFromTestResult {
                         
@@ -128,7 +151,7 @@ class FingerprintViewController: UIViewController {
             
             //*
             switch UIDevice.current.moName {
-            case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max", "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max", "iPad Pro (11-inch) (1st generation)", "iPad Pro (11-inch) (2nd generation)", "iPad Pro (12.9-inch) (3rd generation)", "iPad Pro (12.9-inch) (4th generation)" :
+            case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max", "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max", "iPad Pro (11-inch) (1st generation)", "iPad Pro (11-inch) (2nd generation)", "iPad Pro (12.9-inch) (3rd generation)", "iPad Pro (12.9-inch) (4th generation)" :
                 
                 print("hello faceid available")
                 // device supports face id recognition.
@@ -156,22 +179,29 @@ class FingerprintViewController: UIViewController {
         
         BioMetricAuthenticator.authenticateWithBioMetrics(reason: "", success: {
             
-            UserDefaults.standard.set(true, forKey: "fingerprint")
-            self.resultJSON["Fingerprint Scanner"].int = 1
+            //UserDefaults.standard.set(true, forKey: "fingerprint")
+            //self.resultJSON["Fingerprint Scanner"].int = 1
             
-            /*
-            if self.isComingFromTestResult {
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                vc.resultJSON = self.resultJSON
-                self.present(vc, animated: true, completion: nil)
-            }else {
-                //let vc = self.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
-                let vc = self.storyboard?.instantiateViewController(withIdentifier: "WiFiTestVC") as! WiFiTestVC
-                vc.resultJSON = self.resultJSON
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true, completion: nil)
-            }*/
             
+            if BioMetricAuthenticator.shared.faceIDAvailable() {
+                
+                UserDefaults.standard.set(true, forKey: "FaceId")
+                self.resultJSON["FaceId"].int = 1
+                
+                UserDefaults.standard.set(false, forKey: "fingerprint")
+                self.resultJSON["Fingerprint Scanner"].int = -2
+                
+            }else  {
+                
+                UserDefaults.standard.set(true, forKey: "fingerprint")
+                self.resultJSON["Fingerprint Scanner"].int = 1
+                
+                UserDefaults.standard.set(false, forKey: "FaceId")
+                self.resultJSON["FaceId"].int = -2
+                
+            }
+            
+          
             DispatchQueue.main.async {
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
@@ -212,7 +242,6 @@ class FingerprintViewController: UIViewController {
                     self?.view.makeToast("\(error.message())", duration: 2.0, position: .bottom)
                 }
             }
-                
                 // show alternatives on fallback button clicked
             else if error == .fallback {
                 
@@ -221,7 +250,6 @@ class FingerprintViewController: UIViewController {
                     self?.view.makeToast("\(error.message())", duration: 2.0, position: .bottom)
                 }
             }
-                
                 // No biometry enrolled in this device, ask user to register fingerprint or face
             else if error == .biometryNotEnrolled {
                 DispatchQueue.main.async {
@@ -237,31 +265,40 @@ class FingerprintViewController: UIViewController {
                     self?.view.makeToast("\(error.message())", duration: 2.0, position: .bottom)
                 }
             }
-                
                 // show error on authentication failed
             else {
-                UserDefaults.standard.set(false, forKey: "fingerprint")
-                self?.resultJSON["Fingerprint Scanner"].int = 0
                 
+                //UserDefaults.standard.set(false, forKey: "fingerprint")
+                //self?.resultJSON["Fingerprint Scanner"].int = 0
+                
+                switch UIDevice.current.moName {
+                case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max", "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max", "iPad Pro (11-inch) (1st generation)", "iPad Pro (11-inch) (2nd generation)", "iPad Pro (12.9-inch) (3rd generation)", "iPad Pro (12.9-inch) (4th generation)" :
+                                           
+                    UserDefaults.standard.set(false, forKey: "FaceId")
+                    self?.resultJSON["FaceId"].int = 0
+                    
+                    UserDefaults.standard.set(false, forKey: "fingerprint")
+                    self?.resultJSON["Fingerprint Scanner"].int = -2
+                   
+                    break
+                    
+                default:
+                    
+                    UserDefaults.standard.set(false, forKey: "FaceId")
+                    self?.resultJSON["FaceId"].int = -2
+                    
+                    UserDefaults.standard.set(false, forKey: "fingerprint")
+                    self?.resultJSON["Fingerprint Scanner"].int = 0
+                    
+                    break
+                }
+                
+              
                 DispatchQueue.main.async() {
                     self?.view.makeToast("\(error.message())", duration: 2.0, position: .bottom)
                 }
                     
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
-                    
-                    /*
-                    if self?.isComingFromTestResult ?? false {
-                        let vc = self?.storyboard?.instantiateViewController(withIdentifier: "ResultsVC") as! ResultsViewController
-                        vc.resultJSON = self?.resultJSON ?? JSON()
-                        vc.modalPresentationStyle = .fullScreen
-                        self?.present(vc, animated: true, completion: nil)
-                    }else {
-                        //let vc = self?.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
-                        let vc = self?.storyboard?.instantiateViewController(withIdentifier: "WiFiTestVC") as! WiFiTestVC
-                        vc.resultJSON = (self?.resultJSON)!
-                        vc.modalPresentationStyle = .fullScreen
-                        self?.present(vc, animated: true, completion: nil)
-                    }*/
                     
                     if ((self?.isComingFromTestResult) != nil) {
                         
@@ -399,8 +436,32 @@ class FingerprintViewController: UIViewController {
                 
                 print("Fingerprint Scanner Skipped!")
                 
-                UserDefaults.standard.set(false, forKey: "fingerprint")
-                self.resultJSON["Fingerprint Scanner"].int = -1
+                //UserDefaults.standard.set(false, forKey: "fingerprint")
+                //self.resultJSON["Fingerprint Scanner"].int = -1
+                
+                switch UIDevice.current.moName {
+                case "iPhone X","iPhone XR","iPhone XS","iPhone XS Max","iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12 mini","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max", "iPhone 13 Mini", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max", "iPad Pro (11-inch) (1st generation)", "iPad Pro (11-inch) (2nd generation)", "iPad Pro (12.9-inch) (3rd generation)", "iPad Pro (12.9-inch) (4th generation)" :
+                                           
+                    UserDefaults.standard.set(false, forKey: "FaceId")
+                    self.resultJSON["FaceId"].int = -1
+                    
+                    UserDefaults.standard.set(false, forKey: "fingerprint")
+                    self.resultJSON["Fingerprint Scanner"].int = -2
+                   
+                    break
+                    
+                default:
+                    
+                    UserDefaults.standard.set(false, forKey: "FaceId")
+                    self.resultJSON["FaceId"].int = -2
+                    
+                    UserDefaults.standard.set(false, forKey: "fingerprint")
+                    self.resultJSON["Fingerprint Scanner"].int = -1
+                    
+                    break
+                }
+                
+             
              
                 if self.isComingFromTestResult {
                     

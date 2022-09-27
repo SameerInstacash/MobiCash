@@ -12,3 +12,8 @@
 
 
 #endif /* SmartExchange_Bridging_Header_h */
+
+#import "TPKeyboardAvoidingScrollView.h"
+#import "TPKeyboardAvoidingTableView.h"
+#import "TPKeyboardAvoidingCollectionView.h"
+#import "UIScrollView+TPKeyboardAvoidingAdditions.h"

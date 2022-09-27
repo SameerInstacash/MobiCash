@@ -55,7 +55,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var appPhysicalQuestionCodeStr = ""
     var appCodeStr = ""
-    var resultJOSN = JSON()
+    //var resultJOSN = JSON()
     var deviceName = ""
     var metaDetails = JSON()
     var myArray: Array<String> = []
@@ -608,9 +608,11 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let resultCode = ""
         let imei = UserDefaults.standard.string(forKey: "imei_number") ?? ""
         let product_id = UserDefaults.standard.string(forKey: "product_id") ?? ""
-        print("Result JSON 5: \(self.resultJOSN)")
         
-        let postString = "customerId=\(customerId)&resultCode=\(resultCode)&resultJson=\(self.resultJOSN)&price=\(price)&deviceName=\(self.deviceName)&conditionString=\(self.appCodeStr)&metaDetails=\(metaDetails)&IMEINumber=\(imei)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&productId=\(product_id)"
+        //print("Result JSON 5: \(self.resultJOSN)")
+        print("Result JSON 5: \(self.resultJSON)")
+        
+        let postString = "customerId=\(customerId)&resultCode=\(resultCode)&resultJson=\(self.resultJSON)&price=\(price)&deviceName=\(self.deviceName)&conditionString=\(self.appCodeStr)&metaDetails=\(metaDetails)&IMEINumber=\(imei)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf&productId=\(product_id)"
         
         print("\(postString)")
         
@@ -843,6 +845,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func backToHomeBtnClicked(_ sender: UIButton) {
         
         if (self.isSynced){
+            
+            hardwareQuestionsCount = 0
+            AppQuestionIndex = -1
+            AppResultString = ""
             
             // Navigate to home page
             let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -1349,6 +1355,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
+        /* 27.9.22 comment due to both tests split
         if(!UserDefaults.standard.bool(forKey: "camera")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 7
@@ -1361,6 +1368,35 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             model.strTestType = "Camera"
             self.arrFunctionalTest.append(model)
         }
+        */
+        
+        if(!UserDefaults.standard.bool(forKey: "Front_Camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Front Camera"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Front Camera"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if(!UserDefaults.standard.bool(forKey: "Back_Camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Back Camera"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Back Camera"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        
         
         /*
         var biometricTest = ""
@@ -1398,6 +1434,8 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         */
         
+        
+        /* 27.9.22 comment due to both tests split
         var biometricTest = ""
         if BioMetricAuthenticator.canAuthenticate() {
             
@@ -1431,6 +1469,45 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let model = ModelCompleteDiagnosticFlow()
             model.strTestType = biometricTest
             self.arrFailedAndSkipedTest.append(model)
+        }*/
+        
+        
+        if (!UserDefaults.standard.bool(forKey: "fingerprint")) {
+            
+            if self.resultJSON["Fingerprint Scanner"].int != -2 {
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 8
+                model.strTestType = "Fingerprint Scanner"
+                self.arrFailedAndSkipedTest.append(model)
+            }else {
+                
+            }
+           
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Fingerprint Scanner"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "FaceId")) {
+            
+            if self.resultJSON["FaceId"].int != -2 {
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 8
+                model.strTestType = "Face-Id Scanner"
+                self.arrFailedAndSkipedTest.append(model)
+            }else {
+                
+            }
+            
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Face-Id Scanner"
+            self.arrFunctionalTest.append(model)
         }
         
         
@@ -1525,7 +1602,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Torch")) {
+        if (!UserDefaults.standard.bool(forKey: "Torch")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 18
             model.strTestType = "FlashLight"
@@ -1553,7 +1630,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         */
         
-        if(!UserDefaults.standard.bool(forKey: "GSM")) {
+        if (!UserDefaults.standard.bool(forKey: "GSM")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 20
             model.strTestType = "SMS Verification"
@@ -1566,7 +1643,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Storage")) {
+        if (!UserDefaults.standard.bool(forKey: "Storage")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 21
             model.strTestType = "Storage"
@@ -1579,7 +1656,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Battery")) {
+        if (!UserDefaults.standard.bool(forKey: "Battery")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 21
             model.strTestType = "Battery"
@@ -1592,7 +1669,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
-        if arrFailedAndSkipedTest.count > 0 {
+        if self.arrFailedAndSkipedTest.count > 0 {
             self.section = ["Failed and Skipped Tests".localized, "Functional Checks".localized]
         }
         else{
@@ -1695,13 +1772,31 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             myarray.append(functional)
         }
         
+        /* 27.9.22 comment due to both tests split
         if (!UserDefaults.standard.bool(forKey: "camera")){
             functional = "camera_info".localized
             myarray.append(functional)
         }
+        */
         
+        if (!UserDefaults.standard.bool(forKey: "Front_Camera")){
+            functional = "front_camera_info".localized
+            myarray.append(functional)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Back_Camera")){
+            functional = "back_camera_info".localized
+            myarray.append(functional)
+        }
+        
+       
         if (!UserDefaults.standard.bool(forKey: "fingerprint")){
             functional = "fingerprint_info".localized
+            myarray.append(functional)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "FaceId")){
+            functional = "faceId_info".localized
             myarray.append(functional)
         }
         
@@ -1797,8 +1892,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if (!UserDefaults.standard.bool(forKey: "volume")){
-            appCodestring = "\(appCodestring);CISS02;CISS03"
+            appCodestring = "\(appCodestring);CISS02"
         }
+        
+        //CISS03
         
         if (!UserDefaults.standard.bool(forKey: "earphone")){
             appCodestring = "\(appCodestring);CISS11"
@@ -1814,12 +1911,33 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             print("Charger sahi hai")
         }
         
+        /*
         if (!UserDefaults.standard.bool(forKey: "camera")){
             appCodestring = "\(appCodestring);CISS01"
         }
+        */
+        
+        if (!UserDefaults.standard.bool(forKey: "Front_Camera")){
+            appCodestring = "\(appCodestring);CISS01"
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Back_Camera")){
+            appCodestring = "\(appCodestring);CISS18"
+        }
+        
+       
+        
         
         if (!UserDefaults.standard.bool(forKey: "fingerprint")){
-            appCodestring = "\(appCodestring);CISS12"
+            if self.resultJSON["Fingerprint Scanner"].int != -2 {
+                appCodestring = "\(appCodestring);CISS12"
+            }
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "FaceId")){
+            if self.resultJSON["FaceId"].int != -2 {
+                appCodestring = "\(appCodestring);CISS17"
+            }
         }
         
         if (!UserDefaults.standard.bool(forKey: "WIFI")) || (!UserDefaults.standard.bool(forKey: "Bluetooth")) || (!UserDefaults.standard.bool(forKey: "GPS")) {
@@ -1841,6 +1959,16 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (!UserDefaults.standard.bool(forKey: "Vibrator")){
             appCodestring = "\(appCodestring);CISS13"
         }
+        
+        if (!UserDefaults.standard.bool(forKey: "Torch")){
+            appCodestring = "\(appCodestring);CISS16"
+        }
+        
+        
+        if (!UserDefaults.standard.bool(forKey: "Battery")){
+            appCodestring = "\(appCodestring);CISS06"
+        }
+   
         
         /*
         print(apps[0])

@@ -82,7 +82,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         print("self.resultJSON" , self.resultJSON)
         
-        if(!UserDefaults.standard.bool(forKey: "deadPixel")) {
+        if (!UserDefaults.standard.bool(forKey: "deadPixel")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 1
             model.strTestType = "Dead Pixels"
@@ -95,7 +95,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "screen")) {
+        if (!UserDefaults.standard.bool(forKey: "screen")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 1
             model.strTestType = "Screen"
@@ -108,7 +108,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "rotation")) {
+        if (!UserDefaults.standard.bool(forKey: "rotation")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 2
             model.strTestType = "Rotation"
@@ -121,7 +121,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "proximity")) {
+        if (!UserDefaults.standard.bool(forKey: "proximity")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 3
             model.strTestType = "Proximity"
@@ -134,7 +134,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "volume")) {
+        if (!UserDefaults.standard.bool(forKey: "volume")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 4
             model.strTestType = "Hardware Buttons"
@@ -147,7 +147,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "earphone")) {
+        if (!UserDefaults.standard.bool(forKey: "earphone")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 5
             model.strTestType = "Earphone"
@@ -160,7 +160,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "charger")) {
+        if (!UserDefaults.standard.bool(forKey: "charger")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 6
             model.strTestType = "Charger"
@@ -173,7 +173,8 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "camera")) {
+        /* 27.9.22 comment due to both tests split
+        if (!UserDefaults.standard.bool(forKey: "camera")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 7
             model.strTestType = "Camera"
@@ -183,6 +184,34 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 0
             model.strTestType = "Camera"
+            arrFunctionalTest.append(model)
+        }
+        */
+        
+        
+        if (!UserDefaults.standard.bool(forKey: "Back_Camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Back Camera"
+            arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Back Camera"
+            arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Front_Camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Front Camera"
+            arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Front Camera"
             arrFunctionalTest.append(model)
         }
         
@@ -222,6 +251,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
         */
         
+        /* 27.9.22 comment due to both tests split
         var biometricTest = ""
         if BioMetricAuthenticator.canAuthenticate() {
             
@@ -256,9 +286,48 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             model.strTestType = biometricTest
             self.arrFailedAndSkipedTest.append(model)
         }
+        */
+        
+        if (!UserDefaults.standard.bool(forKey: "fingerprint")) {
+            
+            if self.resultJSON["Fingerprint Scanner"].int != -2 {
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 8
+                model.strTestType = "Fingerprint Scanner"
+                self.arrFailedAndSkipedTest.append(model)
+            }else {
+                
+            }
+           
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Fingerprint Scanner"
+            self.arrFunctionalTest.append(model)
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "FaceId")) {
+            
+            if self.resultJSON["FaceId"].int != -2 {
+                let model = ModelCompleteDiagnosticFlow()
+                model.priority = 8
+                model.strTestType = "Face-Id Scanner"
+                self.arrFailedAndSkipedTest.append(model)
+            }else {
+                
+            }
+            
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Face-Id Scanner"
+            self.arrFunctionalTest.append(model)
+        }
         
         
-        if(!UserDefaults.standard.bool(forKey: "WIFI")) {
+        if (!UserDefaults.standard.bool(forKey: "WIFI")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 9
             model.strTestType = "WIFI"
@@ -271,7 +340,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "GPS")) {
+        if (!UserDefaults.standard.bool(forKey: "GPS")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 10
             model.strTestType = "GPS"
@@ -284,7 +353,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Bluetooth")) {
+        if (!UserDefaults.standard.bool(forKey: "Bluetooth")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 11
             model.strTestType = "Bluetooth"
@@ -350,7 +419,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Torch")) {
+        if (!UserDefaults.standard.bool(forKey: "Torch")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 18
             model.strTestType = "FlashLight"
@@ -365,7 +434,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         
         
         /*
-        if(!UserDefaults.standard.bool(forKey: "Autofocus")) {
+        if (!UserDefaults.standard.bool(forKey: "Autofocus")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 19
             model.strTestType = "Autofocus"
@@ -379,7 +448,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
         */
         
-        if(!UserDefaults.standard.bool(forKey: "GSM")) {
+        if (!UserDefaults.standard.bool(forKey: "GSM")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 20
             model.strTestType = "SMS Verification"
@@ -392,7 +461,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Storage")) {
+        if (!UserDefaults.standard.bool(forKey: "Storage")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 21
             model.strTestType = "Storage"
@@ -405,7 +474,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if(!UserDefaults.standard.bool(forKey: "Battery")) {
+        if (!UserDefaults.standard.bool(forKey: "Battery")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 21
             model.strTestType = "Battery"
@@ -720,7 +789,20 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                     self.present(vc, animated: true, completion: nil)
                     
                 }
-                else if  self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Camera" {
+                else if  self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Front Camera" {
+                    
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
+                    vc.isComingFromTestResult = true
+                    
+                    vc.cameraRetryDiagnosis = { retryJSON in
+                        self.resultJSON = retryJSON
+                    }
+                    
+                    vc.resultJSON = self.resultJSON
+                    vc.modalPresentationStyle = .fullScreen
+                    self.present(vc, animated: true, completion: nil)
+                   
+                }else if self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Back Camera" {
                     
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraVC") as! CameraViewController
                     vc.isComingFromTestResult = true
