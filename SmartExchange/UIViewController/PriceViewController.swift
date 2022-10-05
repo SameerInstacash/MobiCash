@@ -891,6 +891,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }else {
             
+            hardwareQuestionsCount = 0
+            AppQuestionIndex = -1
+            AppResultString = ""
+            
             // Navigate to home page
             let appDel:AppDelegate = UIApplication.shared.delegate as! AppDelegate
             let mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
