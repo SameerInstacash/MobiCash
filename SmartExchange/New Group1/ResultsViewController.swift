@@ -188,6 +188,18 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         }
         */
         
+        if (!UserDefaults.standard.bool(forKey: "Front_Camera")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 7
+            model.strTestType = "Front Camera"
+            arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Front Camera"
+            arrFunctionalTest.append(model)
+        }
         
         if (!UserDefaults.standard.bool(forKey: "Back_Camera")) {
             let model = ModelCompleteDiagnosticFlow()
@@ -202,18 +214,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
             arrFunctionalTest.append(model)
         }
         
-        if (!UserDefaults.standard.bool(forKey: "Front_Camera")) {
-            let model = ModelCompleteDiagnosticFlow()
-            model.priority = 7
-            model.strTestType = "Front Camera"
-            arrFailedAndSkipedTest.append(model)
-        }
-        else{
-            let model = ModelCompleteDiagnosticFlow()
-            model.priority = 0
-            model.strTestType = "Front Camera"
-            arrFunctionalTest.append(model)
-        }
+      
         
         /*
         var biometricTest = ""
@@ -837,7 +838,7 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
                     self.present(vc, animated: true, completion: nil)
                     
                 }
-                else if self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Bluetooth" || arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "GPS" ||  arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "GSM" || arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "SMS Verification" || arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "NFC" || arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Battery" || arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Storage" {
+                else if self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Bluetooth" || self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "GPS" ||  self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "GSM" || self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "SMS Verification" || self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "NFC" || self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Battery" || self.arrFailedAndSkipedTest[indexPath.row - 1].strTestType == "Storage" {
                     
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: "InternalVC") as! InternalTestsVC
                     vc.isComingFromTestResult = true

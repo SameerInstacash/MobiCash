@@ -336,7 +336,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                 // ***** TO CHECK GSM TEST WHEN E-SIM AVAILABLE ***** //
                 
                 
-                
+                /* MARK: 4/10/22 not required now as Ankur told to do this
                 // To Check Both Sim Cards working or not as per mobiCash's requirment
                 if #available(iOS 12.0, *) {
                     
@@ -358,6 +358,7 @@ class InternalTestsVC: UIViewController,CBCentralManagerDelegate, CBPeripheralDe
                     }
                     
                 }
+                */
                 
             }else {
                 

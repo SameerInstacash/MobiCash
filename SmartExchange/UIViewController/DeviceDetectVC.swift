@@ -37,7 +37,6 @@ class DeviceDetectVC: UIViewController {
             self.deviceImage.af_setImage(withURL: url)
         }
     
-        
     }
     
     //MARK: IBActions

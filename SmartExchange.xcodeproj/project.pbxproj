@@ -1220,7 +1220,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SmartExchange/Blynk Exchange.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				ENABLE_BITCODE = NO;
@@ -1249,7 +1249,7 @@
 				CODE_SIGN_ENTITLEMENTS = "SmartExchange/Blynk Exchange.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEVELOPMENT_TEAM = 9MWPG4LSJS;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartExchange/Info.plist;
@@ -1259,7 +1259,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MobiCash;
 				PRODUCT_NAME = MobiCash;
-				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AdHoc_ProProfile;
+				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AppStore_ProProfile;
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartExchange/SmartExchange-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "SmartExchange-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
