@@ -132,6 +132,25 @@ public extension UIDevice {
         case "iPad8,5", "iPad8,6", "iPad8,7", "iPad8,8":return "iPad Pro (12.9-inch) (3rd generation)"
         case "iPad8,11", "iPad8,12":                    return "iPad Pro (12.9-inch) (4th generation)"
             
+            
+            //New iPads add on 6/10/22
+            case "iPad12,1":                    return "iPad 9th Gen (WiFi)"
+            case "iPad12,2":                    return "iPad 9th Gen (WiFi+Cellular)"
+            case "iPad14,1":                    return "iPad mini 6th Gen (WiFi)"
+            case "iPad14,2":                    return "iPad mini 6th Gen (WiFi+Cellular)"
+            case "iPad13,1":                    return "iPad Air 4th Gen (WiFi)"
+            case "iPad13,2":                    return "iPad Air 4th Gen (WiFi+Cellular)"
+            case "iPad13,4":                    return "iPad Pro 11 inch 5th Gen"
+            case "iPad13,5":                    return "iPad Pro 11 inch 5th Gen"
+            case "iPad13,6":                    return "iPad Pro 11 inch 5th Gen"
+            case "iPad13,7":                    return "iPad Pro 11 inch 5th Gen"
+            case "iPad13,8":                    return "iPad Pro 12.9 inch 5th Gen"
+            case "iPad13,9":                    return "iPad Pro 12.9 inch 5th Gen"
+            case "iPad13,10":                    return "iPad Pro 12.9 inch 5th Gen"
+            case "iPad13,11":                    return "iPad Pro 12.9 inch 5th Gen"
+            case "iPad13,16":                    return "iPad Air 5th Gen (WiFi)"
+            case "iPad13,17":                    return "iPad Air 5th Gen (WiFi+Cellular)"
+            
         
         case "AppleTV5,3":                              return "Apple TV"
         case "AppleTV6,2":                              return "Apple TV 4K"

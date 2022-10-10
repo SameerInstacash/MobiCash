@@ -90,13 +90,18 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
         }
         
     }
-    
+ 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+        
         //AppOrientationUtility.lockOrientation(.portrait)
         //self.changeLanguageOfUI()
         
         // Earphones plugged in. Please remove the Earphones and click on the start button below to start the test
     }
+
 
     func changeLanguageOfUI() {
   
@@ -162,24 +167,28 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             //try recording.play()
         } catch {
             
-        }*/
+        }
+        */
+        
     }
         
     func audioMeterDidUpdate(_ db: Float) {
+        
         self.recording.recorder?.updateMeters()
         let ALPHA = 0.05
         let peakPower = pow(10, (ALPHA * Double((self.recording.recorder?.peakPower(forChannel: 0))!)))
         var rate: Double = 0.0
         if (peakPower <= 0.2) {
             rate = 0.2
-        } else if (peakPower > 0.9) {
-            rate = 1.0
+        //} else if (peakPower > 0.9) {
+        } else if (peakPower > 0.22) {
+            rate = 0.22
             self.isBitRate = true
         } else {
             rate = peakPower
         }
         
-        print(rate)
+        print("rate is:",rate)
         self.recordDuration += 1
     }
 
@@ -187,6 +196,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
     @IBAction func onClickStart(sender: UIButton) {
         
         if sender.titleLabel?.text == "Start Test".localized {
+            
             //sender.setTitle("SKIP", for: .normal)
             //self.startTest()
             
@@ -272,6 +282,7 @@ class MicrophoneVC: UIViewController, AVAudioRecorderDelegate, RecorderDelegate 
             UserDefaults.standard.set(true, forKey: "mic")
             
             DispatchQueue.main.async {
+                self.view.isUserInteractionEnabled = false
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             

@@ -39,6 +39,9 @@ class WiFiTestVC: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.isUserInteractionEnabled = true
+        
         //self.changeLanguageOfUI()
         
         //print("WiFi Signal strength is:", self.wifiStrength() ?? 0)
@@ -147,6 +150,7 @@ class WiFiTestVC: UIViewController {
         if self.isWiFiPass {
             
             DispatchQueue.main.async {
+                self.view.isUserInteractionEnabled = false
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             

@@ -78,8 +78,12 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         }
         
     }
-    
+   
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+        
         //AppOrientationUtility.lockOrientation(.portrait)
         //self.changeLanguageOfUI()
     }
@@ -157,6 +161,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 UserDefaults.standard.set(true, forKey: "Speakers")
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
@@ -167,6 +172,9 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                     
             }else {
                 self.isSpeakerCodeEntered = true
+                
+                self.resultJSON["Speakers"].int = 1
+                UserDefaults.standard.set(true, forKey: "Speakers")
                 
                 self.btnSpeakerVerifyCode.isHidden = true
                 self.btnSpeakerPlayPause.isUserInteractionEnabled = false
@@ -236,9 +244,11 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             if self.isSpeakerCodeEntered {
                 
                 self.resultJSON["Speakers"].int = 1
-                UserDefaults.standard.set(true, forKey: "Speakers")
+                //UserDefaults.standard.set(true, forKey: "Speakers")
+                UserDefaults.standard.set(true, forKey: "Receiver")
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
@@ -249,6 +259,10 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 
             }else {
                 self.isReceiverCodeEntered = true
+                
+                self.resultJSON["Speakers"].int = 1
+                //UserDefaults.standard.set(true, forKey: "Speakers")
+                UserDefaults.standard.set(true, forKey: "Receiver")
                 
                 self.btnReceiverVerifyCode.isHidden = true
                 self.btnReceiverPlayPause.isUserInteractionEnabled = false
@@ -819,7 +833,15 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 print("Speakers Skipped!")
                 
                 self.resultJSON["Speakers"].int = -1
-                UserDefaults.standard.set(false, forKey: "Speakers")
+                //UserDefaults.standard.set(false, forKey: "Speakers")
+                
+                if !self.isSpeakerCodeEntered {
+                    UserDefaults.standard.set(false, forKey: "Speakers")
+                }
+                
+                if !self.isReceiverCodeEntered {
+                    UserDefaults.standard.set(false, forKey: "Receiver")
+                }
                 
                 if self.isComingFromTestResult {
                     

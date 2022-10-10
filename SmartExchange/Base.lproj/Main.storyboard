@@ -4759,7 +4759,7 @@ experience</string>
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MobiCash Exchange" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WyU-X8-aVy">
-                                        <rect key="frame" x="108.5" y="12" width="158" height="20"/>
+                                        <rect key="frame" x="99.5" y="10" width="176" height="24"/>
                                         <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -4774,14 +4774,14 @@ experience</string>
                                 </constraints>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please enter your details below" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJO-FD-R8R">
-                                <rect key="frame" x="25" y="59" width="330" height="21"/>
+                                <rect key="frame" x="25" y="59" width="330" height="25.5"/>
                                 <color key="tintColor" red="0.0" green="0.5624732375" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Poppins-Medium" family="Poppins" pointSize="18"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="hn8-TY-VXf" customClass="TPKeyboardAvoidingTableView">
-                                <rect key="frame" x="20" y="90" width="335" height="454"/>
+                                <rect key="frame" x="20" y="94.5" width="335" height="427"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="tintColor" red="0.12549019610000001" green="0.25098039220000001" blue="0.60392156860000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -5003,7 +5003,7 @@ experience</string>
                                 </prototypes>
                             </tableView>
                             <view clipsSubviews="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="Fof-RN-eLt" customClass="BEMCheckBox">
-                                <rect key="frame" x="20" y="558" width="40" height="40"/>
+                                <rect key="frame" x="20" y="547" width="40" height="40"/>
                                 <color key="tintColor" red="0.019607843137254902" green="0.67843137254901964" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="XiI-It-jUS"/>
@@ -5054,7 +5054,7 @@ experience</string>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I hearby acknowledge that I have read, understand and agree to the Terms and Conditions." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RpB-zM-eV4">
-                                <rect key="frame" x="80" y="564" width="275" height="28"/>
+                                <rect key="frame" x="80" y="541.5" width="275" height="50.5"/>
                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="12"/>
                                 <color key="textColor" red="0.19691967290000001" green="0.27047425980000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -6663,6 +6663,9 @@ experience</string>
         <designable name="FcK-T3-lDQ">
             <size key="intrinsicContentSize" width="16" height="22"/>
         </designable>
+        <designable name="Fof-RN-eLt">
+            <size key="intrinsicContentSize" width="40" height="40"/>
+        </designable>
         <designable name="IR5-Bb-ncI">
             <size key="intrinsicContentSize" width="243" height="239"/>
         </designable>
@@ -6740,6 +6743,9 @@ experience</string>
         </designable>
         <designable name="bmX-fF-cvG">
             <size key="intrinsicContentSize" width="59" height="35"/>
+        </designable>
+        <designable name="cFU-eE-fgq">
+            <size key="intrinsicContentSize" width="40" height="40"/>
         </designable>
         <designable name="d78-UB-eb6">
             <size key="intrinsicContentSize" width="16" height="22"/>

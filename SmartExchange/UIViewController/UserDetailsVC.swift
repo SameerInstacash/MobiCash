@@ -117,19 +117,60 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             for key in self.arrBankKeysMendatory {
                 if self.bankDict[key] as? String == "" {
+                    
                     if key == "tnc" {
                         DispatchQueue.main.async {
                             self.view.makeToast("Please agree Terms & Conditions", duration: 2.0, position: .bottom)
                         }
                         return
                     }else {
-                        DispatchQueue.main.async {
-                            self.view.makeToast("Please Enter \(key)", duration: 2.0, position: .bottom)
+                        
+                        if key.contains("email") {
+                            
+                            self.bankDict[key] = "abc@xyz.com"
+                            
+                        }else {
+                            
+                            DispatchQueue.main.async {
+                                self.view.makeToast("Please Enter \(key)", duration: 2.0, position: .bottom)
+                            }
+                            return
+                            
                         }
-                        return
+                  
                     }
+                }else {
+                    
+                    //MARK: Mobile Validation
+                    if key.contains("mobile") || key.contains("Mobile*") {
+                        let mobNumber = self.bankDict[key] as? String ?? ""
+                        
+                        if mobNumber.count < 10 {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("Please Enter valid \(key)", duration: 2.0, position: .bottom)
+                            }
+                            return
+                        }
+                    }
+                    
+                    //MARK: Email Validation
+                    if key.contains("email") {
+                        
+                        let emailValidation = self.isValidEmail(self.bankDict[key] as? String ?? "")
+                        
+                        if !emailValidation {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("Please Enter valid \(key)", duration: 2.0, position: .bottom)
+                            }
+                            return
+                        }
+                        
+                    }
+                    
                 }
             }
+            
+            
             
             if !checkBox.on {
                 
@@ -183,6 +224,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 self.bankDict[self.placeHold] = cell.txtField.text ?? ""
             }
             
+            
             /*
             if cell.txtField.placeholder == "IFSC" {
                 
@@ -210,6 +252,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
         }
         
+        
         if let cell = self.userDetailTableView.cellForRow(at: ndx) as? SelectTextCell {
             
             if cell.selectTextField.text?.isEmpty ?? false {
@@ -220,6 +263,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
                 self.bankDict[self.placeHold] = cell.selectTextField.text ?? ""
             }
         }
+        
         
         if let cell = self.userDetailTableView.cellForRow(at: ndx) as? MobileNumberCell {
             
@@ -233,6 +277,39 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
         }
         
     }
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let ndx = IndexPath(row: textField.tag, section: 0)
+        
+        if let cell = self.userDetailTableView.cellForRow(at: ndx) as? TextBoxCell {
+            // YOU SHOULD FIRST CHECK FOR THE BACKSPACE. IF BACKSPACE IS PRESSED ALLOW IT
+            if string == "" {
+                return true
+            }
+            
+            if textField.placeholder?.contains("mobile") ?? false || textField.placeholder?.contains("Mobile*") ?? false {
+                if let updatedString = (cell.txtField.text as NSString?)?.replacingCharacters(in: range, with: string) {
+                    print(updatedString)
+                    
+                    let characterCount = (cell.txtField.text?.count ?? 0)
+                    if characterCount == 10 {
+                        // RESIGN FIRST RERSPONDER TO HIDE KEYBOARD
+                        self.view.endEditing(true)
+                    }
+                }
+            }
+            
+            return true
+            
+        }else {
+            return true
+        }
+                
+        //return true
+    }
+    
     
     // MARK: WebService Method
     func getXtraCoverForm() {

@@ -71,7 +71,6 @@ extension DeviceDetectVC {
             DispatchQueue.main.async() {
                 
                 self.touchScreenTest(rsltJson)
-                //self.CameraTest(rsltJson)
                 
             }
         }

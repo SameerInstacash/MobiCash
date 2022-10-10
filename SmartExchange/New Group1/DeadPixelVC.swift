@@ -58,6 +58,12 @@ class DeadPixelVC: UIViewController {
         //}
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -381,6 +387,7 @@ class DeadPixelVC: UIViewController {
                 print("Dead Pixel Passed!")
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 

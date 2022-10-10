@@ -29,6 +29,7 @@ open class Recording : NSObject {
     
     open var bitRate = 192000
     open var sampleRate = 44100.0
+    //open var sampleRate = 12000
     open var channels = 1
     
     fileprivate let session = AVAudioSession.sharedInstance()
@@ -51,7 +52,8 @@ open class Recording : NSObject {
     
     open func prepare() throws {
         let settings: [String: AnyObject] = [
-            AVFormatIDKey : NSNumber(value: Int32(kAudioFormatAppleLossless) as Int32),
+            //AVFormatIDKey : NSNumber(value: Int32(kAudioFormatAppleLossless) as Int32),
+            AVFormatIDKey : NSNumber(value: Int32(kAudioFormatMPEG4AAC) as Int32),
             AVEncoderAudioQualityKey: AVAudioQuality.max.rawValue as AnyObject,
             AVEncoderBitRateKey: bitRate as AnyObject,
             AVNumberOfChannelsKey: channels as AnyObject,

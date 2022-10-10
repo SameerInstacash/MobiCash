@@ -174,6 +174,12 @@ class FingerprintViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+    }
+    
     //MARK: IBActions
     @IBAction func scanFingerprintBtnPressed(_ sender: UIButton) {
         
@@ -203,6 +209,7 @@ class FingerprintViewController: UIViewController {
             
           
             DispatchQueue.main.async {
+                self.view.isUserInteractionEnabled = false
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             

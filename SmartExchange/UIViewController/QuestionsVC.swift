@@ -128,9 +128,23 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
-            return self.arrQuestionAnswer?.specificationValue?.count ?? 0
+            
+            //MARK: To handle the case of NONE OF THE ABOVE
+            if self.arrQuestionAnswer?.viewType == "checkbox" {
+                return (self.arrQuestionAnswer?.specificationValue?.count ?? 0) + 1
+            }else {
+                return self.arrQuestionAnswer?.specificationValue?.count ?? 0
+            }
+            
         }else {
-            return self.arrQuestionAnswer?.conditionValue?.count ?? 0
+            
+            //MARK: To handle the case of NONE OF THE ABOVE
+            if self.arrQuestionAnswer?.viewType == "checkbox" {
+                return (self.arrQuestionAnswer?.conditionValue?.count ?? 0) + 1
+            }else {
+                return self.arrQuestionAnswer?.conditionValue?.count ?? 0
+            }
+            
         }
         
     }
@@ -145,47 +159,81 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
         //let iconImgView : UIImageView = CosmeticQuestionTblCell.viewWithTag(10) as! UIImageView
         //let lblIconName : UILabel = CosmeticQuestionTblCell.viewWithTag(20) as! UILabel
         
+        
         if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
-            let answer = self.arrQuestionAnswer?.specificationValue?[indexPath.item]
             
-            //let str = answer?.value?.removingPercentEncoding
-            let str = answer?.value?.removingPercentEncoding ?? ""
-            CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
-            
-            
-            if let qImage = self.arrQuestionAnswer?.specificationValue?[indexPath.item].image {
+            //MARK: To handle the case of NONE OF THE ABOVE
+            if self.arrQuestionAnswer?.viewType == "checkbox" {
                 
-                if let imgUrl = URL(string: qImage) {
-                    CosmeticQuestionTblCell.iconImgView.isHidden = false
-                    CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                if indexPath.row == self.arrQuestionAnswer?.specificationValue?.count {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = true
+                    CosmeticQuestionTblCell.lblIconName.text = "NONE OF THE ABOVE"
+                }
+                
+            }
+            
+            if indexPath.row < (self.arrQuestionAnswer?.specificationValue?.count ?? 0) {
+            
+                let answer = self.arrQuestionAnswer?.specificationValue?[indexPath.item]
+                
+                //let str = answer?.value?.removingPercentEncoding
+                let str = answer?.value?.removingPercentEncoding ?? ""
+                CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
+                
+                
+                if let qImage = self.arrQuestionAnswer?.specificationValue?[indexPath.item].image {
+                    
+                    if let imgUrl = URL(string: qImage) {
+                        CosmeticQuestionTblCell.iconImgView.isHidden = false
+                        CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                    }else {
+                        CosmeticQuestionTblCell.iconImgView.isHidden = true
+                    }
+                    
                 }else {
                     CosmeticQuestionTblCell.iconImgView.isHidden = true
                 }
                 
-            }else {
-                CosmeticQuestionTblCell.iconImgView.isHidden = true
             }
+            
             
         }else {
-            let answer = self.arrQuestionAnswer?.conditionValue?[indexPath.item]
             
-            //let str = answer?.value?.removingPercentEncoding
-            let str = answer?.value?.removingPercentEncoding ?? ""
-            CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
-            
-        
-            if let qImage = self.arrQuestionAnswer?.conditionValue?[indexPath.item].image {
+            //MARK: To handle the case of NONE OF THE ABOVE
+            if self.arrQuestionAnswer?.viewType == "checkbox" {
                 
-                if let imgUrl = URL(string: qImage) {
-                    CosmeticQuestionTblCell.iconImgView.isHidden = false
-                    CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                if indexPath.row == self.arrQuestionAnswer?.conditionValue?.count {
+                    CosmeticQuestionTblCell.iconImgView.isHidden = true
+                    CosmeticQuestionTblCell.lblIconName.text = "NONE OF THE ABOVE"
+                }
+                
+            }
+            
+            
+            if indexPath.row < (self.arrQuestionAnswer?.conditionValue?.count ?? 0) {
+                
+                let answer = self.arrQuestionAnswer?.conditionValue?[indexPath.item]
+                
+                //let str = answer?.value?.removingPercentEncoding
+                let str = answer?.value?.removingPercentEncoding ?? ""
+                CosmeticQuestionTblCell.lblIconName.text = str.replacingOccurrences(of: "+", with: " ")
+                
+            
+                if let qImage = self.arrQuestionAnswer?.conditionValue?[indexPath.item].image {
+                    
+                    if let imgUrl = URL(string: qImage) {
+                        CosmeticQuestionTblCell.iconImgView.isHidden = false
+                        CosmeticQuestionTblCell.iconImgView.af_setImage(withURL: imgUrl)
+                    }else {
+                        CosmeticQuestionTblCell.iconImgView.isHidden = true
+                    }
+                    
                 }else {
                     CosmeticQuestionTblCell.iconImgView.isHidden = true
                 }
                 
-            }else {
-                CosmeticQuestionTblCell.iconImgView.isHidden = true
             }
+                
          
         }
         
@@ -231,16 +279,48 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
             
             if (self.arrQuestionAnswer?.specificationValue?.count ?? 0) > 0 {
                 
+                //MARK: To handle the case of NONE OF THE ABOVE
+                if indexPath.row == self.arrQuestionAnswer?.specificationValue?.count {
+                    
+                    self.selectedAppCode = ""
+                    
+                    arrAppQuestionsAppCodes?.append(self.selectedAppCode)
+                    print("arrQuestionsAppCodes are when NONE OF THE ABOVE:", arrAppQuestionsAppCodes ?? [])
+                    
+                    guard let didFinishRetryDiagnosis = self.TestDiagnosisForward else { return }
+                    didFinishRetryDiagnosis()
+                    self.dismiss(animated: false, completion: nil)
+                    
+                    return
+                }
+                
+                
                 if self.selectedAppCode == "" {
                     self.selectedAppCode = self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? ""
                 }else {
                     if !self.selectedAppCode.contains(self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? "") {
                         self.selectedAppCode += ";" + (self.arrQuestionAnswer?.specificationValue?[indexPath.item].appCode ?? "")
                     }
-                    
                 }
+                               
                 
             }else {
+                
+                //MARK: To handle the case of NONE OF THE ABOVE
+                if indexPath.row == self.arrQuestionAnswer?.conditionValue?.count {
+                    
+                    self.selectedAppCode = ""
+                    
+                    arrAppQuestionsAppCodes?.append(self.selectedAppCode)
+                    print("arrQuestionsAppCodes are when NONE OF THE ABOVE:", arrAppQuestionsAppCodes ?? [])
+                    
+                    guard let didFinishRetryDiagnosis = self.TestDiagnosisForward else { return }
+                    didFinishRetryDiagnosis()
+                    self.dismiss(animated: false, completion: nil)
+                    
+                    return
+                }
+                
                 
                 if self.selectedAppCode == "" {
                     self.selectedAppCode = self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? ""
@@ -249,6 +329,7 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
                         self.selectedAppCode += ";" + (self.arrQuestionAnswer?.conditionValue?[indexPath.item].appCode ?? "")
                     }
                 }
+                
                 
             }
             
@@ -300,6 +381,18 @@ class QuestionsVC: UIViewController, UICollectionViewDataSource, UICollectionVie
     }
     
   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // MARK: - UICollectionView DataSource & Delegates
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1

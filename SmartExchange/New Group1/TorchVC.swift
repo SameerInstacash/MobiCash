@@ -46,6 +46,8 @@ class TorchVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.view.isUserInteractionEnabled = true
+        
         //AppOrientationUtility.lockOrientation(.portrait)
     }
     
@@ -105,6 +107,7 @@ class TorchVC: UIViewController {
             UserDefaults.standard.set(true, forKey: "Torch")
             
             DispatchQueue.main.async {
+                self.view.isUserInteractionEnabled = false
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             
@@ -147,6 +150,7 @@ class TorchVC: UIViewController {
                 UserDefaults.standard.set(true, forKey: "Torch")
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 

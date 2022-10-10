@@ -86,7 +86,13 @@ class ScreenViewController: UIViewController {
         
         //"Click 'Start Test', then swipe along the squares"
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -236,6 +242,7 @@ class ScreenViewController: UIViewController {
                  }*/
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 

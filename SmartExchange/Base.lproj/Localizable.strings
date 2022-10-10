@@ -93,4 +93,5 @@
 "gps_info" = "GPS: Defective";
 "mic_info" = "Microphone: Defective";
 "speakers_info" = "Speakers: Defective";
+"receiver_info" = "Receiver: Defective";
 "vibrator_info" = "Vibrator: Defective";

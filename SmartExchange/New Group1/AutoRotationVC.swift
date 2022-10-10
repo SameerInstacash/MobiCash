@@ -41,6 +41,12 @@ class AutoRotationVC: UIViewController {
         //NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
                 
@@ -264,6 +270,7 @@ class AutoRotationVC: UIViewController {
             */
             
             DispatchQueue.main.async {
+                self.view.isUserInteractionEnabled = false
                 self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
             }
             

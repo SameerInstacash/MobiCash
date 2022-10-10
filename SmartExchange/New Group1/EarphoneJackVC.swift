@@ -30,6 +30,12 @@ class EarphoneJackVC: UIViewController {
         //self.earphoneInfoImage.loadGif(name: "earphone_jack")
                 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.isUserInteractionEnabled = true
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -232,6 +238,7 @@ class EarphoneJackVC: UIViewController {
                 }*/
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 
@@ -272,6 +279,7 @@ class EarphoneJackVC: UIViewController {
                 }*/
                 
                 DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = false
                     self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
                 }
                 

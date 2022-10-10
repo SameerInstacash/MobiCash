@@ -1604,6 +1604,19 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.arrFunctionalTest.append(model)
         }
         
+        if (!UserDefaults.standard.bool(forKey: "Receiver")) {
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 16
+            model.strTestType = "Receiver"
+            self.arrFailedAndSkipedTest.append(model)
+        }
+        else{
+            let model = ModelCompleteDiagnosticFlow()
+            model.priority = 0
+            model.strTestType = "Receiver"
+            self.arrFunctionalTest.append(model)
+        }
+                
         if (!UserDefaults.standard.bool(forKey: "Vibrator")) {
             let model = ModelCompleteDiagnosticFlow()
             model.priority = 17
@@ -1846,6 +1859,11 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             myarray.append(functional)
         }
         
+        if (!UserDefaults.standard.bool(forKey: "Receiver")) {
+            functional = "receiver_info".localized
+            myarray.append(functional)
+        }
+        
         if (!UserDefaults.standard.bool(forKey: "Vibrator")) {
             functional = "vibrator_info".localized
             myarray.append(functional)
@@ -1968,10 +1986,10 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appCodestring = "\(appCodestring);CISS08"
         }
         
-        if (!UserDefaults.standard.bool(forKey: "Speakers")){
+        if (!UserDefaults.standard.bool(forKey: "Speakers")) || (!UserDefaults.standard.bool(forKey: "Receiver")) {
             appCodestring = "\(appCodestring);CISS07"
         }
-        
+      
         if (!UserDefaults.standard.bool(forKey: "Vibrator")){
             appCodestring = "\(appCodestring);CISS13"
         }

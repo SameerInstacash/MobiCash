@@ -1259,7 +1259,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MobiCash;
 				PRODUCT_NAME = MobiCash;
-				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AppStore_ProProfile;
+				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AdHoc_ProProfile;
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartExchange/SmartExchange-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "SmartExchange-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
