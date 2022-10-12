@@ -13,6 +13,7 @@
 		5902CB49287553AA0066DEA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */; };
 		5919F2D6289E493200DFCD8A /* proximity.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5919F2D5289E492F00DFCD8A /* proximity.gif */; };
 		5935F62B2897B79D00C55BF8 /* DeviceDetectVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */; };
+		594111EB28F695CE00977864 /* DualRing.gif in Resources */ = {isa = PBXBuildFile; fileRef = 594111EA28F695CD00977864 /* DualRing.gif */; };
 		5941862C282E277900DB2723 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418623282E276200DB2723 /* Poppins-Thin.ttf */; };
 		5941862D282E277900DB2723 /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418624282E276800DB2723 /* Poppins-Light.ttf */; };
 		5941862E282E277900DB2723 /* Poppins-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 59418625282E276A00DB2723 /* Poppins-ExtraBold.ttf */; };
@@ -140,6 +141,7 @@
 		5902CB48287553AA0066DEA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5919F2D5289E492F00DFCD8A /* proximity.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = proximity.gif; sourceTree = "<group>"; };
 		5935F62A2897B79D00C55BF8 /* DeviceDetectVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceDetectVC.swift; sourceTree = "<group>"; };
+		594111EA28F695CD00977864 /* DualRing.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DualRing.gif; sourceTree = "<group>"; };
 		59418623282E276200DB2723 /* Poppins-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Thin.ttf"; sourceTree = "<group>"; };
 		59418624282E276800DB2723 /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		59418625282E276A00DB2723 /* Poppins-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-ExtraBold.ttf"; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 		59418636282E29DD00DB2723 /* Gif */ = {
 			isa = PBXGroup;
 			children = (
+				594111EA28F695CD00977864 /* DualRing.gif */,
 				5902CB45287541850066DEA4 /* dead_pixel.gif */,
 				5902CB44287541850066DEA4 /* speech.gif */,
 				C30A6CA920729B150079FFEB /* proximity-old.gif */,
@@ -745,6 +748,7 @@
 				5966EF5F2614812C00E91F21 /* three.wav in Resources */,
 				C3D253AD20723D780017F224 /* charging.gif in Resources */,
 				5902CB46287541850066DEA4 /* speech.gif in Resources */,
+				594111EB28F695CE00977864 /* DualRing.gif in Resources */,
 				C30A6CAA20729B160079FFEB /* proximity-old.gif in Resources */,
 				C39948261E54270600F01384 /* Main.storyboard in Resources */,
 				5966EF5B2614812C00E91F21 /* whistle.mp3 in Resources */,

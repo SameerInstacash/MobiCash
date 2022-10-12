@@ -10,6 +10,7 @@ import UIKit
 import JPSVolumeButtonHandler
 import PopupDialog
 import SwiftyJSON
+import SwiftGifOrigin
 
 class VolumeRockerVC: UIViewController {
     
@@ -20,10 +21,14 @@ class VolumeRockerVC: UIViewController {
     @IBOutlet weak var lblInfo: UILabel!
     @IBOutlet weak var volumeUpImg: UIImageView!
     @IBOutlet weak var volumeDownImg: UIImageView!
-    var resultJSON = JSON()
-    var isComingFromTestResult = false
+    
+    @IBOutlet weak var volumeUpImgGif: UIImageView!
+    @IBOutlet weak var volumeDownImgGif: UIImageView!
     
     @IBOutlet weak var btnStartTest: UIButton!
+    
+    var resultJSON = JSON()
+    var isComingFromTestResult = false
     
     private var audioLevel : Float = 0.0
     //var audioSession = AVAudioSession.sharedInstance()
@@ -31,7 +36,15 @@ class VolumeRockerVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setStatusBarColor(themeColor: GlobalUtility().AppThemeColor)
+        
+        self.volumeUpImgGif.loadGif(name: "DualRing")
+        self.volumeDownImgGif.loadGif(name: "DualRing")
+        
+        self.volumeUpImgGif.isHidden = false
+        self.volumeDownImgGif.isHidden = false
+        
                 
         //self.lblInfo.text = "hard_btn_info".localized
       
@@ -224,6 +237,8 @@ class VolumeRockerVC: UIViewController {
                     self.volumeUpImg.image = image
                     self.volumeUpImg.tintColor = UIColor.init(hexString: "#05adef")
                     
+                    self.volumeUpImgGif.isHidden = true
+                    
                     self.volUp = true
                     
                     if (self.volDown == true) {
@@ -282,6 +297,8 @@ class VolumeRockerVC: UIViewController {
                     let image = UIImage(named: "volume_down")?.withRenderingMode(.alwaysTemplate)
                     self.volumeDownImg.image = image
                     self.volumeDownImg.tintColor = UIColor.init(hexString: "#05adef")
+                    
+                    self.volumeDownImgGif.isHidden = true
                     
                     self.volDown = true
                     

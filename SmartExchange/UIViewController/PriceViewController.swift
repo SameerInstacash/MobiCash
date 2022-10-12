@@ -807,7 +807,9 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             vc.modalPresentationStyle = .overFullScreen
             
             vc.isPhotoIdUploaded = {
-                self.uploadPhotoIdBtn.isHidden = true
+                DispatchQueue.main.async {
+                    self.uploadPhotoIdBtn.isHidden = true
+                }
             }
             
             self.present(vc, animated: true, completion: nil)
@@ -1869,6 +1871,12 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             myarray.append(functional)
         }
         
+        if (!UserDefaults.standard.bool(forKey: "Torch")) {
+            functional = "torch_info".localized
+            myarray.append(functional)
+        }
+        
+        
         /*
         if (!UserDefaults.standard.bool(forKey: "NFC")) {
             functional = "nfc_info".localized
@@ -1997,7 +2005,6 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (!UserDefaults.standard.bool(forKey: "Torch")){
             appCodestring = "\(appCodestring);CISS16"
         }
-        
         
         if (!UserDefaults.standard.bool(forKey: "Battery")){
             appCodestring = "\(appCodestring);CISS06"

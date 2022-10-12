@@ -1010,6 +1010,12 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             //cellTextBox.txtField.placeholder = (self.arrDictKeys[indexPath.row])
             if (arrData?.count ?? 0) > 2 {
                 cellTextBox.txtField.placeholder = arrData?[2] as? String ?? ""
+                
+                let placeHold = arrData?[2] as? String ?? ""
+                if placeHold.contains("email") || placeHold.contains("Email") {
+                    let emailPlaceHolder = placeHold.replacingOccurrences(of: "*", with: "")
+                    cellTextBox.txtField.placeholder = emailPlaceHolder
+                }
             }
             
             
@@ -1019,7 +1025,7 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             
             if cellTextBox.txtField.placeholder == "mobile" || cellTextBox.txtField.placeholder == "Mobile*" {
                 cellTextBox.txtField.keyboardType = .numberPad
-            }else if cellTextBox.txtField.placeholder == "email"  || cellTextBox.txtField.placeholder == "Email*" {
+            }else if cellTextBox.txtField.placeholder == "email" || cellTextBox.txtField.placeholder == "Email"  || cellTextBox.txtField.placeholder == "Email*" {
                 cellTextBox.txtField.keyboardType = .emailAddress
             }else if cellTextBox.txtField.placeholder == "Bank Name" || cellTextBox.txtField.placeholder == "mobile" {
                 cellTextBox.txtField.keyboardType = .default
