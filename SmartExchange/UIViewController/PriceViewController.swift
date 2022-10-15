@@ -1895,6 +1895,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let appCodeS = UserDefaults.standard.string(forKey: "appCodes") ?? ""
         let apps = appCodeS.split(separator: ";")
+        print("apps are :",apps)
         
         var appCodestring = ""
         
@@ -1910,6 +1911,8 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         appCodestr = "\(apps[0]);\(apps[1])"
         */
         
+        
+        /*
         if apps.count > 0 {
             
             if (!UserDefaults.standard.bool(forKey: "deadPixel") && apps[1] != "SBRK01"){
@@ -1922,8 +1925,17 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             
+        }*/
+        
+        
+        if (!UserDefaults.standard.bool(forKey: "screen")) {
+            appCodestring = "\(appCodestring);SBRK01"
         }
         
+        if (!UserDefaults.standard.bool(forKey: "deadPixel")) {
+            appCodestring = "\(appCodestring);SPTS03"
+        }
+      
         if (!UserDefaults.standard.bool(forKey: "rotation")){
             appCodestring = "\(appCodestring);CISS14"
             print("Rotation kharaab hai")
@@ -1936,21 +1948,15 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (!UserDefaults.standard.bool(forKey: "volume")){
             appCodestring = "\(appCodestring);CISS02"
         }
-        
-        //CISS03
-        
+                
         if (!UserDefaults.standard.bool(forKey: "earphone")){
             appCodestring = "\(appCodestring);CISS11"
             print("Earphone kharaab hai")
-        }else {
-            print("Earphone sahi hai")
         }
         
         if (!UserDefaults.standard.bool(forKey: "charger")){
             appCodestring = "\(appCodestring);CISS05"
             print("Charger kharaab hai")
-        }else {
-            print("Charger sahi hai")
         }
         
         /*
@@ -1966,9 +1972,6 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (!UserDefaults.standard.bool(forKey: "Back_Camera")){
             appCodestring = "\(appCodestring);CISS18"
         }
-        
-       
-        
         
         if (!UserDefaults.standard.bool(forKey: "fingerprint")){
             if self.resultJSON["Fingerprint Scanner"].int != -2 {
@@ -1994,8 +1997,12 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             appCodestring = "\(appCodestring);CISS08"
         }
         
-        if (!UserDefaults.standard.bool(forKey: "Speakers")) || (!UserDefaults.standard.bool(forKey: "Receiver")) {
+        if (!UserDefaults.standard.bool(forKey: "Speakers")) {
             appCodestring = "\(appCodestring);CISS07"
+        }
+        
+        if (!UserDefaults.standard.bool(forKey: "Receiver")){
+            appCodestring = "\(appCodestring);CISS19"
         }
       
         if (!UserDefaults.standard.bool(forKey: "Vibrator")){
@@ -2036,7 +2043,58 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.appCodeStr += "STON01"
         }
         
-        print("self.appCodeStr",self.appCodeStr)
+
+        //MARK: 15/10/22 As discussed with Vijay Bhai
+            if self.appCodeStr.contains("SBRK01") {
+                
+                if self.appCodeStr.contains("SPTS01") {
+                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
+                }
+                
+                if self.appCodeStr.contains("SPTS02") {
+                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
+                }
+                
+                if self.appCodeStr.contains("SPTS03") {
+                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS03", with: "")
+                }
+                
+            }else if self.appCodeStr.contains("SPTS03") {
+                
+                if self.appCodeStr.contains("SPTS01") {
+                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
+                }
+                
+                if self.appCodeStr.contains("SPTS02") {
+                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
+                }
+                
+            }
+        
+        var arrSplitString = self.appCodeStr.split(separator: ";")
+        //print("arrSplitString", arrSplitString)
+        
+        arrSplitString = self.unique(source: arrSplitString)
+        //print("arrSplitString after duplicate remove", arrSplitString)
+        
+        self.appCodeStr = arrSplitString.joined(separator: ";")
+        //print("arrSplitString after imploide", self.appCodeStr)
+    
+        
+        //print("Final self.appCodeStr for server :",self.appCodeStr)
+        
+    }
+    
+    func unique<S : Sequence, T : Hashable>(source: S) -> [T] where S.Iterator.Element == T {
+        var buffer = [T]()
+        var added = Set<T>()
+        for elem in source {
+            if !added.contains(elem) {
+                buffer.append(elem)
+                added.insert(elem)
+            }
+        }
+        return buffer
     }
     
 }

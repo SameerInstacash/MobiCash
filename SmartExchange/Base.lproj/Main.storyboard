@@ -5294,7 +5294,7 @@ experience</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ORD-Bo-cO5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6895" y="-860"/>
+            <point key="canvasLocation" x="5342" y="-627"/>
         </scene>
         <!--MicrophoneVC-->
         <scene sceneID="tL1-Bz-xLH">
@@ -6636,6 +6636,72 @@ experience</string>
             </objects>
             <point key="canvasLocation" x="3870" y="-620"/>
         </scene>
+        <!--Camera LayerVC-->
+        <scene sceneID="OJa-ot-6Ls">
+            <objects>
+                <viewController storyboardIdentifier="CameraLayerVC" id="BHS-UQ-ccH" customClass="CameraLayerVC" customModule="MobiCash" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0LH-UV-kmY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MQk-wK-kj5">
+                                <rect key="frame" x="305" y="30" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="3eT-kQ-zIS">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="50"/>
+                                    </constraint>
+                                    <constraint firstAttribute="height" constant="40" id="zTz-kZ-PUf">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="50"/>
+                                    </constraint>
+                                </constraints>
+                                <state key="normal" image="cross-camera"/>
+                                <connections>
+                                    <action selector="cameraDismiss:" destination="BHS-UQ-ccH" eventType="touchUpInside" id="0Yi-rP-csU"/>
+                                </connections>
+                            </button>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xNU-QF-RIw">
+                                <rect key="frame" x="0.0" y="547" width="375" height="120"/>
+                                <subviews>
+                                    <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LiD-Dr-gyW">
+                                        <rect key="frame" x="147.5" y="20" width="80" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="ZNR-uN-8PD"/>
+                                            <constraint firstAttribute="height" constant="80" id="xiP-ek-5rQ"/>
+                                        </constraints>
+                                        <state key="normal" image="capture_photo"/>
+                                        <connections>
+                                            <action selector="handleTakePhoto:" destination="BHS-UQ-ccH" eventType="touchUpInside" id="cll-yq-7tZ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="LiD-Dr-gyW" firstAttribute="centerY" secondItem="xNU-QF-RIw" secondAttribute="centerY" id="Dxt-TU-GTQ"/>
+                                    <constraint firstAttribute="height" constant="120" id="YmO-U4-BvH"/>
+                                    <constraint firstItem="LiD-Dr-gyW" firstAttribute="centerX" secondItem="xNU-QF-RIw" secondAttribute="centerX" id="jNn-wQ-2nk"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Ybe-bM-4mo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="MQk-wK-kj5" firstAttribute="top" secondItem="Ybe-bM-4mo" secondAttribute="top" constant="30" id="4GW-3d-SVb"/>
+                            <constraint firstAttribute="trailing" secondItem="xNU-QF-RIw" secondAttribute="trailing" id="62l-Dc-xiO"/>
+                            <constraint firstItem="xNU-QF-RIw" firstAttribute="leading" secondItem="0LH-UV-kmY" secondAttribute="leading" id="A0z-Ho-bOn"/>
+                            <constraint firstAttribute="bottom" secondItem="xNU-QF-RIw" secondAttribute="bottom" id="l9f-ds-tUS"/>
+                            <constraint firstItem="Ybe-bM-4mo" firstAttribute="trailing" secondItem="MQk-wK-kj5" secondAttribute="trailing" constant="30" id="pst-Xz-3SG"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="captureButton" destination="LiD-Dr-gyW" id="gI3-bl-XUY"/>
+                        <outlet property="closeButton" destination="MQk-wK-kj5" id="vZP-bw-Lm8"/>
+                        <outlet property="overlayView" destination="xNU-QF-RIw" id="Odj-b9-sbc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5ur-Oe-fIU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6753" y="-627"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="0gb-tI-f4A">
@@ -6852,10 +6918,12 @@ experience</string>
         <image name="Screen-gray" width="735" height="1295"/>
         <image name="XtraCover_Logo" width="1024" height="1024"/>
         <image name="camera" width="256" height="256"/>
+        <image name="capture_photo" width="80" height="80"/>
         <image name="check" width="16" height="16"/>
         <image name="circle" width="16" height="16"/>
         <image name="connect_usb_image" width="720" height="720"/>
         <image name="cross" width="40" height="40"/>
+        <image name="cross-camera" width="20" height="20"/>
         <image name="dead_pixel_image" width="150" height="150"/>
         <image name="dented" width="43" height="50"/>
         <image name="dented-2" width="41" height="58"/>

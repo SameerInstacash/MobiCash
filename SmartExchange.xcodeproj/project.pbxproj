@@ -47,6 +47,7 @@
 		5966EF622614812C00E91F21 /* zero.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF572614812A00E91F21 /* zero.wav */; };
 		5966EF632614812C00E91F21 /* five.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF582614812C00E91F21 /* five.wav */; };
 		596F3430288526AD008E9B4D /* TorchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596F342F288526AD008E9B4D /* TorchVC.swift */; };
+		59AB51AB28FAB32C007BD039 /* CameraLayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AB51AA28FAB32C007BD039 /* CameraLayerVC.swift */; };
 		59BDBE38283F396B00A7890F /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE32283F396800A7890F /* TPKeyboardAvoidingTableView.m */; };
 		59BDBE39283F396B00A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE33283F396800A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		59BDBE3A283F396B00A7890F /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */; };
@@ -176,6 +177,7 @@
 		5966EF572614812A00E91F21 /* zero.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = zero.wav; sourceTree = "<group>"; };
 		5966EF582614812C00E91F21 /* five.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = five.wav; sourceTree = "<group>"; };
 		596F342F288526AD008E9B4D /* TorchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TorchVC.swift; sourceTree = "<group>"; };
+		59AB51AA28FAB32C007BD039 /* CameraLayerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLayerVC.swift; sourceTree = "<group>"; };
 		59BDBE2F283F396600A7890F /* SmartExchange-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartExchange-Bridging-Header.h"; sourceTree = "<group>"; };
 		59BDBE30283F396700A7890F /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
 		59BDBE31283F396800A7890F /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				C343A76E1E7FBFA500C355DD /* EarphoneJackVC.swift */,
 				C343A7701E7FC2BF00C355DD /* DeviceChargerVC.swift */,
 				C3F4AC901E81062D00D18FFA /* CameraViewController.swift */,
+				59AB51AA28FAB32C007BD039 /* CameraLayerVC.swift */,
 				C37A34E12073EFAD004A4986 /* FingerprintViewController.swift */,
 				59420D28262EBFA30048B712 /* WiFiTestVC.swift */,
 				C3E76E691E7D5C5900228428 /* InternalTests.swift */,
@@ -1009,6 +1012,7 @@
 				C3F2C42F1E7EC73E0034E035 /* VolumeRockerVC.swift in Sources */,
 				59E086D62674A709003FDA1C /* Reachability.swift in Sources */,
 				59CF22652844846B00E28F15 /* TextBoxCell.swift in Sources */,
+				59AB51AB28FAB32C007BD039 /* CameraLayerVC.swift in Sources */,
 				59418639282E2A5600DB2723 /* GlobalUtility.swift in Sources */,
 				C363AE45208F069400D2AC54 /* Q7ViewController.swift in Sources */,
 				C343A7711E7FC2BF00C355DD /* DeviceChargerVC.swift in Sources */,

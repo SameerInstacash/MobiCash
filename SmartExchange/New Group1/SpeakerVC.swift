@@ -243,7 +243,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             
             if self.isSpeakerCodeEntered {
                 
-                self.resultJSON["Speakers"].int = 1
+                self.resultJSON["Receiver"].int = 1
                 //UserDefaults.standard.set(true, forKey: "Speakers")
                 UserDefaults.standard.set(true, forKey: "Receiver")
                 
@@ -260,7 +260,7 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             }else {
                 self.isReceiverCodeEntered = true
                 
-                self.resultJSON["Speakers"].int = 1
+                self.resultJSON["Receiver"].int = 1
                 //UserDefaults.standard.set(true, forKey: "Speakers")
                 UserDefaults.standard.set(true, forKey: "Receiver")
                 
@@ -455,7 +455,6 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 self.goNext()
             }
             
-            
         }
     
     }
@@ -518,7 +517,6 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
         }
         
         
-        
         // To play number from earpiece speaker (upper speaker)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.4) {
             
@@ -538,7 +536,6 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
             } catch let error as NSError {
                 print("#configureAudioSessionToEarpieceSpeaker Error \(error.localizedDescription)")
             }
-            
             
             
             do {
@@ -832,15 +829,17 @@ class SpeakerVC: UIViewController, UITextFieldDelegate {
                 
                 print("Speakers Skipped!")
                 
-                self.resultJSON["Speakers"].int = -1
+                //self.resultJSON["Speakers"].int = -1
                 //UserDefaults.standard.set(false, forKey: "Speakers")
                 
                 if !self.isSpeakerCodeEntered {
                     UserDefaults.standard.set(false, forKey: "Speakers")
+                    self.resultJSON["Speakers"].int = -1
                 }
                 
                 if !self.isReceiverCodeEntered {
                     UserDefaults.standard.set(false, forKey: "Receiver")
+                    self.resultJSON["Receiver"].int = -1
                 }
                 
                 if self.isComingFromTestResult {

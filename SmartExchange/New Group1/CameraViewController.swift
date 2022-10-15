@@ -46,6 +46,71 @@ class CameraViewController: UIViewController {
     
     @IBAction func clickPictureBtnPressed(_ sender: UIButton) {
         
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "CameraLayerVC") as! CameraLayerVC
+        vc.modalPresentationStyle = .overFullScreen
+        
+        vc.isBackCameraClicked = {
+            
+            self.isBackClick = true
+            
+            UserDefaults.standard.set(true, forKey: "Back_Camera")
+            self.resultJSON["Back Camera"].int = 1
+        }
+        
+        vc.isBothCameraClicked = {
+            print("Camera Test Passed via AVCaptureSession !!")
+            
+            self.isFrontClick = true
+            
+            UserDefaults.standard.set(true, forKey: "Front_Camera")
+            self.resultJSON["Front Camera"].int = 1
+            
+            
+            //self.dismiss(animated: true, completion: nil)
+            
+            //UserDefaults.standard.set(true, forKey: "camera")
+            //self.resultJSON["Camera"].int = 1
+            
+            vc.dismiss(animated: true) {
+                
+                if self.isComingFromTestResult {
+                    
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = false
+                        self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        guard let didFinishRetryDiagnosis = self.cameraRetryDiagnosis else { return }
+                        didFinishRetryDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                    
+                }else {
+                    
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = false
+                        self.view.makeToast("Test Passed!", duration: 1.0, position: .bottom)
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        guard let didFinishTestDiagnosis = self.cameraTestDiagnosis else { return }
+                        didFinishTestDiagnosis(self.resultJSON)
+                        self.dismiss(animated: false, completion: nil)
+                    }
+                    
+                }
+                
+            }
+                        
+        }
+        
+        self.present(vc, animated: true, completion: nil)
+    }
+    
+    /*
+    @IBAction func clickPictureBtnPressed(_ sender: UIButton) {
+        
         let camera = DKCamera()
      
         DispatchQueue.main.async {
@@ -143,6 +208,7 @@ class CameraViewController: UIViewController {
         
         self.present(camera, animated: true, completion: nil)
     }
+    */
     
     @IBAction func skipPictureBtnPressed(_ sender: Any) {
         
