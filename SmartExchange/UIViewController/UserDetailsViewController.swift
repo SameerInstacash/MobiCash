@@ -14,6 +14,8 @@ import JGProgressHUD
 
 class UserDetailsViewController: UIViewController, UITextFieldDelegate {
     
+    let reachability: Reachability? = Reachability()
+    
     @IBOutlet weak var userInfo: UILabel!
     
     @IBOutlet weak var txtFieldName: UITextField!
@@ -108,7 +110,17 @@ class UserDetailsViewController: UIViewController, UITextFieldDelegate {
     @IBAction func continueBtnClicked(_ sender: UIButton) {
         if self.validation() {
             self.view.endEditing(true)
-            self.call()
+            
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.call()
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+            
         }
     }
     

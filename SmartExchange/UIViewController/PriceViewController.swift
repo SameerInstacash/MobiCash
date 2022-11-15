@@ -30,6 +30,7 @@ extension UIView {
 class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     let hud = JGProgressHUD()
+    let reachability: Reachability? = Reachability()
     
     @IBOutlet weak var tradeInOnlineView: UIView!
     @IBOutlet weak var tradeInOnlineMessageTxtView: UITextView!
@@ -136,7 +137,17 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.callAPI()
+            
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.callAPI()
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+            
         }
         
         //}
@@ -156,6 +167,7 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func addInfoToTextView()  {
+        
         let strMessage = "Your sell back request has been registered with us and we will be calling you shortly to confirm an appointment for pickup.\nor you may call us on \(self.XtraCoverSupportNumber) for more details."
 
         let attributedString = NSMutableAttributedString(string: strMessage, attributes: [NSAttributedStringKey.font: UIFont(name: "Poppins-Medium", size: 14) ?? UIFont()])
@@ -267,13 +279,26 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
                             
                             if index == 0 {
-                                self.callAPI()
+                                
+                                if self.reachability?.connection.description != "No Connection" {
+                                    
+                                    self.callAPI()
+                                    
+                                }else {
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                                    }
+                                }
+                                
                             }
                             
                         }
                         
                     }else {
-                        self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                        DispatchQueue.main.async {
+                            self.view.makeToast("Something went wrong!!", duration: 3.0, position: .bottom)
+                        }
+                        
                     }
                 }
                 
@@ -880,7 +905,15 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 camera.didFinishCapturingImage = { (image: UIImage?, metadata: [AnyHashable : Any]?) in
                     self.dismiss(animated: true, completion: nil)
                     
-                    self.uploadPhotoId(image ?? UIImage())
+                    if self.reachability?.connection.description != "No Connection" {
+                        
+                        self.uploadPhotoId(image ?? UIImage())
+                        
+                    }else {
+                        DispatchQueue.main.async {
+                            self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                        }
+                    }
                     
                 }
                 self.present(camera, animated: true, completion: nil)
@@ -960,7 +993,17 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
                             
                             if index == 0 {
-                                self.uploadPhotoId(self.holdCaptureImage)
+                                
+                                if self.reachability?.connection.description != "No Connection" {
+                                    
+                                    self.uploadPhotoId(self.holdCaptureImage)
+                                    
+                                }else {
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                                    }
+                                }
+                                
                             }
                             
                         }
@@ -2043,33 +2086,33 @@ class PriceViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.appCodeStr += "STON01"
         }
         
-
+        
         //MARK: 15/10/22 As discussed with Vijay Bhai
-            if self.appCodeStr.contains("SBRK01") {
-                
-                if self.appCodeStr.contains("SPTS01") {
-                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
-                }
-                
-                if self.appCodeStr.contains("SPTS02") {
-                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
-                }
-                
-                if self.appCodeStr.contains("SPTS03") {
-                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS03", with: "")
-                }
-                
-            }else if self.appCodeStr.contains("SPTS03") {
-                
-                if self.appCodeStr.contains("SPTS01") {
-                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
-                }
-                
-                if self.appCodeStr.contains("SPTS02") {
-                    self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
-                }
-                
+        if self.appCodeStr.contains("SBRK01") {
+            
+            if self.appCodeStr.contains("SPTS01") {
+                self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
             }
+            
+            if self.appCodeStr.contains("SPTS02") {
+                self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
+            }
+            
+            if self.appCodeStr.contains("SPTS03") {
+                self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS03", with: "")
+            }
+            
+        }else if self.appCodeStr.contains("SPTS03") {
+            
+            if self.appCodeStr.contains("SPTS01") {
+                self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS01", with: "")
+            }
+            
+            if self.appCodeStr.contains("SPTS02") {
+                self.appCodeStr = self.appCodeStr.replacingOccurrences(of: "SPTS02", with: "")
+            }
+            
+        }
         
         var arrSplitString = self.appCodeStr.split(separator: ";")
         //print("arrSplitString", arrSplitString)

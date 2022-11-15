@@ -21,6 +21,7 @@ class ModelCompleteDiagnosticFlow: NSObject {
 class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     var testResultTestDiagnosis: ((_ testJSON: JSON) -> Void)?
+    let reachability: Reachability? = Reachability()
 
     @IBOutlet weak var lblTitleTests: UILabel!
     @IBOutlet weak var tableViewTests: UITableView!
@@ -34,7 +35,6 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
     var appCodeStr = ""
     
     let hud = JGProgressHUD()
-    let reachability: Reachability? = Reachability()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -536,7 +536,17 @@ class ResultsViewController: UIViewController,UITableViewDelegate,UITableViewDat
         if isTradeInOnline {
             
             DispatchQueue.main.async() {
-                self.getProductsDetailsQuestions()
+                
+                if self.reachability?.connection.description != "No Connection" {
+                    
+                    self.getProductsDetailsQuestions()
+                    
+                }else {
+                    DispatchQueue.main.async {
+                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                    }
+                }
+                
             }
         
         }else {

@@ -24,6 +24,8 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
     @IBOutlet weak var lblTnc: UILabel!
     @IBOutlet weak var btnContinue: UIButton!
     
+    let reachability: Reachability? = Reachability()
+    
     var questionAppCodeStr = ""
     var appCodeStr = ""
     var resultJOSN = JSON()
@@ -68,7 +70,16 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
         }
         
         
-        self.getXtraCoverForm()
+        if self.reachability?.connection.description != "No Connection" {
+            
+            self.getXtraCoverForm()
+            
+        }else {
+            DispatchQueue.main.async {
+                self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+            }
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -184,7 +195,16 @@ class UserDetailsVC: UIViewController, UITextFieldDelegate, UITableViewDataSourc
             self.bankDict["customerId"] = self.customerId
             self.bankDetails = self.bankDict
             
-            self.setXtraCoverFormToServer()
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.setXtraCoverFormToServer()
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+            
         }
         
     }

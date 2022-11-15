@@ -6749,9 +6749,6 @@ experience</string>
         <designable name="FcK-T3-lDQ">
             <size key="intrinsicContentSize" width="16" height="22"/>
         </designable>
-        <designable name="Fof-RN-eLt">
-            <size key="intrinsicContentSize" width="40" height="40"/>
-        </designable>
         <designable name="IR5-Bb-ncI">
             <size key="intrinsicContentSize" width="243" height="239"/>
         </designable>
@@ -6829,9 +6826,6 @@ experience</string>
         </designable>
         <designable name="bmX-fF-cvG">
             <size key="intrinsicContentSize" width="59" height="35"/>
-        </designable>
-        <designable name="cFU-eE-fgq">
-            <size key="intrinsicContentSize" width="40" height="40"/>
         </designable>
         <designable name="d78-UB-eb6">
             <size key="intrinsicContentSize" width="16" height="22"/>

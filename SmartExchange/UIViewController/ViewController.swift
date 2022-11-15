@@ -334,9 +334,20 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                 let preferences = UserDefaults.standard
                 preferences.setValue(AppBaseTnc, forKey: "tncendpoint")
                 
-                self.verifyUserSmartCode()
-                
                 UserDefaults.standard.setValue(true, forKey: "Trade_In_Online")
+                
+                if self.reachability?.connection.description != "No Connection" {
+                    
+                    self.verifyUserSmartCode()
+                    
+                }else {
+                    DispatchQueue.main.async {
+                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                    }
+                }
+                
+                
+                
             }
             
         })
@@ -367,13 +378,32 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                 let token = strTxtFld.replacingOccurrences(of: "C", with: "")
                 print("token is :",token)
                 
-                self.fireWebServiceForQuoteId(quoteID: token)
+                if self.reachability?.connection.description != "No Connection" {
+                    
+                    self.fireWebServiceForQuoteId(quoteID: token)
+                    
+                }else {
+                    DispatchQueue.main.async {
+                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                    }
+                }
+                
                 
             }else {
                 
                 print("storeToken is :",self.storeTokenEdit.text ?? "")
                 self.storeToken = self.storeTokenEdit.text ?? ""
-                self.verifyUserSmartCode()
+                
+                if self.reachability?.connection.description != "No Connection" {
+                    
+                    self.verifyUserSmartCode()
+                    
+                }else {
+                    DispatchQueue.main.async {
+                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                    }
+                }
+                
                                 
             }
             
@@ -409,7 +439,15 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                     preferences.setValue(tokens.strType, forKey: "storeType")
                     preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                     
-                    self.verifyUserSmartCode()
+                    if self.reachability?.connection.description != "No Connection" {
+                        
+                        self.verifyUserSmartCode()
+                        
+                    }else {
+                        DispatchQueue.main.async {
+                            self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                        }
+                    }
                                         
                     //break
                     return
@@ -431,7 +469,16 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             preferences.setValue(0, forKey: "storeType")
             preferences.setValue(0, forKey: "tradeOnline")
             
-            self.verifyUserSmartCode()
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.verifyUserSmartCode()
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+            
                         
         }else {
             DispatchQueue.main.async() {
@@ -513,13 +560,32 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         
                         let token = strTxtFld.replacingOccurrences(of: "C", with: "")
                         print("token is :",token)
-                        self.fireWebServiceForQuoteId(quoteID: token)
+                        
+                        if self.reachability?.connection.description != "No Connection" {
+                            
+                            self.fireWebServiceForQuoteId(quoteID: token)
+                            
+                        }else {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                            }
+                        }
+                        
                         
                     }else {
                         
                         print("storeToken is :", completeResult)
                         self.storeToken = completeResult
-                        self.verifyUserSmartCode()
+                        
+                        if self.reachability?.connection.description != "No Connection" {
+                            
+                            self.verifyUserSmartCode()
+                            
+                        }else {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                            }
+                        }
                         
                     }
                     
@@ -562,7 +628,15 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 preferences.setValue(tokens.strType, forKey: "storeType")
                                 preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                                 
-                                self.verifyUserSmartCode()
+                                if self.reachability?.connection.description != "No Connection" {
+                                    
+                                    self.verifyUserSmartCode()
+                                    
+                                }else {
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                                    }
+                                }
                                                                 
                                 //break
                                 return
@@ -585,7 +659,16 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         preferences.setValue(0, forKey: "storeType")
                         preferences.setValue(0, forKey: "tradeOnline")
                         
-                        self.verifyUserSmartCode()
+                        if self.reachability?.connection.description != "No Connection" {
+                            
+                            self.verifyUserSmartCode()
+                            
+                        }else {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                            }
+                        }
+                        
                                                 
                     }else {
                         DispatchQueue.main.async() {
@@ -599,7 +682,7 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
         }
 
         present(readerVC, animated: true, completion: nil)
-//        self.verifyUserSmartCode()
+
     }
     
     func QuoteIdPost(strURL : String , parameters:NSDictionary, completionHandler: @escaping (NSDictionary?, NSError?) -> ()) {
@@ -637,9 +720,6 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
             print(responseObject ?? [:])
             
             DispatchQueue.main.async {
-                //self.smartExLoadingImage.layer.removeAllAnimations()
-                //self.smartExLoadingImage.isHidden = true
-                
                 self.hud.dismiss()
             }
             
@@ -679,7 +759,15 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                                 preferences.setValue(tokens.strType, forKey: "storeType")
                                 preferences.setValue(tokens.strIsTradeOnline, forKey: "tradeOnline")
                                 
-                                self.verifyUserSmartCode()
+                                if self.reachability?.connection.description != "No Connection" {
+                                    
+                                    self.verifyUserSmartCode()
+                                    
+                                }else {
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                                    }
+                                }
                                                                 
                                 //break
                                 return
@@ -701,7 +789,16 @@ class ViewController: UIViewController, QRCodeReaderViewControllerDelegate {
                         preferences.setValue(0, forKey: "storeType")
                         preferences.setValue(0, forKey: "tradeOnline")
                         
-                        self.verifyUserSmartCode()
+                        if self.reachability?.connection.description != "No Connection" {
+                            
+                            self.verifyUserSmartCode()
+                            
+                        }else {
+                            DispatchQueue.main.async {
+                                self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                            }
+                        }
+                        
                                                 
                     }else {
                         DispatchQueue.main.async() {

@@ -48,6 +48,7 @@
 		5966EF632614812C00E91F21 /* five.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5966EF582614812C00E91F21 /* five.wav */; };
 		596F3430288526AD008E9B4D /* TorchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596F342F288526AD008E9B4D /* TorchVC.swift */; };
 		59AB51AB28FAB32C007BD039 /* CameraLayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AB51AA28FAB32C007BD039 /* CameraLayerVC.swift */; };
+		59B211BF2921FCF40092AAD4 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B211BE2921FCF40092AAD4 /* Reachability.swift */; };
 		59BDBE38283F396B00A7890F /* TPKeyboardAvoidingTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE32283F396800A7890F /* TPKeyboardAvoidingTableView.m */; };
 		59BDBE39283F396B00A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE33283F396800A7890F /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		59BDBE3A283F396B00A7890F /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59BDBE36283F396A00A7890F /* TPKeyboardAvoidingScrollView.m */; };
@@ -68,7 +69,6 @@
 		59DA3431283B8ED3005AC9CA /* CosmeticQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DA342C283B8ED2005AC9CA /* CosmeticQuestions.swift */; };
 		59DA3432283B8ED3005AC9CA /* Questions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DA342D283B8ED3005AC9CA /* Questions.swift */; };
 		59E086D52674A709003FDA1C /* StoreUrlData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E086D32674A709003FDA1C /* StoreUrlData.swift */; };
-		59E086D62674A709003FDA1C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E086D42674A709003FDA1C /* Reachability.swift */; };
 		59E0CAA32832135000FC493E /* GoogleService-Info-SellnCash.plist in Resources */ = {isa = PBXBuildFile; fileRef = 59E0CAA22832134F00FC493E /* GoogleService-Info-SellnCash.plist */; };
 		9F3B8B721FD07057605F914D /* Pods_SmartExchangeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A605FA6818744F36A4A27C8 /* Pods_SmartExchangeTests.framework */; };
 		C30A6CAA20729B160079FFEB /* proximity-old.gif in Resources */ = {isa = PBXBuildFile; fileRef = C30A6CA920729B150079FFEB /* proximity-old.gif */; };
@@ -178,6 +178,7 @@
 		5966EF582614812C00E91F21 /* five.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = five.wav; sourceTree = "<group>"; };
 		596F342F288526AD008E9B4D /* TorchVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TorchVC.swift; sourceTree = "<group>"; };
 		59AB51AA28FAB32C007BD039 /* CameraLayerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLayerVC.swift; sourceTree = "<group>"; };
+		59B211BE2921FCF40092AAD4 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		59BDBE2F283F396600A7890F /* SmartExchange-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartExchange-Bridging-Header.h"; sourceTree = "<group>"; };
 		59BDBE30283F396700A7890F /* TPKeyboardAvoidingTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingTableView.h; sourceTree = "<group>"; };
 		59BDBE31283F396800A7890F /* TPKeyboardAvoidingCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingCollectionView.h; sourceTree = "<group>"; };
@@ -203,7 +204,6 @@
 		59DA342C283B8ED2005AC9CA /* CosmeticQuestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CosmeticQuestions.swift; sourceTree = "<group>"; };
 		59DA342D283B8ED3005AC9CA /* Questions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Questions.swift; sourceTree = "<group>"; };
 		59E086D32674A709003FDA1C /* StoreUrlData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreUrlData.swift; sourceTree = "<group>"; };
-		59E086D42674A709003FDA1C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		59E0CAA22832134F00FC493E /* GoogleService-Info-SellnCash.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-SellnCash.plist"; sourceTree = "<group>"; };
 		64CE37AA01A63F11FAC23EED /* Pods-SmartExchangeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartExchangeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SmartExchangeUITests/Pods-SmartExchangeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		6A605FA6818744F36A4A27C8 /* Pods_SmartExchangeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartExchangeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -450,6 +450,7 @@
 		59CF225D284482A400E28F15 /* GlobalClasses */ = {
 			isa = PBXGroup;
 			children = (
+				59B211BE2921FCF40092AAD4 /* Reachability.swift */,
 				59DA3425283B8E1A005AC9CA /* AppConstant.swift */,
 				59418638282E2A5600DB2723 /* GlobalUtility.swift */,
 			);
@@ -483,7 +484,6 @@
 			isa = PBXGroup;
 			children = (
 				5966EF482614810300E91F21 /* Recording.swift */,
-				59E086D42674A709003FDA1C /* Reachability.swift */,
 				59E086D32674A709003FDA1C /* StoreUrlData.swift */,
 			);
 			path = Models;
@@ -666,9 +666,8 @@
 				TargetAttributes = {
 					C399481C1E54270600F01384 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 9MWPG4LSJS;
 						LastSwiftMigration = 1330;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -1010,7 +1009,6 @@
 				59DA342F283B8ED3005AC9CA /* SpecificationValue.swift in Sources */,
 				5966EF4C2614810500E91F21 /* Recording.swift in Sources */,
 				C3F2C42F1E7EC73E0034E035 /* VolumeRockerVC.swift in Sources */,
-				59E086D62674A709003FDA1C /* Reachability.swift in Sources */,
 				59CF22652844846B00E28F15 /* TextBoxCell.swift in Sources */,
 				59AB51AB28FAB32C007BD039 /* CameraLayerVC.swift in Sources */,
 				59418639282E2A5600DB2723 /* GlobalUtility.swift in Sources */,
@@ -1026,6 +1024,7 @@
 				59BDBE3B283F396B00A7890F /* TPKeyboardAvoidingCollectionView.m in Sources */,
 				59CF225A28447D1C00E28F15 /* UserDetailsVC.swift in Sources */,
 				59CF22622844846B00E28F15 /* SelectTextCell.swift in Sources */,
+				59B211BF2921FCF40092AAD4 /* Reachability.swift in Sources */,
 				C31CFDEF2080E052003870BE /* HardwareQuestionsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1227,15 +1226,15 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "SmartExchange/Blynk Exchange.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1.0.0;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 9MWPG4LSJS;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SmartExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MobiCash;
 				PRODUCT_NAME = MobiCash;
@@ -1263,11 +1262,11 @@
 				INFOPLIST_FILE = SmartExchange/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.MobiCash;
 				PRODUCT_NAME = MobiCash;
-				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AdHoc_ProProfile;
+				PROVISIONING_PROFILE_SPECIFIER = MobiCash_AppStore_ProProfile;
 				SWIFT_OBJC_BRIDGING_HEADER = "SmartExchange/SmartExchange-Bridging-Header.h";
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = "SmartExchange-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;

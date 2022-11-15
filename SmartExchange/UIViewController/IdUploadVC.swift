@@ -16,6 +16,7 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
     
     var isIDUpload = false
     var isPhotoIdUploaded : (() -> Void)?
+    let reachability: Reachability? = Reachability()
     
     @IBOutlet weak var IdFrontImageView: UIImageView!
     @IBOutlet weak var IdBackImageView: UIImageView!
@@ -154,20 +155,40 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        let imageData:NSData = UIImageJPEGRepresentation(image, 0.25)! as NSData
-        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+        
+        //let imageData:NSData = UIImageJPEGRepresentation(image, 0.25)! as NSData
+        //let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+        
+      
                
         switch self.btnTap {
             
         case 1:
             //self.IdFrontImageView.image = image
             
-            self.uploadPhotoId(image, "")
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.uploadPhotoId(image, "")
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
             
         default:
             //self.IdBackImageView.image = image
             
-            self.uploadPhotoId(image, "back")
+            if self.reachability?.connection.description != "No Connection" {
+                
+                self.uploadPhotoId(image, "back")
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+            
         }
         
         dismiss(animated: true) { }
@@ -178,17 +199,24 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
         dismiss(animated: true, completion: nil)
     }
     
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
     var holdCaptureImage = UIImage()
     var holdImgType = String()
     func uploadPhotoId(_ captureImage: UIImage, _ imgType : String) {
         
         holdCaptureImage = captureImage
         holdImgType = imgType
+    
         
         let newImage = self.resizeImage(image: captureImage, newWidth: 800)
         
         let backgroundImage = newImage
         let watermarkImage = #imageLiteral(resourceName: "watermark")
+        
         UIGraphicsBeginImageContextWithOptions(backgroundImage.size, false, 0.0)
         backgroundImage.draw(in: CGRect(x: 0.0, y: 0.0, width: backgroundImage.size.width, height: backgroundImage.size.height))
         watermarkImage.draw(in: CGRect(x: 0, y: 0, width: watermarkImage.size.width, height: backgroundImage.size.height))
@@ -197,14 +225,19 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
         let result = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        let imageData:NSData = UIImagePNGRepresentation(result ?? newImage) as! NSData
         
-        let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+        let uploadImageData = result?.jpeg(.high)
+        let strBase64 = uploadImageData?.base64EncodedString(options: .lineLength64Characters)
+                        
+        
+        //let imageData:NSData = UIImagePNGRepresentation(result ?? newImage) as? NSData ?? NSData()
+        //let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+        
 
         var request = URLRequest(url: URL(string: "\(AppBaseUrl)/idProof")!)
         request.httpMethod = "POST"
         let customerId = UserDefaults.standard.string(forKey: "customer_id") ?? ""
-        let postString = "customerId=\(customerId)&orderId=\(self.orderID)&photo=\(strBase64)&type=\(imgType)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
+        let postString = "customerId=\(customerId)&orderId=\(self.orderID)&photo=\(strBase64 ?? "")&type=\(imgType)&userName=planetm&apiKey=fd9a42ed13c8b8a27b5ead10d054caaf"
         
         //print("idProof url is :",request,"\nParam is :",postString)
         
@@ -232,7 +265,17 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
                         self.showAlert("Error", message: "The request timed out.", alertButtonTitles: ["Retry", "Cancel"], alertButtonStyles: [.default, .destructive], vc: self) { index in
                             
                             if index == 0 {
-                                self.uploadPhotoId(self.holdCaptureImage, self.holdImgType)
+                                
+                                if self.reachability?.connection.description != "No Connection" {
+                                    
+                                    self.uploadPhotoId(self.holdCaptureImage, self.holdImgType)
+                                    
+                                }else {
+                                    DispatchQueue.main.async {
+                                        self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                                    }
+                                }
+                                
                             }
                             
                         }
@@ -304,4 +347,37 @@ class IdUploadVC: UIViewController, UIImagePickerControllerDelegate,UINavigation
     }
     
 
+}
+
+extension UIImage {
+    
+    enum JPEGQuality: CGFloat {
+        case lowest  = 0
+        case low     = 0.25
+        case medium  = 0.5
+        case high    = 0.75
+        case highest = 1
+    }
+
+    /// Returns the data for the specified image in JPEG format.
+    /// If the image object’s underlying image data has been purged, calling this function forces that data to be reloaded into memory.
+    /// - returns: A data object containing the JPEG data, or nil if there was a problem generating the data. This function may return nil if the image has no data or if the underlying CGImageRef contains data in an unsupported bitmap format.
+    func jpeg(_ quality: JPEGQuality) -> Data? {
+        return UIImageJPEGRepresentation(self, quality.rawValue)
+    }
+    
+    /*
+    enum PNGQuality: CGFloat {
+        case lowest  = 0
+        case low     = 0.25
+        case medium  = 0.5
+        case high    = 0.75
+        case highest = 1
+    }
+    
+    func png(_ quality: PNGQuality) -> Data? {
+        return UIImagePNGRepresentation(self)
+    }
+    */
+    
 }

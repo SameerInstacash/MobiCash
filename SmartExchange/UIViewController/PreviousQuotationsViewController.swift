@@ -25,6 +25,8 @@ class PreviousQuotationsViewController: UIViewController {
     @IBOutlet weak var tableView: UILabel!
     @IBOutlet weak var htmlTxtView: UITextView!
     
+    let reachability: Reachability? = Reachability()
+    
     var ref = ""
     var endPoint = ""
     //@IBOutlet weak var smartExLoadingImage: UIImageView!
@@ -66,8 +68,16 @@ class PreviousQuotationsViewController: UIViewController {
                 //self.hud.backgroundColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 0.4)
                 //self.hud.show(in: self.view)
                 
+            if self.reachability?.connection.description != "No Connection" {
                 
                 self.modAPI()
+                
+            }else {
+                DispatchQueue.main.async {
+                    self.view.makeToast("No connection found", duration: 3.0, position: .bottom)
+                }
+            }
+             
             
         }
     }
